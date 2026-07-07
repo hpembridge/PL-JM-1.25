@@ -1,0 +1,100 @@
+/* ── MODAL OVERLAY — matches customer-management exactly ── */
+
+.modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 200;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+.modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+/* Centered dialog variant (confirm/alert modals) */
+
+.modal-overlay.modal-centered {
+      align-items: center;
+      justify-content: center;
+    }
+
+.modal-overlay.modal-centered .modal-panel {
+      width: 400px;
+      max-width: 90vw;
+      height: auto;
+      max-height: 90vh;
+      border-radius: var(--border-radius-lg);
+      transform: translateY(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+.modal-overlay.modal-centered.open .modal-panel {
+      transform: translateY(0);
+    }
+
+.modal-panel {
+      width: var(--container-aside);
+      height: 100vh;
+      background: var(--bg-surface);
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+      transform: translateX(40px);
+      transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+.modal-overlay.open .modal-panel {
+      transform: translateX(0);
+    }
+
+.modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      background: var(--bg-surface);
+      z-index: 10;
+    }
+
+.modal-title {
+      font-size: var(--fontsize-body-md);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+    }
+
+.modal-body {
+      padding: 24px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-bottom: 192px;
+    }
+
+.modal-footer {
+      padding: 16px 32px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+      position: sticky;
+      bottom: 0;
+      background: var(--bg-surface);
+    }
+
+/* Scrollable modal variant (fixed header/footer, scrollable inner list) */
+
+.modal-scroll { overflow: hidden; }

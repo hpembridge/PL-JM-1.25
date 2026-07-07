@@ -1,0 +1,226 @@
+/* ── Proof Contacts Combobox ── */
+
+.pc-combobox {
+      position: relative;
+    }
+
+.pc-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--border-radius-sm);
+      background: var(--bg-surface);
+      transition: border-color 0.15s;
+    }
+
+.pc-input-wrap:focus-within {
+      border-color: var(--interactive-default);
+    }
+
+.pc-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-primary);
+    }
+
+.pc-input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+.pc-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--border-radius-md);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      z-index: 50;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+.pc-dd-group-label {
+      font-size: var(--fontsize-label);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      padding: 8px 12px 4px;
+    }
+
+.pc-dd-item {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding: 7px 12px;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+.pc-dd-item:hover,
+    .pc-dd-item.highlighted {
+      background: var(--interactive-bg-subtle);
+    }
+
+.pc-dd-item-name {
+      font-size: var(--fontsize-body-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+    }
+
+.pc-dd-item-email {
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-tertiary);
+    }
+
+.pc-dd-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 4px 0;
+    }
+
+.pc-dd-empty {
+      padding: 12px;
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-tertiary);
+      font-style: italic;
+      text-align: center;
+    }
+
+.pc-email-string {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 24px;
+    }
+
+.pc-email-string-text {
+      flex: 1;
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-secondary);
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+.pc-added-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+.pc-added-name {
+      font-size: var(--fontsize-body-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+    }
+
+.pc-added-email {
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-tertiary);
+    }
+
+/* ── Job Contacts table ── */
+
+.pc-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+.pc-table thead tr {
+      border-bottom: 2px solid var(--border-subtle);
+    }
+
+.pc-table th {
+      font-size: var(--fontsize-label);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-tertiary);
+      padding: 5px 0;
+      text-align: left;
+    }
+
+.pc-th-receives { width: 210px; }
+
+.pc-th-action   { width: 32px; }
+
+/* z-index fix: rows are positioned so open dropdown clears siblings */
+
+.pc-table tbody tr { border-bottom: 1px solid var(--border-subtle); position: relative; }
+
+.pc-row-open { z-index: 10; }
+
+.pc-table td {
+      padding: 8px 0;
+      vertical-align: middle;
+    }
+
+.pc-table td:not(:last-child) { padding-right: 12px; }
+
+/* Shared icon helpers */
+
+.pc-search-icon { color: var(--text-tertiary); font-size: var(--fontsize-body-sm); flex-shrink: 0; }
+
+.pc-chevron     { font-size: 10px; color: var(--text-tertiary); flex-shrink: 0; }
+
+.pc-receives-none { font-size: 11px; font-style: italic; color: var(--text-tertiary); }
+
+.pc-receives-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+.pc-receives-trigger {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      min-height: 30px;
+    }
+
+.pc-receives-tags {
+      flex: 1;
+    }
+
+.pc-receives-text {
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-primary);
+    }
+
+.pc-receives-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--border-radius-sm);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      z-index: 200;
+      padding: 4px 0;
+    }
+
+.pc-receives-opt {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+.pc-receives-opt:hover { background: var(--interactive-bg-subtle); }
+
+.pc-receives-opt input[type="checkbox"] { width: 14px; height: 14px; flex-shrink: 0; }

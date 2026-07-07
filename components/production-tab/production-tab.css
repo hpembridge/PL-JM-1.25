@@ -1,0 +1,192 @@
+/* ── DETAIL CARDS ── */
+
+.detail-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+    }
+
+.detail-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-muted);
+    }
+
+.detail-card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-secondary);
+    }
+
+.detail-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--interactive-default);
+      color: white;
+      font-size: var(--fontsize-body-sm);
+      font-weight: var(--font-weight-bold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+.detail-card-body {
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+/* ── SECTION PILLS (detail card header) ── */
+
+.detail-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      flex: 1;
+      min-width: 500px;
+      justify-content: flex-end;
+    }
+
+@media only screen and (max-width: 1000px) {
+      .detail-pills {
+        justify-content: flex-start;
+      }
+    }
+
+.section-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      border-radius: var(--border-radius-full);
+      font-size: var(--fontsize-body-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: default;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-muted);
+      color: var(--text-tertiary);
+      user-select: none;
+    }
+
+.section-pill.active {
+      background: var(--interactive-bg-subtle);
+      border-color: var(--interactive-default);
+      color: var(--interactive-default);
+    }
+
+/* ── READ-ONLY DETAIL SECTIONS ── */
+
+.detail-section {
+      flex: 1 1 200px;
+      min-width: 300px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+.detail-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+    }
+
+.detail-section-title {
+      font-size: var(--fontsize-label);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+
+.detail-fields {
+      display: contents;
+    }
+
+.detail-field-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 5px 12px;
+    }
+
+.detail-field-row:nth-child(odd) {
+      background: var(--bg-muted);
+    }
+
+.detail-field-row:nth-child(even) {
+      background: var(--bg-surface);
+    }
+
+.detail-field-label {
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-tertiary);
+      flex: 0 0 90px;
+      white-space: nowrap;
+    }
+
+.detail-field-value {
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-primary);
+      font-weight: var(--font-weight-medium);
+    }
+
+.detail-empty-prompt {
+      padding: 16px;
+      color: var(--text-tertiary);
+      font-size: var(--fontsize-body-sm);
+      font-style: italic;
+      text-align: center;
+    }
+
+.add-list-btn {
+      width: 100%;
+      padding: 12px;
+      border: 1px dashed var(--border-default);
+      border-radius: var(--border-radius-md);
+      color: var(--text-tertiary);
+      font-size: var(--fontsize-body-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+.add-list-btn:hover {
+      background: var(--interactive-bg-subtle);
+      border-color: var(--interactive-default);
+      color: var(--interactive-default);
+    }
+
+/* Two-button group in card header */
+
+.detail-card-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+/* No divider when header is the only card child */
+
+.detail-card .detail-card-header:last-child {
+      border-bottom: none;
+    }

@@ -1,0 +1,99 @@
+/* ── TOP BAR — matches customer-management exactly ── */
+
+.topbar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+  max-width: var(--container-workspace);
+  width: 100%;
+  margin: auto;
+  padding: 16px 0;
+  font-size: var(--fontsize-body-sm);
+}
+
+.breadcrumb a {
+  color: var(--text-interactive);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.breadcrumb a:hover {
+  opacity: 0.8;
+}
+
+.breadcrumb a i {
+  margin-right: 4px;
+}
+
+.breadcrumb .sep {
+  color: var(--text-tertiary);
+}
+
+#search-btn {
+  margin-left: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.topbar:has(.topbar-row.hidden) #search-btn {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  max-width: var(--container-workspace);
+  margin: auto;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transform-origin: top;
+}
+
+.topbar-row.hidden {
+  transform: scaleY(0);
+  opacity: 0;
+  pointer-events: none;
+  padding-bottom: 0;
+}
+
+.search-container {
+  position: relative;
+  flex: 1;
+  display: flex;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  align-items: center;
+}
+
+.search-container i {
+  color: var(--text-tertiary);
+  padding: 0 12px;
+}
+
+.search-container:focus-within {
+  border: 1px solid var(--border-focus);
+  border-radius: 8px 8px 0 0;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-primary);
+}

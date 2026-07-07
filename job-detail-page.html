@@ -11,1990 +11,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
     rel="stylesheet" />
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      color: var(--text-primary);
-      display: flex;
-    }
-
-    /* ── MAIN LAYOUT ── */
-    .main {
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-page);
-      width: 100%;
-      height: 100vh;
-      overflow-y: auto;
-    }
-
-    /* ── TOP BAR — matches customer-management exactly ── */
-    .topbar {
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-default);
-      padding: 0 32px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-tertiary);
-      max-width: var(--container-workspace);
-      width: 100%;
-      margin: auto;
-      padding: 16px 0;
-      font-size: var(--fontsize-body-sm);
-    }
-
-    .breadcrumb a {
-      color: var(--text-interactive);
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .breadcrumb a:hover {
-      opacity: 0.8;
-    }
-
-    .breadcrumb a i {
-      margin-right: 4px;
-    }
-
-    .breadcrumb .sep {
-      color: var(--text-tertiary);
-    }
-
-    #search-btn {
-      margin-left: auto;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.15s;
-    }
-
-    .topbar:has(.topbar-row.hidden) #search-btn {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .topbar-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding-bottom: 16px;
-      max-width: var(--container-workspace);
-      margin: auto;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-      transform-origin: top;
-    }
-
-    .topbar-row.hidden {
-      transform: scaleY(0);
-      opacity: 0;
-      pointer-events: none;
-      padding-bottom: 0;
-    }
-
-    .search-container {
-      position: relative;
-      flex: 1;
-      display: flex;
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      align-items: center;
-    }
-
-    .search-container i {
-      color: var(--text-tertiary);
-      padding: 0 12px;
-    }
-
-    .search-container:focus-within {
-      border: 1px solid var(--border-focus);
-      border-radius: 8px 8px 0 0;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 8px 12px;
-      border: none;
-      outline: none;
-      background: none;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-primary);
-    }
-
-    .search-dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      list-style: none;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 0 0 8px 8px;
-      max-height: 240px;
-      overflow-y: auto;
-      z-index: 10;
-    }
-
-    .search-dropdown li {
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: var(--fontsize-body-sm);
-    }
-
-    .search-dropdown li:hover {
-      background: var(--interactive-bg-subtle);
-    }
-
-    /* ── JOB HEADER — styled as account card ── */
-
-    .job-header-card {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      background-color: white;
-      border-radius: 8px;
-      border: solid 1px var(--border-default);
-    }
-
-    /* inner rows mirror .account .inner-row */
-    .inner-row {
-      display: flex;
-      gap: 12px;
-      padding: 0;
-      align-items: flex-start;
-      padding: 16px;
-    }
-
-    .inner-row.border-top {
-      border-top: 1px solid var(--border-subtle);
-      margin-top: 12px;
-      padding-top: 12px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .inner-row-col {
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    /* Job header layout helpers */
-    .job-header-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .job-title-row {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    /* mirrors .acct-info */
-    .job-info {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      gap: 6px;
-    }
-
-    .job-number {
-      font-size: var(--fontsize-heading-h5);
-      font-weight: var(--font-weight-bold);
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      line-height: var(--line-height-heading-h5);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .active.dot {
-      background: var(--status-success-bg);
-      border: 1px solid var(--status-success-border);
-    }
-
-    .job-name {
-      font-size: var(--fontsize-body-md);
-      color: var(--text-secondary);
-      font-weight: var(--font-weight-light);
-    }
-
-    .job-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 12px;
-      border-radius: var(--border-radius-full);
-      gap: 3px;
-      background: var(--bg-surface);
-      color: var(--text-tertiary);
-      border: 1px solid var(--border-tertiary);
-    }
-
-    /* status pill */
-    .status-pill {
-      text-transform: uppercase;
-      background: var(--interactive-bg-subtle);
-      border: solid 1px var(--interactive-default);
-      color: var(--text-interactive);
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-
-    .status-pill:hover {
-      opacity: 0.75;
-    }
-
-    /* scan history status bar */
-    .scan-status-bar {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 32px;
-      padding-bottom: 0px;
-      flex-shrink: 0;
-    }
-
-    .scan-status-search-wrap {
-      position: relative;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-sm);
-      background: white;
-      overflow: visible;
-    }
-
-    .scan-status-search-wrap:focus-within {
-      border-color: var(--border-focus);
-    }
-
-    .scan-status-search {
-      flex: 1;
-      font-size: var(--fontsize-body-sm);
-      padding: 8px 12px;
-      border: none;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      background: transparent;
-      color: var(--text-primary);
-    }
-
-    #modal-scanHistory .modal-panel {
-      overflow: hidden;
-    }
-
-    .btn-sm {
-      padding: 5px 12px;
-      font-size: var(--fontsize-body-sm);
-    }
-
-    /* action buttons row */
-    .job-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-secondary {
-      background: var(--bg-surface);
-      color: var(--interactive-default);
-      border: 1px solid var(--interactive-default);
-      border-radius: var(--border-radius-full);
-      padding: 8px 20px;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s;
-    }
-
-    .btn-secondary:hover {
-      background: var(--interactive-bg-subtle);
-    }
-
-    .btn-secondary-sm {
-      padding: 4px 12px;
-      font-size: var(--fontsize-body-sm);
-    }
-
-    /* icon btn */
-    .icon-btn {
-      width: 28px;
-      height: 28px;
-      border: 1px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-tertiary);
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-
-    .icon-btn:hover {
-      background: var(--bg-muted);
-      color: var(--text-primary);
-      border-color: var(--border-subtle);
-    }
-
-    /* ── TABS ── */
-
-    .tabs {
-      display: flex;
-      flex: 1;
-      gap: 16px;
-    }
-
-    .tab-btn {
-      padding: 10px 20px;
-      border: none;
-      background: none;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      cursor: pointer;
-      color: var(--text-interactive);
-      background-color: white;
-      border: solid 1px var(--border-subtle);
-      transition: color 0.15s, border-color 0.15s, background 0.15s;
-      display: flex;
-      flex: 1;
-      justify-content: center;
-      border-radius: 8px;
-    }
-
-    .tab-btn:hover {
-      color: var(--interactive-hover);
-    }
-
-    .tab-btn.active {
-      color: var(--color-white);
-      background: var(--interactive-default);
-      border: solid 1px var(--interactive-default);
-    }
-
-    .tab-panel{
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    /* ── PAGE CONTENT ── */
-    .page-content {
-      max-width: var(--container-workspace);
-      margin: 48px auto;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    /* ── DETAIL CARDS ── */
-    .detail-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-default);
-      border-radius: var(--border-radius-md);
-      overflow: hidden;
-    }
-
-    .detail-card-header {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      background: var(--bg-muted);
-    }
-
-    .detail-card-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: var(--font-weight-semibold);
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-    }
-
-    .detail-num {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--interactive-default);
-      color: white;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .detail-card-body {
-      padding: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: flex-start;
-    }
-
-    .detail-empty-area {
-      min-height: 120px;
-      background: var(--bg-muted);
-      border: 1px solid var(--border-tertiary);
-      border-radius: var(--border-radius-sm);
-    }
-
-    /* ── SHIPPING PANEL ── */
-    .ship-toolbar {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 0 16px;
-      flex-wrap: wrap;
-    }
-
-    .ship-field-label {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      margin-bottom: 6px;
-      display: block;
-    }
-    .eyebrow{
-      font-weight: bold;
-      text-transform: uppercase;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-tertiary);
-    }
-
-    .ship-field-tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .ship-field-tab {
-      padding: 4px 12px;
-      border-radius: var(--border-radius-full);
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-surface);
-      color: var(--text-secondary);
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-
-    .ship-field-tab:hover {
-      border-color: var(--interactive-default);
-      color: var(--interactive-default);
-    }
-
-    .ship-field-tab.active {
-      background: var(--interactive-default);
-      color: var(--color-white);
-      border-color: var(--interactive-default);
-    }
-
-    .ship-bulk-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .ship-bulk-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      background: var(--bg-muted);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-md);
-      padding: 10px 14px;
-      flex-shrink: 0;
-    }
-
-    .ship-bulk-label {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      white-space: nowrap;
-    }
-
-    .ship-stepper {
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-sm);
-      overflow: hidden;
-      background: var(--bg-surface);
-    }
-
-    .ship-stepper-btn {
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: none;
-      font-size: var(--fontsize-body-md);
-      line-height: 1;
-      color: var(--text-secondary);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background 0.1s;
-    }
-
-    .ship-stepper-btn:hover {
-      background: var(--bg-subtle);
-    }
-
-    .ship-stepper-val {
-      width: 60px;
-      border: none;
-      border-left: 1px solid var(--border-subtle);
-      border-right: 1px solid var(--border-subtle);
-      text-align: center;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-      padding: 4px 0;
-      outline: none;
-      -moz-appearance: textfield;
-      background: var(--bg-surface);
-    }
-
-    .ship-stepper-val::-webkit-outer-spin-button,
-    .ship-stepper-val::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-    }
-
-    /* ── ADDRESS LIST (customer-management pattern) ── */
-    .search-list {
-      display: flex;
-      flex-direction: column;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-md);
-      overflow: hidden;
-      background-color: var(--bg-surface);
-    }
-    .search-list-header {
-      padding: 14px 20px 14px 23px;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      background: var(--bg-muted);
-      gap: 16px;
-    }
-    .search-list-header input:not([type="checkbox"]) {
-      flex: 1;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-sm);
-      padding: 6px 10px;
-      outline: none;
-      color: var(--text-primary);
-      background: var(--bg-surface);
-    }
-    .search-list-header input:not([type="checkbox"]):focus { border-color: var(--border-focus); }
-    .list-items {
-      display: flex;
-      flex-direction: column;
-    }
-    .list-item {
-      padding: 10px 16px 10px 23px;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .list-item:last-child { border-bottom: none; }
-    .select-all-cb,
-    .item-cb {
-      flex-shrink: 0;
-      width: 14px;
-      height: 14px;
-      cursor: pointer;
-      accent-color: var(--interactive-default);
-    }
-    .list-item-name {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-      white-space: nowrap;
-    }
-    .list-item-value {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-      flex: 1;
-      margin-top: 1px;
-    }
-    .list-item-actions {
-      display: flex;
-      gap: 2px;
-      flex-shrink: 0;
-      min-width: 72px;
-      justify-content: flex-end;
-    }
-
-    .list-footer {
-      padding: 8px 16px;
-      border-top: 1px solid var(--border-subtle);
-      color: var(--text-tertiary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .list-footer-count {
-      text-transform: uppercase;
-      font-size: var(--fontsize-body-sm);
-    }
-    .action-container { display: flex; gap: 4px; }
-
-    .add-list-btn {
-      width: 100%;
-      padding: 12px;
-      border: 1px dashed var(--border-default);
-      border-radius: var(--border-radius-md);
-      color: var(--text-tertiary);
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-bottom: 12px;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-    .add-list-btn:hover {
-      background: var(--interactive-bg-subtle);
-      border-color: var(--interactive-default);
-      color: var(--interactive-default);
-    }
-
-
-    /* ── MODAL OVERLAY — matches customer-management exactly ── */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      z-index: 200;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-end;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-    }
-
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    /* Centered dialog variant (confirm/alert modals) */
-    .modal-overlay.modal-centered {
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-overlay.modal-centered .modal-panel {
-      width: 400px;
-      max-width: 90vw;
-      height: auto;
-      max-height: 90vh;
-      border-radius: var(--border-radius-lg);
-      transform: translateY(12px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    }
-
-    .modal-overlay.modal-centered.open .modal-panel {
-      transform: translateY(0);
-    }
-
-    .modal-panel {
-      width: var(--container-aside);
-      height: 100vh;
-      background: var(--bg-surface);
-      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
-      transform: translateX(40px);
-      transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-overlay.open .modal-panel {
-      transform: translateX(0);
-    }
-
-    .modal-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      background: var(--bg-surface);
-      z-index: 10;
-    }
-
-    .modal-title {
-      font-size: var(--fontsize-body-md);
-      font-weight: var(--font-weight-bold);
-      color: var(--text-primary);
-    }
-
-    .modal-close {
-      width: 32px;
-      height: 32px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      border-radius: 6px;
-      color: var(--text-tertiary);
-      font-size: var(--fontsize-body-lg);
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .modal-close:hover {
-      background: var(--bg-muted);
-      color: var(--text-primary);
-    }
-
-    .modal-body {
-      padding: 24px 32px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      padding-bottom: 192px;
-    }
-
-    #modal-trelloConfirm .modal-body {
-      padding: 24px 32px;
-      gap: 8px;
-    }
-
-    .modal-footer {
-      padding: 16px 32px;
-      border-top: 1px solid var(--border-subtle);
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      flex-shrink: 0;
-      position: sticky;
-      bottom: 0;
-      background: var(--bg-surface);
-    }
-
-    /* ── FORM ELEMENTS — matches customer-management ── */
-    .form-group {}
-
-    .form-label {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .form-input,
-    .form-select {
-      width: 100%;
-      border: 1.5px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: var(--fontsize-body-sm);
-      outline: none;
-      background: var(--bg-surface);
-      color: var(--text-primary);
-      transition: border-color 0.15s;
-    }
-
-    .form-input:focus,
-    .form-select:focus {
-      border-color: var(--border-focus);
-    }
-
-    .form-input::placeholder {
-      color: var(--text-tertiary);
-    }
-
-    .form-select {
-      cursor: pointer;
-      -webkit-appearance: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 32px;
-    }
-
-    .form-row {
-      display: grid;
-      gap: 16px;
-    }
-
-    .form-row-2 {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .form-row-3 {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    .section-label-sm {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      padding: 16px 0 8px;
-      border-top: 1px solid var(--border-subtle);
-      margin: 8px 0px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .section-label-sm.collapsible-header {
-      cursor: pointer;
-      margin-left: -8px;
-      margin-right: -8px;
-      padding-left: 8px;
-      padding-right: 8px;
-      transition: background 0.15s, color 0.15s;
-      user-select: none;
-    }
-
-    .section-label-sm.collapsible-header:hover {
-      background: var(--interactive-bg-subtle);
-      color: var(--text-interactive);
-      border-top: 1px solid var(--interactive-hover);
-    }
-
-    /* checkbox grid — 3-column layout */
-    .check-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px 0;
-    }
-
-    .check-grid-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .check-grid label {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-      cursor: pointer;
-      white-space: nowrap;
-      padding: 4px 6px;
-      border-radius: var(--border-radius-sm);
-      transition: background 0.15s;
-    }
-
-    .check-grid label:hover {
-      background: var(--bg-subtle);
-    }
-
-    .check-grid input[type="checkbox"] {
-      accent-color: var(--interactive-default);
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    .check-inline {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-      cursor: pointer;
-    }
-
-    .check-inline input[type="checkbox"] {
-      accent-color: var(--interactive-default);
-      cursor: pointer;
-    }
-
-    /* collapsible sections */
-    .collapsible-body {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .collapsible-body.collapsed,
-    .collapsed {
-      display: none;
-    }
-
-    /* check subgroups */
-    .check-subgroup {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .check-subgroup + .check-subgroup {
-      margin-top: 16px;
-    }
-
-    .bindery-board-action {
-      margin-top: 16px;
-    }
-
-    .check-subgroup-label {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-    }
-
-    /* ── SECTION PILLS (detail card header) ── */
-    .detail-pills {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      flex: 1;
-      min-width: 500px;
-      justify-content: flex-end;
-    }
-
-    @media only screen and (max-width: 1000px) {
-      .detail-pills {
-        justify-content: flex-start;
-      }
-    }
-
-    .section-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 10px;
-      border-radius: var(--border-radius-full);
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      cursor: default;
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-muted);
-      color: var(--text-tertiary);
-      user-select: none;
-    }
-
-    .section-pill.active {
-      background: var(--interactive-bg-subtle);
-      border-color: var(--interactive-default);
-      color: var(--interactive-default);
-    }
-
-    /* ── READ-ONLY DETAIL SECTIONS ── */
-    .detail-section {
-      flex: 1 1 200px;
-      min-width: 300px;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-md);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .detail-section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 7px 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      background: var(--bg-surface);
-    }
-
-    .detail-section-title {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-    }
-
-    .detail-fields {
-      display: contents;
-    }
-
-    .detail-field-row {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      padding: 5px 12px;
-    }
-
-    .detail-field-row:nth-child(odd) {
-      background: var(--bg-muted);
-    }
-
-    .detail-field-row:nth-child(even) {
-      background: var(--bg-surface);
-    }
-
-    .detail-field-label {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-tertiary);
-      flex: 0 0 90px;
-      white-space: nowrap;
-    }
-
-    .detail-field-value {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-primary);
-      font-weight: var(--font-weight-medium);
-    }
-
-    .detail-field-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      padding: 4px 0;
-    }
-
-    .detail-tag {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-semibold);
-      padding: 1px 7px;
-      border-radius: var(--border-radius-full);
-      background: var(--interactive-bg-subtle);
-      border: 1px solid var(--interactive-default);
-      color: var(--interactive-default);
-    }
-
-    .detail-empty-prompt {
-      padding: 16px;
-      color: var(--text-tertiary);
-      font-size: var(--fontsize-body-sm);
-      font-style: italic;
-      text-align: center;
-    }
-
-    .hidden-section {
-      display: none;
-    }
-
-    /* addon reveal fields */
-    .addon-fields {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .addon-fields.collapsed {
-      display: none;
-    }
-
-    /* Section label following addon-fields gets top spacing */
-    .addon-fields + .section-label-sm {
-      margin-top: 8px;
-    }
-
-    /* Corner size reveal */
-    #cornerSize {
-      margin-top: 4px;
-    }
-
-    /* toggle rows — matches customer-management */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-md);
-      background: var(--bg-surface);
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.15s, border-color 0.15s;
-    }
-
-    .toggle-row:hover {
-      background: var(--bg-muted);
-      border-color: var(--border-default);
-    }
-
-    .toggle-row.on {
-      background: var(--status-success-bg);
-      border-color: var(--status-success-border);
-    }
-
-    .toggle-row.on:hover {
-      filter: brightness(0.96);
-    }
-
-    .toggle-label {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-primary);
-      transition: color 0.15s;
-    }
-
-    .toggle-row.on .toggle-label {
-      color: var(--status-success-border);
-    }
-
-    .toggle {
-      width: 36px;
-      height: 20px;
-      background: var(--border-default);
-      border-radius: 20px;
-      position: relative;
-      pointer-events: none;
-      transition: background 0.2s;
-      flex-shrink: 0;
-    }
-
-    .toggle::after {
-      content: "";
-      width: 14px;
-      height: 14px;
-      background: var(--color-white);
-      border-radius: 50%;
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      transition: left 0.2s;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-
-    .toggle-row.on .toggle {
-      background: var(--status-success-border);
-    }
-
-    .toggle-row.on .toggle::after {
-      left: 19px;
-    }
-
-    .collapse-toggle {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-tertiary);
-      padding: 0;
-      font-size: var(--fontsize-body-sm);
-      pointer-events: none;
-      /* row handles the click */
-    }
-
-    /* sub-action button in modal body */
-    .btn-add-sub {
-      width: 100%;
-      padding: 9px;
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      background: var(--bg-muted);
-      color: var(--text-secondary);
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .btn-add-sub:hover {
-      background: var(--interactive-bg-subtle);
-      color: var(--interactive-default);
-    }
-
-    /* primary button */
-    .btn-primary {
-      background: var(--interactive-default);
-      color: var(--color-white);
-      border: none;
-      border-radius: var(--border-radius-full);
-      padding: 8px 20px;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .btn-primary:hover {
-      background: var(--interactive-hover);
-    }
-
-    .btn-primary:disabled {
-      opacity: .5;
-      background-color: var(--interactive-default);
-      cursor: default;
-    }
-
-    /* toast */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: #111827;
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-medium);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.2s, transform 0.2s;
-      z-index: 300;
-      pointer-events: none;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── INTERIOR BOARDS MODAL ── */
-    .boards-section {
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-md);
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-
-    .boards-section:last-child {
-      margin-bottom: 0;
-    }
-
-    .boards-section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      background: var(--bg-muted);
-    }
-
-    /* ── Proof Contacts Combobox ── */
-    .pc-combobox {
-      position: relative;
-    }
-
-    .pc-input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border: 1px solid var(--border-default);
-      border-radius: var(--border-radius-sm);
-      background: var(--bg-surface);
-      transition: border-color 0.15s;
-    }
-
-    .pc-input-wrap:focus-within {
-      border-color: var(--interactive-default);
-    }
-
-    .pc-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-primary);
-    }
-
-    .pc-input::placeholder {
-      color: var(--text-tertiary);
-    }
-
-    .pc-dropdown {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-default);
-      border-radius: var(--border-radius-md);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-      z-index: 50;
-      max-height: 260px;
-      overflow-y: auto;
-    }
-
-    .pc-dd-group-label {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      padding: 8px 12px 4px;
-    }
-
-    .pc-dd-item {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      padding: 7px 12px;
-      cursor: pointer;
-      transition: background 0.1s;
-    }
-
-    .pc-dd-item:hover,
-    .pc-dd-item.highlighted {
-      background: var(--interactive-bg-subtle);
-    }
-
-    .pc-dd-item-name {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-    }
-
-    .pc-dd-item-email {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-tertiary);
-    }
-
-    .pc-dd-divider {
-      height: 1px;
-      background: var(--border-subtle);
-      margin: 4px 0;
-    }
-
-    .pc-dd-empty {
-      padding: 12px;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-tertiary);
-      font-style: italic;
-      text-align: center;
-    }
-
-    .pc-email-string {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--bg-muted);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-sm);
-      margin-bottom: 24px;
-    }
-
-    .pc-email-string-text {
-      flex: 1;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-      word-break: break-all;
-      line-height: 1.5;
-    }
-
-    .pc-added-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .pc-added-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .pc-added-name {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-    }
-
-    .pc-added-email {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-tertiary);
-    }
-
-    /* ── Job Contacts table ── */
-    .pc-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .pc-table thead tr {
-      border-bottom: 2px solid var(--border-subtle);
-    }
-    .pc-table th {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--text-tertiary);
-      padding: 5px 0;
-      text-align: left;
-    }
-    .pc-th-receives { width: 210px; }
-    .pc-th-action   { width: 32px; }
-    /* z-index fix: rows are positioned so open dropdown clears siblings */
-    .pc-table tbody tr { border-bottom: 1px solid var(--border-subtle); position: relative; }
-    .pc-row-open { z-index: 10; }
-    .pc-table td {
-      padding: 8px 0;
-      vertical-align: middle;
-    }
-    .pc-table td:not(:last-child) { padding-right: 12px; }
-
-    /* Scrollable modal variant (fixed header/footer, scrollable inner list) */
-    .modal-scroll { overflow: hidden; }
-    .modal-scroll .te-list { overflow-y: auto; flex: 1; }
-
-    /* Shared icon helpers */
-    .pc-search-icon { color: var(--text-tertiary); font-size: var(--fontsize-body-sm); flex-shrink: 0; }
-    .pc-chevron     { font-size: 10px; color: var(--text-tertiary); flex-shrink: 0; }
-    .pc-receives-none { font-size: 11px; font-style: italic; color: var(--text-tertiary); }
-    .icon-success   { color: var(--status-success-fg); }
-
-    /* Time entry cell text */
-    .te-val     { font-size: var(--fontsize-body-sm); color: var(--text-primary); }
-    .te-val-sec { font-size: var(--fontsize-body-sm); color: var(--text-secondary); }
-
-    /* Time entry compact inputs */
-    .te-input-sm   { font-size: var(--fontsize-body-sm) !important; padding: 5px 8px !important; }
-    .te-input-time { font-size: var(--fontsize-body-sm) !important; padding: 5px 6px !important; width: 48px; text-align: center; }
-
-    .pc-receives-wrap {
-      position: relative;
-      width: 100%;
-    }
-    .pc-receives-trigger {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: var(--border-radius-sm);
-      cursor: pointer;
-      min-height: 30px;
-    }
-    .pc-receives-tags {
-      flex: 1;
-    }
-    .pc-receives-text {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-primary);
-    }
-    .pc-receives-menu {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-default);
-      border-radius: var(--border-radius-sm);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-      z-index: 200;
-      padding: 4px 0;
-    }
-    .pc-receives-opt {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-primary);
-      cursor: pointer;
-    }
-    .pc-receives-opt:hover { background: var(--interactive-bg-subtle); }
-    .pc-receives-opt input[type="checkbox"] { width: 14px; height: 14px; flex-shrink: 0; }
-
-    /* ── Time Entries Modal ── */
-    .te-header-row {
-      display: grid;
-      grid-template-columns: 28px 160px 100px 120px 1fr 32px;
-      gap: 8px;
-      padding: 6px 12px;
-      background: var(--bg-page);
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      flex-shrink: 0;
-    }
-
-    .te-entry {
-      display: grid;
-      grid-template-columns: 28px 160px 100px 120px 1fr 32px;
-      gap: 8px;
-      padding: 6px 12px;
-      align-items: center;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .te-entry:nth-child(even) {
-      background: var(--bg-muted);
-    }
-
-    .te-initials {
-      width: 24px;
-      height: 24px;
-      border-radius: var(--border-radius-full);
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      color: var(--text-tertiary);
-      flex-shrink: 0;
-    }
-
-    .te-time-wrap {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .te-time-sep {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-tertiary);
-    }
-
-    .te-list {
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .te-add-row {
-      display: grid;
-      grid-template-columns: 28px 160px 100px 120px 1fr 32px;
-      gap: 8px;
-      padding: 10px 12px;
-      align-items: end;
-      border-bottom: 2px solid var(--border-subtle);
-      flex-shrink: 0;
-      background: var(--bg-surface);
-    }
-
-    /* ── Scan History Modal ── */
-    .scan-tabs {
-      display: flex;
-      padding: 32px;
-      padding-bottom: 0px;
-      gap: 24px;
-      flex-shrink: 0;
-    }
-
-    .scan-tab {
-      flex: 1;
-      padding: 10px 20px;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-interactive);
-      background: white;
-      border: solid 1px var(--border-subtle);
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-
-    .scan-tab:hover {
-      color: var(--interactive-hover);
-    }
-
-    .scan-tab.active {
-      background: var(--interactive-default);
-      color: var(--color-white);
-      border-color: var(--interactive-default);
-    }
-
-    .scan-tab-panel {
-      display: none;
-      flex-direction: column;
-      flex: 1;
-      overflow: visible;
-      gap: 16px;
-    }
-
-    .scan-tab-panel.active {
-      display: flex;
-    }
-
-    .scan-filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 32px 10px;
-      flex-shrink: 0;
-    }
-
-    .scan-filter-label {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-tertiary);
-      white-space: nowrap;
-    }
-
-    .scan-table-wrap {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 32px 32px;
-    }
-
-    .scan-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: var(--fontsize-body-sm);
-    }
-
-    .scan-table th {
-      text-align: left;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--border-subtle);
-      white-space: nowrap;
-    }
-
-    .scan-table td {
-      padding: 7px 10px;
-      color: var(--text-primary);
-      border-bottom: 1px solid var(--border-tertiary);
-    }
-
-    .scan-table .col-timestamp {
-      color: var(--text-tertiary);
-      font-size: var(--fontsize-body-sm);
-      white-space: nowrap;
-    }
-
-    .scan-table .col-arrow {
-      color: var(--text-tertiary);
-      padding-left: 4px;
-      padding-right: 4px;
-    }
-
-    .scan-table tr:nth-child(even) td {
-      background: var(--bg-muted);
-    }
-
-
-    .boards-section-title {
-      font-size: var(--fontsize-label);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-secondary);
-    }
-
-    .boards-section-body {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .insert-sizes-header {
-      display: grid;
-      grid-template-columns: 20px 1fr 1fr 1fr 1fr auto;
-      gap: 8px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-      font-weight: var(--font-weight-medium);
-    }
-
-    #insertSizeList {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .insert-size-fields .icon-btn {
-      margin-bottom: 1px;
-    }
-
-    .insert-sizes-header span:nth-child(2) {
-      grid-column: 2 / 4;
-    }
-
-    .insert-sizes-header span:nth-child(3) {
-      grid-column: 4 / 7;
-    }
-
-    .insert-size-block {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .insert-size-fields {
-      display: grid;
-      grid-template-columns: 20px 1fr 1fr 1fr 1fr auto;
-      gap: 8px;
-      align-items: flex-end;
-    }
-
-    .insert-size-fields div:nth-child(4n) {
-      margin-left: 16px;
-    }
-
-    .insert-row-num {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      color: var(--text-tertiary);
-      padding-bottom: 10px;
-      align-self: flex-end;
-      text-align: center;
-    }
-
-    .insert-size-fields .form-label {
-      font-size: var(--fontsize-label);
-    }
-
-    /* Segmented toggle */
-    .seg-toggle {
-      display: inline-flex;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-full);
-      overflow: hidden;
-      background: var(--bg-muted);
-      gap: 8px;
-    }
-
-    .seg-toggle-btn {
-      padding: 4px 14px;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-tertiary);
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      user-select: none;
-      border-radius: var(--border-radius-full);
-
-    }
-
-    .seg-toggle-btn:hover:not(.active) {
-      background: var(--bg-subtle);
-      color: var(--text-secondary);
-    }
-
-    .seg-toggle-btn.active {
-      background: var(--interactive-default);
-      color: #fff;
-
-    }
-
-    .boards-empty-state {
-      padding: 16px;
-      color: var(--text-tertiary);
-      font-size: var(--fontsize-body-sm);
-      font-style: italic;
-      text-align: center;
-    }
-
-    /* radio group */
-    .radio-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .radio-option {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-      cursor: pointer;
-    }
-
-    .radio-option input[type="radio"] {
-      accent-color: var(--interactive-default);
-      cursor: pointer;
-      width: 14px;
-      height: 14px;
-    }
-
-    /* danger button */
-    .btn-danger {
-      background: var(--bg-surface);
-      color: var(--color-red-300);
-      border: 1px solid var(--color-red-100);
-      border-radius: var(--border-radius-full);
-      padding: 8px 20px;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .btn-danger:hover {
-      background: var(--status-error-bg);
-    }
-
-    .modal-footer-split {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 32px;
-      border-top: 1px solid var(--border-subtle);
-      flex-shrink: 0;
-      position: sticky;
-      bottom: 0;
-      background: var(--bg-surface);
-      gap: 8px;
-    }
-
-    .modal-footer-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    /* Trello confirm modal text */
-    .trello-confirm-heading {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-    }
-
-    .trello-confirm-body {
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    /* Detail tab filter select */
-    .detail-filter-select {
-      width: auto;
-      min-width: 40px;
-      flex-shrink: 0;
-    }
-
-    /* Textarea resize */
-    textarea.form-input {
-      resize: vertical;
-    }
-
-    /* ── DETAIL EDIT MODAL TABS ── */
-    .detail-edit-tabs {
-      display: flex;
-      flex-shrink: 0;
-            border-bottom: 1px solid var(--border-default);
-
-    }
-
-    .detail-edit-tab {
-      padding: 10px 16px;
-      border: none;
-      border-bottom: 2px solid transparent;
-      background: transparent;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-tertiary);
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: color 0.15s, background 0.15s;
-      flex: 1;
-    }
-
-    .detail-edit-tab:hover {
-      color: var(--text-interactive);
-    }
-
-    .detail-edit-tab.active {
-      color: var(--interactive-default);
-      background: var(--interactive-bg-subtle);
-      border-radius: 8px 8px 0px 0px;
-      border: solid 1px var(--interactive-hover);
-      border-bottom: none;
-    }
-
-    .detail-edit-panel {
-      display: none;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .detail-edit-panel.active {
-      display: flex;
-    }
-
-    /* Two-button group in card header */
-    .detail-card-actions {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    /* No divider when header is the only card child */
-    .detail-card .detail-card-header:last-child {
-      border-bottom: none;
-    }
-
-    /* scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-subtle);
-      border-radius: 3px;
-    }
-  </style>
+  <link rel="stylesheet" href="job-detail.css" />
+  <link rel="stylesheet" href="components/modal-shell.css" />
+  <link rel="stylesheet" href="components/topbar/topbar.css" />
+  <link rel="stylesheet" href="components/job-header/job-header.css" />
+  <link rel="stylesheet" href="components/production-tab/production-tab.css" />
+  <link rel="stylesheet" href="components/shipping-tab/shipping-tab.css" />
+  <link rel="stylesheet" href="modals/detail-edit-modal/detail-edit-modal.css" />
+  <link rel="stylesheet" href="modals/trello-confirm-modal/trello-confirm-modal.css" />
+  <link rel="stylesheet" href="modals/proof-contacts-modal/proof-contacts-modal.css" />
+  <link rel="stylesheet" href="modals/time-entries-modal/time-entries-modal.css" />
+  <link rel="stylesheet" href="modals/scan-history-modal/scan-history-modal.css" />
 </head>
 
 <body data-theme="titanium">
   <div class="main">
 
-    <!-- ── TOP BAR ── -->
+    <!-- ── TOP BAR (components/topbar) ── -->
     <div class="topbar">
       <div class="breadcrumb type-body-sm">
         <a><i class="fa-solid fa-folder"></i>Jobs</a>
@@ -2026,34 +59,34 @@
 
     <!-- ── PAGE CONTENT ── -->
     <div class="page-content">
-      <!-- ── JOB HEADER (account card style) ── -->
-      <div class="job-header-card">
+      <!-- ── JOB HEADER — account card style (components/job-header) ── -->
+      <div class="header-wrap">
+        <div class="job-header-card">
         <div class="inner-row inner-row-col">
           <div class="job-header-top">
             <div class="job-title-row">
-              <h5 class="job-number">232323</h5>
-              <div class="job-name type-body-md">2018 Standard Menu Single Fold Jan 2018 Ws</div>
+              <span class="semibold">232323</span>
+              <span>2018 Standard Menu Single Fold Jan 2018 Ws</span>
             </div>
             <button class="icon-btn" title="Edit job information" onclick="openModal('editJob')">
               <i class="fa-solid fa-pen"></i>
             </button>
           </div>
           <div class="job-tags">
-              <span class="pill">New Job</span>
-              <span class="pill">Printing</span>
-              <span class="pill">Received 12/08/17</span>
-            </div>
+            <span class="pill">New Job</span>
+            <span class="pill">Printing</span>
+            <span class="pill">Received 12/08/17</span>
+          </div>
         </div>
         <div class="inner-row border-top">
           <div class="job-actions">
-            <button class="btn-secondary btn-secondary-sm">View Linked Jobs</button>
-<button class="btn-secondary btn-secondary-sm" onclick="openModal('timeEntries')">Manage Time
+            <button class="btn-secondary btn-secondary-sm" onclick="openModal('timeEntries')">Manage Time
               Entries</button>
             <button class="btn-secondary btn-secondary-sm" id="trello-btn" onclick="trelloAction()">Send to
               Trello</button>
           </div>
-          <span class="pill status-pill" id="statusPill" title="Bindery On Cart" onclick="openModal('scanHistory')"
-            >STATUS: IN PRODUCTION</span>
+          <span class="pill status-pill" id="statusPill" title="Bindery On Cart"
+            onclick="openModal('scanHistory')">STATUS: IN PRODUCTION</span>
         </div>
       </div>
 
@@ -2063,32 +96,30 @@
         <button class="tab-btn" onclick="switchTab(this, 'shipping')">Shipping</button>
         <button class="tab-btn" onclick="switchTab(this, 'billing')">Billing</button>
       </div>
+      </div>
 
-      <!-- ── SHIPPING PANEL ── -->
+      <!-- ── SHIPPING PANEL (components/shipping-tab) ── -->
       <div class="tab-panel hidden-section" id="tab-panel-shipping">
 
-        <span class="eyebrow">Shipping Contacts</span>
-        <div class="pc-email-string hidden-section" id="pcShipWrap">
-          <span class="pc-email-string-text" id="pcShipNames"></span>
-          <button class="icon-btn" id="pcShipCopyBtn" title="Copy shipping contacts" onclick="pcShipCopyNames()">
-            <i class="fa-regular fa-copy"></i>
-          </button>
-          <button class="icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
-            <i class="fa-regular fa-pen"></i>
-          </button>
-        </div>
-
-        <h6>Shipping Distribution</h6>
         <!-- Field tabs + bulk apply -->
         <div class="ship-toolbar">
           <div class="ship-field-tabs-wrap">
             <span class="ship-field-label">Editing Field</span>
             <div class="ship-field-tabs">
-              <button class="ship-field-tab active" onclick="switchShipField(this, 'quantity')">Quantity</button>
-              <button class="ship-field-tab" onclick="switchShipField(this, 'info')">Additional Information</button>
+              <button class="ship-field-tab active" onclick="switchShipField(this, 'quantity')">Quantity</button>              
               <button class="ship-field-tab" onclick="switchShipField(this, 'method')">Method</button>
-              <button class="ship-field-tab" onclick="switchShipField(this, 'account')">Account</button>
               <button class="ship-field-tab" onclick="switchShipField(this, 'attn')">ATTN</button>
+              <button class="ship-field-tab" onclick="switchShipField(this, 'info')">Notes</button>
+            </div>
+            <div class="notice" id="pcShipWrap">
+              <button class="inline-icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+              <p>
+                <span class="pc-email-string-text semibold" id="pcShipNames"></span>
+                receives shipping notifications
+              </p>
+              
             </div>
           </div>
           <div class="ship-bulk-wrap">
@@ -2105,12 +136,14 @@
           </div>
         </div>
 
+
         <!-- Address list -->
         <div class="search-list ship-address-list">
           <div class="search-list-header">
             <input type="checkbox" class="select-all-cb" id="selectAllAddresses" onchange="toggleSelectAll(this)">
             <input type="text" placeholder="Search Addresses…" oninput="filterAddresses(this.value)">
-            <button class="icon-btn" onclick="addShippingAddress()" title="Add address"><i class="fa-solid fa-plus"></i></button>
+            <button class="icon-btn" onclick="addShippingAddress()" title="Add address"><i
+                class="fa-solid fa-plus"></i></button>
           </div>
           <div class="list-items" id="shipAddressList">
 
@@ -2120,12 +153,13 @@
               <div class="list-item-value">710 S Wayside Drive, Houston, TX 77023</div>
               <div class="ship-stepper">
                 <button class="ship-stepper-btn" onclick="stepRow(this,-1)">−</button>
-                <input class="ship-stepper-val" type="number" value="0" min="0">
+                <input class="ship-stepper-val" type="number" value="100" min="0">
                 <button class="ship-stepper-btn" onclick="stepRow(this,1)">+</button>
               </div>
               <div class="list-item-actions">
                 <button class="icon-btn" title="Edit address"><i class="fa-regular fa-pen"></i></button>
-                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button>
+                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i
+                    class="fa-regular fa-trash-can"></i></button>
               </div>
             </div>
 
@@ -2135,12 +169,13 @@
               <div class="list-item-value">8925 Clearwood St, Houston, TX 77075</div>
               <div class="ship-stepper">
                 <button class="ship-stepper-btn" onclick="stepRow(this,-1)">−</button>
-                <input class="ship-stepper-val" type="number" value="11221" min="0">
+                <input class="ship-stepper-val" type="number" value="100" min="0">
                 <button class="ship-stepper-btn" onclick="stepRow(this,1)">+</button>
               </div>
               <div class="list-item-actions">
                 <button class="icon-btn" title="Edit address"><i class="fa-regular fa-pen"></i></button>
-                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button>
+                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i
+                    class="fa-regular fa-trash-can"></i></button>
               </div>
             </div>
 
@@ -2150,32 +185,37 @@
               <div class="list-item-value">1441 East 17th Street, Cleveland, OH 44114</div>
               <div class="ship-stepper">
                 <button class="ship-stepper-btn" onclick="stepRow(this,-1)">−</button>
-                <input class="ship-stepper-val" type="number" value="300" min="0">
+                <input class="ship-stepper-val" type="number" value="100" min="0">
                 <button class="ship-stepper-btn" onclick="stepRow(this,1)">+</button>
               </div>
               <div class="list-item-actions">
                 <button class="icon-btn" title="Edit address"><i class="fa-regular fa-pen"></i></button>
-                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button>
+                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i
+                    class="fa-regular fa-trash-can"></i></button>
               </div>
             </div>
 
           </div>
           <div class="list-footer">
             <span class="list-footer-count" id="shipAddrCount">3 ADDRESSES</span>
+            <span class="pill pill-success" id="qty-count">300/300</span>
             <div class="action-container">
-              <button class="icon-btn" title="Export address list"><i class="fa-solid fa-arrow-down-from-bracket"></i></button>
-              <button class="icon-btn" title="Import addresses"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+              <button class="icon-btn" title="Export address list"><i
+                  class="fa-solid fa-arrow-down-from-bracket"></i></button>
+              <button class="icon-btn" title="Import addresses"><i
+                  class="fa-solid fa-arrow-up-from-bracket"></i></button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ── PRODUCTION PANEL ── -->
+      <!-- ── PRODUCTION PANEL (components/production-tab) ── -->
       <div class="tab-panel" id="tab-panel-production">
         <span class="eyebrow">Proofing Contacts</span>
         <div class="pc-email-string hidden-section" id="pcProdEmailStringWrap">
           <span class="pc-email-string-text" id="pcProdEmailString"></span>
-          <button class="icon-btn" id="pcProdCopyBtn" title="Copy all emails" onclick="pcProdCopyEmails()">
+          <button class="icon-btn" id="pcProdCopyBtn" title="Copy all emails"
+            onclick="pcCopyText('pcProdEmailString','pcProdCopyBtn')">
             <i class="fa-regular fa-copy"></i>
           </button>
           <button class="icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
@@ -2214,7 +254,7 @@
               <div class="detail-fields">
                 <div class="detail-field-row">
                   <span class="detail-field-label">Quantity</span>
-                  <span class="detail-field-value">200</span>
+                  <span class="detail-field-value">300</span>
                 </div>
                 <div class="detail-field-row">
                   <span class="detail-field-label"># Panels</span>
@@ -2276,12 +316,13 @@
 
       </div><!-- /tab-panel-production -->
 
-      <!-- ── BILLING PANEL ── -->
+      <!-- ── BILLING PANEL (no unique styles/behavior — shares proof-contacts-modal) ── -->
       <div class="tab-panel hidden-section" id="tab-panel-billing">
         <span class="eyebrow">Billing Contacts</span>
         <div class="pc-email-string hidden-section" id="pcBillWrap">
           <span class="pc-email-string-text" id="pcBillNames"></span>
-          <button class="icon-btn" id="pcBillCopyBtn" title="Copy billing contacts" onclick="pcBillCopyNames()">
+          <button class="icon-btn" id="pcBillCopyBtn" title="Copy billing contacts"
+            onclick="pcCopyText('pcBillNames','pcBillCopyBtn')">
             <i class="fa-regular fa-copy"></i>
           </button>
           <button class="icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
@@ -2293,7 +334,7 @@
     </div><!-- /page-content -->
   </div><!-- /main -->
 
-  <!-- ── MODAL: Detail Edit (tabbed) ── -->
+  <!-- ── MODAL: Detail Edit — tabbed (modals/detail-edit-modal) ── -->
   <div class="modal-overlay" id="modal-detailEdit" onclick="handleOverlayClick(event, 'detailEdit')">
     <div class="modal-panel">
       <div class="modal-header">
@@ -2301,16 +342,20 @@
         <button class="icon-btn" onclick="closeModal('detailEdit')"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      
+
 
       <div class="modal-body">
         <div class="detail-edit-tabs">
-        <button class="detail-edit-tab active" data-tab="general" onclick="switchDetailTab(this, 'general')">General</button>
-        <button class="detail-edit-tab" data-tab="paper" onclick="switchDetailTab(this, 'paper')">Paper</button>
-        <button class="detail-edit-tab" data-tab="print" onclick="switchDetailTab(this, 'print')">Print Finishing</button>
-        <button class="detail-edit-tab" data-tab="bindery" onclick="switchDetailTab(this, 'bindery')">Bindery Finishing</button>
-        <button class="detail-edit-tab" data-tab="boards" onclick="switchDetailTab(this, 'boards')">Interior Boards</button>
-      </div>
+          <button class="detail-edit-tab active" data-tab="general"
+            onclick="switchDetailTab(this, 'general')">General</button>
+          <button class="detail-edit-tab" data-tab="paper" onclick="switchDetailTab(this, 'paper')">Paper</button>
+          <button class="detail-edit-tab" data-tab="print" onclick="switchDetailTab(this, 'print')">Print
+            Finishing</button>
+          <button class="detail-edit-tab" data-tab="bindery" onclick="switchDetailTab(this, 'bindery')">Bindery
+            Finishing</button>
+          <button class="detail-edit-tab" data-tab="boards" onclick="switchDetailTab(this, 'boards')">Interior
+            Boards</button>
+        </div>
         <!-- General -->
         <div class="detail-edit-panel active" id="dep-general">
           <div class="form-group">
@@ -2465,7 +510,8 @@
               <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Emboss</label>
               <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Logojet</label>
               <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Deboss</label>
-              <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Laser Engrave</label>
+              <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Laser
+                Engrave</label>
               <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Flat Stamp</label>
             </div>
             <div class="addon-fields collapsed" id="decorationColor">
@@ -2481,7 +527,8 @@
               <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> Cords</label>
               <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> ScrewPosts</label>
               <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> Slide-In Pocket</label>
-              <label><input type="checkbox" class="binding-chk" id="clipChk" onchange="onBindingChange(); onClipChange(this)" /> Clip</label>
+              <label><input type="checkbox" class="binding-chk" id="clipChk"
+                  onchange="onBindingChange(); onClipChange(this)" /> Clip</label>
             </div>
             <div class="addon-fields collapsed" id="clipColor">
               <label class="form-label">Clip Color</label>
@@ -2496,11 +543,6 @@
               <label class="form-label">Binding Description</label>
               <input class="form-input" type="text" />
             </div>
-          </div>
-          <div class="bindery-board-action">
-            <button class="btn-add-sub" onclick="switchDetailTab(document.querySelector('[data-tab=boards]'), 'boards')">
-              <i class="fa-solid fa-plus"></i> Interior Boards
-            </button>
           </div>
         </div>
 
@@ -2582,7 +624,7 @@
     </div>
   </div>
 
-  <!-- ── Edit Job Info Modal ── -->
+  <!-- ── MODAL: Edit Job Info (modals/edit-job-modal) ── -->
   <div class="modal-overlay" id="modal-editJob" onclick="handleOverlayClick(event, 'editJob')">
     <div class="modal-panel">
       <div class="modal-header">
@@ -2631,7 +673,7 @@
     </div>
   </div>
 
-  <!-- ── Trello Confirm Modal ── -->
+  <!-- ── MODAL: Trello Confirm (modals/trello-confirm-modal) ── -->
   <div class="modal-overlay modal-centered" id="modal-trelloConfirm"
     onclick="handleOverlayClick(event, 'trelloConfirm')">
     <div class="modal-panel">
@@ -2651,7 +693,7 @@
     </div>
   </div>
 
-  <!-- ── Manage Job Contacts Modal ── -->
+  <!-- ── MODAL: Manage Job Contacts (modals/proof-contacts-modal) ── -->
   <div class="modal-overlay" id="modal-proofContacts" onclick="handleOverlayClick(event, 'proofContacts')">
     <div class="modal-panel">
       <div class="modal-header">
@@ -2689,7 +731,7 @@
     </div>
   </div>
 
-  <!-- ── Manage Time Entries Modal ── -->
+  <!-- ── MODAL: Manage Time Entries (modals/time-entries-modal) ── -->
   <div class="modal-overlay" id="modal-timeEntries" onclick="handleOverlayClick(event, 'timeEntries')">
     <div class="modal-panel modal-scroll">
       <div class="modal-header">
@@ -2730,7 +772,8 @@
           <span class="te-val">09:15</span>
           <span class="te-val-sec">—</span>
           <span class="te-val">Initial layout setup</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i class="fa-regular fa-trash-can"></i></button>
+          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
+              class="fa-regular fa-trash-can"></i></button>
         </div>
         <div class="te-entry">
           <div class="te-initials">HP</div>
@@ -2738,7 +781,8 @@
           <span class="te-val">14:30</span>
           <span class="te-val-sec">Sent proof?</span>
           <span class="te-val">Sent PDF proof to Diane</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i class="fa-regular fa-trash-can"></i></button>
+          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
+              class="fa-regular fa-trash-can"></i></button>
         </div>
         <div class="te-entry">
           <div class="te-initials">HP</div>
@@ -2746,7 +790,8 @@
           <span class="te-val">10:00</span>
           <span class="te-val-sec">—</span>
           <span class="te-val">Revisions from client markup</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i class="fa-regular fa-trash-can"></i></button>
+          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
+              class="fa-regular fa-trash-can"></i></button>
         </div>
         <div class="te-entry">
           <div class="te-initials">HP</div>
@@ -2754,7 +799,8 @@
           <span class="te-val">08:45</span>
           <span class="te-val-sec">Sent proof?</span>
           <span class="te-val">Re-proof after revisions</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i class="fa-regular fa-trash-can"></i></button>
+          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
+              class="fa-regular fa-trash-can"></i></button>
         </div>
         <div class="te-entry">
           <div class="te-initials">HP</div>
@@ -2762,7 +808,8 @@
           <span class="te-val">11:20</span>
           <span class="te-val-sec">—</span>
           <span class="te-val">Prepress check &amp; file prep</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i class="fa-regular fa-trash-can"></i></button>
+          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
+              class="fa-regular fa-trash-can"></i></button>
         </div>
       </div>
 
@@ -2773,11 +820,11 @@
     </div>
   </div>
 
-  <!-- ── Scan History Modal ── -->
+  <!-- ── MODAL: Scan History (modals/scan-history-modal) ── -->
   <div class="modal-overlay" id="modal-scanHistory" onclick="handleOverlayClick(event, 'scanHistory')">
     <div class="modal-panel">
       <div class="modal-header">
-        <span class="modal-title">Scan History — 232323</span>
+        <span class="modal-title">Scan History</span>
         <button class="icon-btn" onclick="closeModal('scanHistory')"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
@@ -2984,838 +1031,17 @@
   <!-- Toast -->
   <div class="toast" id="toast">Detail saved</div>
 
-  <script>
-    // ── Topbar auto-hide on scroll (matches customer-management) ──
-    const mainEl = document.querySelector('.main');
-    const topbarRow = document.querySelector('.topbar-row');
-    const searchBtn = document.getElementById('search-btn');
-    let lastScroll = 0;
-    const threshold = 10;
-
-    mainEl.addEventListener('scroll', () => {
-      const current = mainEl.scrollTop;
-      const diff = current - lastScroll;
-      if (Math.abs(diff) < threshold) return;
-      if (diff > 0) {
-        topbarRow.classList.add('hidden');
-      } else {
-        topbarRow.classList.remove('hidden');
-      }
-      lastScroll = current;
-    });
-
-    searchBtn.addEventListener('click', () => {
-      topbarRow.classList.remove('hidden');
-      document.getElementById('search-input').focus();
-    });
-
-    // ── Tabs ──
-    function switchTab(btn, panel) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden-section'));
-      const el = document.getElementById('tab-panel-' + panel);
-      if (el) el.classList.remove('hidden-section');
-    }
-
-    // ── Shipping ──
-    function switchShipField(btn, field) {
-      document.querySelectorAll('.ship-field-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      // future: swap input type in bulk area based on field
-    }
-
-    function stepBulk(dir) {
-      const input = document.getElementById('bulkQtyInput');
-      input.value = Math.max(0, (parseInt(input.value) || 0) + dir);
-      onBulkInput();
-    }
-    function onBulkInput() {
-      const checkedCount = document.querySelectorAll('.ship-row-check:checked').length;
-      document.getElementById('shipApplyBtn').disabled = checkedCount === 0;
-    }
-    function applyBulkShip() {
-      const val = document.getElementById('bulkQtyInput').value;
-      document.querySelectorAll('.ship-address-row').forEach(row => {
-        if (row.querySelector('.ship-row-check:checked')) {
-          row.querySelector('.ship-stepper-val').value = val;
-        }
-      });
-    }
-    function stepRow(btn, dir) {
-      const input = btn.closest('.ship-stepper').querySelector('.ship-stepper-val');
-      input.value = Math.max(0, (parseInt(input.value) || 0) + dir);
-    }
-    function updateAddrCount() {
-      const total = document.querySelectorAll('#shipAddressList .ship-address-row').length;
-      const el = document.getElementById('shipAddrCount');
-      if (el) el.textContent = `${total} ADDRESS${total !== 1 ? 'ES' : ''}`;
-    }
-    function onRowCheck() {
-      const checked = document.querySelectorAll('.ship-row-check:checked');
-      const total = document.querySelectorAll('.ship-row-check').length;
-      const selAll = document.getElementById('selectAllAddresses');
-      selAll.checked = checked.length === total && total > 0;
-      selAll.indeterminate = checked.length > 0 && checked.length < total;
-      document.getElementById('shipBulkLabel').textContent =
-        `APPLY TO ALL CHECKED (${checked.length} of ${total} checked)`;
-      document.getElementById('shipApplyBtn').disabled = checked.length === 0
-        || !document.getElementById('bulkQtyInput').value;
-    }
-    function toggleSelectAll(cb) {
-      document.querySelectorAll('.ship-row-check').forEach(c => c.checked = cb.checked);
-      onRowCheck();
-    }
-    function deleteAddressRow(btn) {
-      btn.closest('.ship-address-row').remove();
-      onRowCheck();
-      updateAddrCount();
-    }
-    function filterAddresses(val) {
-      const lower = val.toLowerCase();
-      document.querySelectorAll('.ship-address-row').forEach(row => {
-        const name = row.querySelector('.list-item-name')?.textContent.toLowerCase() || '';
-        const addr = row.querySelector('.list-item-value')?.textContent.toLowerCase() || '';
-        row.style.display = (name + addr).includes(lower) ? '' : 'none';
-      });
-    }
-    let shipAddrCount = 3;
-    function addShippingAddress() {
-      shipAddrCount++;
-      const row = document.createElement('div');
-      row.className = 'list-item ship-address-row';
-      row.dataset.id = shipAddrCount;
-      row.innerHTML = `
-        <input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()">
-        <div class="list-item-name">New Address</div>
-        <div class="list-item-value">—</div>
-        <div class="ship-stepper">
-          <button class="ship-stepper-btn" onclick="stepRow(this,-1)">−</button>
-          <input class="ship-stepper-val" type="number" value="0" min="0">
-          <button class="ship-stepper-btn" onclick="stepRow(this,1)">+</button>
-        </div>
-        <div class="list-item-actions">
-          <button class="icon-btn" title="Edit address"><i class="fa-regular fa-pen"></i></button>
-          <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button>
-        </div>`;
-      document.getElementById('shipAddressList').appendChild(row);
-      onRowCheck();
-      updateAddrCount();
-    }
-
-    // ── Modals ──
-    function openModal(section) {
-      document.getElementById('modal-' + section).classList.add('open');
-      document.body.style.overflow = 'hidden';
-      if (section === 'timeEntries') {
-        const dateInput = document.getElementById('teDate');
-        if (dateInput && !dateInput.value) {
-          dateInput.value = new Date().toISOString().split('T')[0];
-        }
-      }
-      if (section === 'scanHistory') {
-        initStatusModal();
-      }
-    }
-    function closeModal(section) {
-      document.getElementById('modal-' + section).classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    function handleOverlayClick(e, section) {
-      if (e.target === e.currentTarget) closeModal(section);
-    }
-    function saveModal(section) {
-      closeModal(section);
-      const t = document.getElementById('toast');
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2500);
-    }
-
-    // ── Detail section state (tracks which sections have data per card) ──
-    const detailSectionState = {
-      'detail-1': { general: true, paper: true, print: false, bindery: false, boards: false }
-    };
-
-    const DETAIL_SECTION_LABELS = {
-      general: 'General',
-      paper: 'Paper',
-      print: 'Print Finishing',
-      bindery: 'Bindery Finishing',
-      boards: 'Interior Boards'
-    };
-
-    let currentDetailId = null;
-
-    function openDetailEdit(cardId, tab) {
-      currentDetailId = cardId;
-      const card = document.getElementById(cardId);
-      // Extract text content of title, skipping the number badge
-      const titleEl = card?.querySelector('.detail-card-title');
-      const titleText = titleEl
-        ? [...titleEl.childNodes].filter(n => n.nodeType === Node.TEXT_NODE).map(n => n.textContent.trim()).join('').trim()
-        : 'Detail';
-      document.getElementById('detailEditTitle').textContent = 'Edit Detail — ' + titleText;
-
-      // Switch to requested tab (default: general)
-      const targetTab = tab || 'general';
-      const tabBtn = document.querySelector(`.detail-edit-tab[data-tab="${targetTab}"]`);
-      if (tabBtn) switchDetailTab(tabBtn, targetTab);
-
-      openModal('detailEdit');
-    }
-
-    function switchDetailTab(btn, tab) {
-      document.querySelectorAll('.detail-edit-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.detail-edit-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('dep-' + tab).classList.add('active');
-    }
-
-    function saveDetailEdit() {
-      if (!currentDetailId) return;
-      const activeTab = document.querySelector('.detail-edit-tab.active')?.dataset.tab;
-      if (activeTab) {
-        if (!detailSectionState[currentDetailId]) detailSectionState[currentDetailId] = {};
-        detailSectionState[currentDetailId][activeTab] = true;
-        updateDetailPills(currentDetailId);
-      }
-      closeModal('detailEdit');
-      const t = document.getElementById('toast');
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2500);
-    }
-
-    function updateDetailPills(cardId) {
-      const num = cardId.replace('detail-', '');
-      const state = detailSectionState[cardId] || {};
-
-      // Update header pills
-      const container = document.getElementById('detail-pills-' + num);
-      if (container) {
-        container.innerHTML = '';
-        Object.entries(DETAIL_SECTION_LABELS).forEach(([key, label]) => {
-          if (state[key]) {
-            const pill = document.createElement('span');
-            pill.className = 'section-pill active';
-            pill.textContent = label;
-            container.appendChild(pill);
-          }
-        });
-      }
-
-      // Show/hide body sections
-      const sectionKeys = Object.keys(DETAIL_SECTION_LABELS);
-      sectionKeys.forEach(key => {
-        const el = document.getElementById(`ds-${key}-${num}`);
-        if (el) el.classList.toggle('hidden-section', !state[key]);
-      });
-    }
-
-    // ── Collapsible sections ──
-    // ── Interior Boards ──
-    let insertSizeCount = 1;
-    function selectBoardType(type, btn) {
-      const btns = document.querySelectorAll('#boardSegToggle .seg-toggle-btn');
-      const wasActive = btn.classList.contains('active');
-      btns.forEach(b => b.classList.remove('active'));
-      if (!wasActive) btn.classList.add('active');
-      const anyActive = document.querySelector('#boardSegToggle .seg-toggle-btn.active');
-      document.getElementById('boardDetailsFields').classList.toggle('collapsed', !anyActive);
-      document.getElementById('boardDetailsEmpty').style.display = anyActive ? 'none' : '';
-    }
-    function addInsertSize() {
-      insertSizeCount++;
-      const n = insertSizeCount;
-      const list = document.getElementById('insertSizeList');
-      const block = document.createElement('div');
-      block.className = 'insert-size-block';
-      block.dataset.insert = n;
-      block.innerHTML = `
-          <div class="insert-size-fields">
-            <span class="insert-row-num">${n}</span>
-            <div><input class="form-input" type="text" /></div>
-            <div><input class="form-input" type="text" /></div>
-            <div><input class="form-input" type="number" value="0" min="0" /></div>
-            <div><input class="form-input" type="number" value="0" min="0" /></div>
-            <button class="icon-btn" title="Remove" onclick="removeInsertSize(this)"><i class="fa-regular fa-trash-can"></i></button>
-          </div>
-        `;
-      list.appendChild(block);
-      renumberInsertSizes();
-    }
-    function removeInsertSize(btn) {
-      btn.closest('.insert-size-block').remove();
-      renumberInsertSizes();
-    }
-    function renumberInsertSizes() {
-      document.querySelectorAll('#insertSizeList .insert-size-block').forEach((block, i) => {
-        block.querySelector('.insert-row-num').textContent = i + 1;
-      });
-    }
-    function addSpecialInstructions(btn) {
-      const body = document.getElementById('specialInstructionsBody');
-      btn.remove();
-      const ta = document.createElement('textarea');
-      ta.className = 'form-input';
-      ta.rows = 4;
-      ta.placeholder = 'Enter special instructions…';
-      body.appendChild(ta);
-    }
-    function clearSpecialInstructions() {
-      const body = document.getElementById('specialInstructionsBody');
-      body.innerHTML = `<button class="btn-add-sub" onclick="addSpecialInstructions(this)"><i class="fa-solid fa-plus"></i> Add Special Instructions</button>`;
-    }
-
-    // ── Bindery conditional fields ──
-    function onDecorationChange() {
-      const any = document.querySelectorAll('.decoration-chk:checked').length > 0;
-      document.getElementById('decorationColor').classList.toggle('collapsed', !any);
-    }
-    function onBindingChange() {
-      const any = document.querySelectorAll('.binding-chk:checked').length > 0;
-      document.getElementById('bindingDesc').classList.toggle('collapsed', !any);
-    }
-    function onClipChange(chk) {
-      document.getElementById('clipColor').classList.toggle('collapsed', !chk.checked);
-    }
-
-    // ── Addon toggles (Lamination, UV Coat) ──
-    function toggleAddon(id, row) {
-      row.classList.toggle('on');
-      document.getElementById(id).classList.toggle('collapsed', !row.classList.contains('on'));
-    }
-
-    // ── Round Corners toggle ──
-    function toggleCornerSize(chk) {
-      document.getElementById('cornerSize').classList.toggle('collapsed', !chk.checked);
-    }
-
-    function toggleSection(id, row) {
-      const el = document.getElementById(id);
-      const icon = row.querySelector('i');
-      el.classList.toggle('collapsed');
-      if (el.classList.contains('collapsed')) {
-        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-      } else {
-        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-      }
-    }
-
-    // ── Add Detail ──
-    let detailCount = 1;
-    function addDetail() {
-      detailCount++;
-      const panel = document.getElementById('tab-panel-production');
-      const n = detailCount;
-      const id = `detail-${n}`;
-      const card = document.createElement('div');
-      card.className = 'detail-card';
-      card.id = id;
-      card.innerHTML = `
-        <div class="detail-card-header">
-          <div class="detail-card-title">
-            <span class="detail-num">${n}</span>
-            New Detail
-          </div>
-          <div class="detail-pills" id="detail-pills-${n}"></div>
-          <div class="detail-card-actions">
-            <button class="icon-btn" title="Edit detail" onclick="openDetailEdit('${id}')">
-              <i class="fa-regular fa-pen"></i>
-            </button>
-            <button class="icon-btn" title="Remove detail" onclick="this.closest('.detail-card').remove()">
-              <i class="fa-regular fa-trash-can"></i>
-            </button>
-          </div>
-        </div>
-        <div class="detail-card-body">
-          <div class="detail-section hidden-section" id="ds-general-${n}">
-            <div class="detail-section-header"><span class="detail-section-title">General</span></div>
-            <div class="detail-empty-prompt">No general info specified.</div>
-          </div>
-          <div class="detail-section hidden-section" id="ds-paper-${n}">
-            <div class="detail-section-header"><span class="detail-section-title">Paper</span></div>
-            <div class="detail-empty-prompt">No paper info specified.</div>
-          </div>
-          <div class="detail-section hidden-section" id="ds-print-${n}">
-            <div class="detail-section-header"><span class="detail-section-title">Print Finishing</span></div>
-            <div class="detail-empty-prompt">No print finishing specified.</div>
-          </div>
-          <div class="detail-section hidden-section" id="ds-bindery-${n}">
-            <div class="detail-section-header"><span class="detail-section-title">Bindery Finishing</span></div>
-            <div class="detail-empty-prompt">No bindery finishing specified.</div>
-          </div>
-          <div class="detail-section hidden-section" id="ds-boards-${n}">
-            <div class="detail-section-header"><span class="detail-section-title">Interior Boards</span></div>
-            <div class="detail-empty-prompt">No interior boards specified.</div>
-          </div>
-        </div>
-      `;
-      detailSectionState[id] = { general: false, paper: false, print: false, bindery: false, boards: false };
-      panel.appendChild(card);
-    }
-
-    // ── Escape key closes any open modal ──
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay.open').forEach(m => {
-          m.classList.remove('open');
-        });
-        document.body.style.overflow = '';
-      }
-    });
-
-    // ── Proof Contacts combobox ──
-    const PC_CONTACTS = [
-      { name: 'Diane Kovach',   role: 'Director of Food & Beverage',   email: 'd.kovach@marriott.com',     group: 'Marriott Downtown Cleveland' },
-      { name: 'Marcus Trevino', role: 'General Manager',                email: 'm.trevino@marriott.com',    group: 'Marriott Downtown Cleveland' },
-      { name: 'Susan Cho',      role: 'Purchasing Manager',             email: 's.cho@marriott.com',        group: 'Marriott Downtown Cleveland' },
-      { name: 'Robert Ellison', role: 'Event Coordinator',              email: 'r.ellison@marriott.com',    group: 'Marriott Downtown Cleveland' },
-      { name: 'Priya Nair',     role: 'Catering Director',              email: 'p.nair@marriott.com',       group: 'Marriott Downtown Cleveland' },
-      { name: 'James Harmon',   role: 'Controller',                     email: 'j.harmon@marriott.com',     group: 'Marriott Downtown Cleveland' },
-      { name: 'Claire Fontaine',role: 'VP, Food & Beverage',            email: 'c.fontaine@marriott-intl.com', group: 'Marriott International (Management Group)' },
-      { name: 'Derek Ashworth', role: 'SVP, Operations',                email: 'd.ashworth@marriott-intl.com', group: 'Marriott International (Management Group)' },
-      { name: 'Mia Solis',      role: 'Director, Corporate Procurement',email: 'm.solis@marriott-intl.com', group: 'Marriott International (Management Group)' },
-      { name: 'Trevor Okafor',  role: 'VP, Finance',                    email: 't.okafor@marriott-intl.com', group: 'Marriott International (Management Group)' },
-      { name: 'Naomi Vance',    role: 'Corporate Executive Chef',       email: 'n.vance@marriott-intl.com', group: 'Marriott International (Management Group)' },
-    ];
-
-    // pcAdded: Set of emails; pcReceives: email → Set of 'proofs'|'shipping'|'invoices'
-    let pcAdded = new Set();
-    const pcReceives = {};
-    let pcHighlightIndex = -1;
-    let pcFiltered = [];
-
-    const PC_RECEIVES_LABELS = { proofs: 'Proofs', shipping: 'Shipping Notifications', invoices: 'Invoices' };
-
-    function pcReceivesTagsHtml(email) {
-      const rv = pcReceives[email] || new Set();
-      if (!rv.size) return '<span class="pc-receives-none">None</span>';
-      const labels = [...rv].map(r => PC_RECEIVES_LABELS[r]);
-      const text = labels.length > 1 ? labels.slice(0, -1).join(', ') + ' & ' + labels.at(-1) : labels[0];
-      return `<span class="pc-receives-text">${text}</span>`;
-    }
-
-    function pcRenderRow(contact, list) {
-      const email = contact.email;
-      const rv = pcReceives[email] || new Set();
-      const chk = key => rv.has(key) ? 'checked' : '';
-      const row = document.createElement('tr');
-      row.dataset.email = email;
-      row.innerHTML = `
-        <td>
-          <div class="pc-added-info">
-            <span class="pc-added-name">${contact.name}</span>
-            <span class="pc-added-email">${email}</span>
-          </div>
-        </td>
-        <td>
-          <div class="pc-receives-wrap">
-            <div class="pc-receives-trigger" onclick="pcToggleReceives(event, this)">
-              <span class="pc-receives-tags">${pcReceivesTagsHtml(email)}</span>
-              <i class="fa-regular fa-angle-down pc-chevron"></i>
-            </div>
-            <div class="pc-receives-menu hidden-section">
-              <label class="pc-receives-opt"><input type="checkbox" value="proofs" ${chk('proofs')} onchange="pcOnReceiveChange(this,'${email}')"> Proofs</label>
-              <label class="pc-receives-opt"><input type="checkbox" value="shipping" ${chk('shipping')} onchange="pcOnReceiveChange(this,'${email}')"> Shipping Notifications</label>
-              <label class="pc-receives-opt"><input type="checkbox" value="invoices" ${chk('invoices')} onchange="pcOnReceiveChange(this,'${email}')"> Invoices</label>
-            </div>
-          </div>
-        </td>
-        <td>
-          <button class="icon-btn" title="Remove" onclick="pcRemove(this,'${email}')"><i class="fa-regular fa-trash-can"></i></button>
-        </td>
-      `;
-      list.appendChild(row);
-    }
-
-    function pcToggleReceives(e, trigger) {
-      e.stopPropagation();
-      const menu = trigger.nextElementSibling;
-      const wasOpen = !menu.classList.contains('hidden-section');
-      document.querySelectorAll('.pc-receives-menu').forEach(m => m.classList.add('hidden-section'));
-      document.querySelectorAll('.pc-row-open').forEach(r => r.classList.remove('pc-row-open'));
-      if (!wasOpen) {
-        menu.classList.remove('hidden-section');
-        trigger.closest('tr')?.classList.add('pc-row-open');
-      }
-    }
-
-    function pcOnReceiveChange(cb, email) {
-      if (!pcReceives[email]) pcReceives[email] = new Set();
-      cb.checked ? pcReceives[email].add(cb.value) : pcReceives[email].delete(cb.value);
-      const row = cb.closest('tr');
-      if (row) row.querySelector('.pc-receives-tags').innerHTML = pcReceivesTagsHtml(email);
-      pcUpdateAllStrings();
-    }
-
-    function pcShowListHeader() {
-      const tbl = document.getElementById('pcTable');
-      if (tbl) tbl.classList.toggle('hidden-section', !pcAdded.size);
-    }
-
-    function pcOnInput(val) {
-      const q = val.trim().toLowerCase();
-      const dropdown = document.getElementById('pcDropdown');
-      if (!q) { dropdown.classList.add('hidden-section'); return; }
-      pcFiltered = PC_CONTACTS.filter(c =>
-        !pcAdded.has(c.email) &&
-        (c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.role.toLowerCase().includes(q))
-      );
-      pcHighlightIndex = pcFiltered.length ? 0 : -1;
-      pcRenderDropdown(pcFiltered);
-    }
-
-    function pcRenderDropdown(results) {
-      const dropdown = document.getElementById('pcDropdown');
-      if (!results.length) {
-        dropdown.innerHTML = '<div class="pc-dd-empty">No contacts found</div>';
-        dropdown.classList.remove('hidden-section');
-        return;
-      }
-      const groups = {};
-      results.forEach(c => { (groups[c.group] = groups[c.group] || []).push(c); });
-      let html = '', globalIdx = 0;
-      Object.entries(groups).forEach(([group, contacts], gi) => {
-        if (gi > 0) html += '<div class="pc-dd-divider"></div>';
-        html += `<div class="pc-dd-group-label">${group}</div>`;
-        contacts.forEach(c => {
-          const hi = globalIdx === pcHighlightIndex ? ' highlighted' : '';
-          html += `<div class="pc-dd-item${hi}" data-idx="${globalIdx}" onmousedown="pcSelect(${globalIdx})">
-            <span class="pc-dd-item-name">${c.name}</span>
-            <span class="pc-dd-item-email">${c.email}</span>
-          </div>`;
-          globalIdx++;
-        });
-      });
-      dropdown.innerHTML = html;
-      dropdown.classList.remove('hidden-section');
-    }
-
-    function pcOnKeydown(e) {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        pcHighlightIndex = Math.min(pcHighlightIndex + 1, pcFiltered.length - 1);
-        pcRenderDropdown(pcFiltered);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        pcHighlightIndex = Math.max(pcHighlightIndex - 1, 0);
-        pcRenderDropdown(pcFiltered);
-      } else if (e.key === 'Enter' && pcHighlightIndex >= 0) {
-        e.preventDefault();
-        pcSelect(pcHighlightIndex);
-      } else if (e.key === 'Escape') {
-        document.getElementById('pcDropdown').classList.add('hidden-section');
-      }
-    }
-
-    function pcSelect(idx) {
-      const contact = pcFiltered[idx];
-      if (!contact || pcAdded.has(contact.email)) return;
-      pcAdded.add(contact.email);
-      pcReceives[contact.email] = new Set(['proofs']);
-      pcRenderRow(contact, document.getElementById('pcList'));
-      pcShowListHeader();
-      document.getElementById('pcInput').value = '';
-      document.getElementById('pcDropdown').classList.add('hidden-section');
-      pcFiltered = [];
-      pcHighlightIndex = -1;
-      pcUpdateAllStrings();
-    }
-
-    function pcRemove(btn, email) {
-      btn.closest('tr').remove();
-      pcAdded.delete(email);
-      delete pcReceives[email];
-      pcShowListHeader();
-      pcUpdateAllStrings();
-    }
-
-    // Pre-seed contacts with varied receives for demo
-    [
-      { email: 'd.kovach@marriott.com',     receives: ['proofs'] },
-      { email: 'm.trevino@marriott.com',    receives: ['proofs', 'shipping'] },
-      { email: 'c.fontaine@marriott-intl.com', receives: ['proofs', 'invoices'] },
-    ].forEach(({ email, receives }) => {
-      const contact = PC_CONTACTS.find(c => c.email === email);
-      if (!contact) return;
-      pcAdded.add(email);
-      pcReceives[email] = new Set(receives);
-      pcRenderRow(contact, document.getElementById('pcList'));
-    });
-    pcShowListHeader();
-    pcUpdateAllStrings();
-
-    function pcUpdateAllStrings() {
-      // Production: proof contacts' emails
-      const proofEmails = [...pcAdded].filter(e => pcReceives[e]?.has('proofs'));
-      const prodWrap = document.getElementById('pcProdEmailStringWrap');
-      const prodEl   = document.getElementById('pcProdEmailString');
-      if (prodWrap) prodWrap.classList.toggle('hidden-section', !proofEmails.length);
-      if (prodEl)   prodEl.textContent = proofEmails.join(', ');
-
-      // Shipping: shipping contacts' names
-      const shipNames = [...pcAdded].filter(e => pcReceives[e]?.has('shipping'))
-        .map(e => PC_CONTACTS.find(c => c.email === e)?.name).filter(Boolean);
-      const shipWrap = document.getElementById('pcShipWrap');
-      const shipEl   = document.getElementById('pcShipNames');
-      if (shipWrap) shipWrap.classList.toggle('hidden-section', !shipNames.length);
-      if (shipEl)   shipEl.textContent = shipNames.join(', ');
-
-      // Billing: invoice contacts' names
-      const billNames = [...pcAdded].filter(e => pcReceives[e]?.has('invoices'))
-        .map(e => PC_CONTACTS.find(c => c.email === e)?.name).filter(Boolean);
-      const billWrap = document.getElementById('pcBillWrap');
-      const billEl   = document.getElementById('pcBillNames');
-      if (billWrap) billWrap.classList.toggle('hidden-section', !billNames.length);
-      if (billEl)   billEl.textContent = billNames.join(', ');
-    }
-
-    function pcProdCopyEmails() {
-      const text = document.getElementById('pcProdEmailString').textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById('pcProdCopyBtn');
-        btn.innerHTML = '<i class="fa-solid fa-check icon-success"></i>';
-        setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i>'; }, 1800);
-      });
-    }
-
-    function pcShipCopyNames() {
-      const text = document.getElementById('pcShipNames').textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById('pcShipCopyBtn');
-        btn.innerHTML = '<i class="fa-solid fa-check icon-success"></i>';
-        setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i>'; }, 1800);
-      });
-    }
-
-    function pcBillCopyNames() {
-      const text = document.getElementById('pcBillNames').textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById('pcBillCopyBtn');
-        btn.innerHTML = '<i class="fa-solid fa-check icon-success"></i>';
-        setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i>'; }, 1800);
-      });
-    }
-
-    // Close dropdowns on outside click
-    document.addEventListener('mousedown', e => {
-      if (!e.target.closest('.pc-receives-wrap')) {
-        document.querySelectorAll('.pc-receives-menu').forEach(m => m.classList.add('hidden-section'));
-        document.querySelectorAll('.pc-row-open').forEach(r => r.classList.remove('pc-row-open'));
-      }
-      if (!document.getElementById('pcCombobox')?.contains(e.target)) {
-        const dd = document.getElementById('pcDropdown');
-        if (dd) dd.classList.add('hidden-section');
-      }
-    });
-
-    // ── Time Entries ──
-    function teAddEntry() {
-      const date = document.getElementById('teDate').value;
-      const hours = document.getElementById('teHours').value.padStart(2, '0');
-      const minutes = document.getElementById('teMinutes').value.padStart(2, '0');
-      const proof = document.getElementById('teProofSent').value.trim();
-      const task = document.getElementById('teTask').value.trim();
-      if (!date && !task) return;
-
-      const list = document.getElementById('teList');
-      const row = document.createElement('div');
-      row.className = 'te-entry';
-
-      // Format date as MM/DD/YY
-      let displayDate = date;
-      if (date) {
-        const d = new Date(date + 'T00:00:00');
-        displayDate = `${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}/${String(d.getFullYear()).slice(2)}`;
-      }
-      const displayTime = (hours !== '00' || minutes !== '00') ? `${hours}:${minutes}` : '—';
-
-      row.innerHTML = `
-        <div class="te-initials">HP</div>
-        <span class="te-val">${displayDate || '—'}</span>
-        <span class="te-val">${displayTime}</span>
-        <span class="te-val-sec">${proof || '—'}</span>
-        <span class="te-val">${task || '—'}</span>
-        <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i class="fa-regular fa-trash-can"></i></button>
-      `;
-      list.appendChild(row);
-
-      // Clear inputs, reset date to today
-      document.getElementById('teDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('teHours').value = '';
-      document.getElementById('teMinutes').value = '';
-      document.getElementById('teProofSent').value = '';
-      document.getElementById('teTask').value = '';
-      document.getElementById('teTask').focus();
-    }
-
-
-    // ── Scan History ──
-    // ── Status pill & scan history status changer ──
-    const STATUS_OPTIONS = [
-      { code: '100', label: 'Colin' },
-      { code: '200', label: 'Proof Out' },
-      { code: '305', label: 'Blake Gantz' },
-      { code: '400', label: 'Creative' },
-      { code: '500', label: 'Proof Out' },
-      { code: '600', label: 'Tape Machine' },
-      { code: '700', label: 'Bindery' },
-      { code: '800', label: 'Shipped' },
-      { code: '900', label: 'Complete' },
-      { code: '950', label: 'Cancelled' },
-    ];
-
-    let currentStatus = { code: '700', label: 'Bindery On Cart', display: 'IN PRODUCTION' };
-    let pendingStatus = null;
-
-
-    function filterStatusDropdown(val) {
-      const match = STATUS_OPTIONS.find(o => o.label.toLowerCase() === val.toLowerCase());
-      if (match && match.code !== currentStatus.code) {
-        pendingStatus = match;
-        document.getElementById('applyStatusBtn').disabled = false;
-      } else {
-        pendingStatus = null;
-        document.getElementById('applyStatusBtn').disabled = true;
-      }
-    }
-
-    function initStatusModal() {
-      pendingStatus = null;
-      pendingDetailStatus = null;
-      document.getElementById('statusSearchInput').value = currentStatus.label;
-      document.getElementById('applyStatusBtn').disabled = true;
-      document.getElementById('statusDropdown').classList.remove('open');
-      document.getElementById('detailStatusSearchInput').value = currentStatus.label;
-      document.getElementById('applyDetailStatusBtn').disabled = true;
-      document.getElementById('detailStatusDropdown').classList.remove('open');
-    }
-
-
-    function applyStatusChange() {
-      if (!pendingStatus || pendingStatus.code === currentStatus.code) return;
-
-      const from = currentStatus.label;
-      const to = pendingStatus.label;
-      const now = new Date();
-      const ts = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' })
-        + ' ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-      // Add row to Job tab table
-      const tbody = document.querySelector('#scan-panel-job .scan-table tbody');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="col-timestamp">${ts}</td><td>${from}</td><td class="col-arrow">→</td><td>${to}</td>`;
-      tr.style.background = 'var(--status-success-bg, #ebfbee)';
-      tbody.appendChild(tr);
-      setTimeout(() => tr.style.background = '', 1500);
-
-      // Update current status
-      currentStatus = { code: pendingStatus.code, label: pendingStatus.label, display: pendingStatus.label.toUpperCase() };
-      document.getElementById('statusPill').textContent = currentStatus.display;
-      document.getElementById('statusPill').title = currentStatus.label;
-      document.getElementById('statusSearchInput').value = currentStatus.label;
-      document.getElementById('detailStatusSearchInput').value = currentStatus.label;
-
-      pendingStatus = null;
-      document.getElementById('applyStatusBtn').disabled = true;
-
-      // Switch to Job tab to show the new entry
-      const jobTabBtn = document.querySelector('.scan-tab');
-      switchScanTab('job', jobTabBtn);
-    }
-
-    // ── Detail tab status changer ──
-    let pendingDetailStatus = null;
-
-    function filterDetailStatusDropdown(val) {
-      const match = STATUS_OPTIONS.find(o => o.label.toLowerCase() === val.toLowerCase());
-      if (match && match.code !== currentStatus.code) {
-        pendingDetailStatus = match;
-        document.getElementById('applyDetailStatusBtn').disabled = false;
-      } else {
-        pendingDetailStatus = null;
-        document.getElementById('applyDetailStatusBtn').disabled = true;
-      }
-    }
-
-    function applyDetailStatusChange() {
-      if (!pendingDetailStatus || pendingDetailStatus.code === currentStatus.code) return;
-
-      const from = currentStatus.label;
-      const to = pendingDetailStatus.label;
-      const now = new Date();
-      const ts = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' })
-        + ' ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-      // Add row to Job tab table
-      const tbody = document.querySelector('#scan-panel-job .scan-table tbody');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="col-timestamp">${ts}</td><td>${from}</td><td class="col-arrow">→</td><td>${to}</td>`;
-      tr.style.background = 'var(--status-success-bg, #ebfbee)';
-      tbody.appendChild(tr);
-      setTimeout(() => tr.style.background = '', 1500);
-
-      currentStatus = { code: pendingDetailStatus.code, label: pendingDetailStatus.label, display: pendingDetailStatus.label.toUpperCase() };
-      document.getElementById('statusPill').textContent = currentStatus.display;
-      document.getElementById('statusPill').title = currentStatus.label;
-      document.getElementById('statusSearchInput').value = currentStatus.label;
-      document.getElementById('detailStatusSearchInput').value = currentStatus.label;
-
-      pendingDetailStatus = null;
-      document.getElementById('applyDetailStatusBtn').disabled = true;
-    }
-
-    function switchScanTab(tab, btn) {
-      document.querySelectorAll('.scan-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.scan-tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('scan-panel-' + tab).classList.add('active');
-      // Disable detail dropdown if only one detail exists
-      if (tab === 'detail') {
-        const sel = document.getElementById('detailFilterSelect');
-        const detailCount = document.querySelectorAll('.detail-card').length;
-        sel.disabled = detailCount <= 1;
-      }
-    }
-
-    function filterDetailScans(sel) {
-      const val = sel.value;
-      document.querySelectorAll('#detailScanBody tr').forEach(row => {
-        row.style.display = (val === 'all' || row.dataset.detail === val) ? '' : 'none';
-      });
-    }
-
-    // ── Job Type conditional ──
-    function onJobTypeChange(sel) {
-      document.getElementById('oldJobNumField').classList.toggle('collapsed', sel.value === 'new');
-    }
-
-    // ── Trello flow ──
-    function trelloAction() {
-      const btn = document.getElementById('trello-btn');
-      // If already sent, open Trello (no-op in prototype)
-      if (btn.dataset.state === 'done') return;
-      openModal('trelloConfirm');
-    }
-
-    function confirmTrello() {
-      closeModal('trelloConfirm');
-      const btn = document.getElementById('trello-btn');
-      // Loading state
-      btn.disabled = true;
-      btn.innerHTML = 'Sending…<i class="fa-solid fa-spinner-third fa-spin"></i>';
-      setTimeout(() => {
-        // Confirm state
-        btn.innerHTML = 'Sent! <i class="fa-solid fa-circle-check" ></i> ';
-        setTimeout(() => {
-          // Final state
-          btn.innerHTML = ' View on Trello';
-          btn.disabled = false;
-          btn.dataset.state = 'done';
-        }, 1200);
-      }, 1800);
-    }
-  </script>
+  <script src="components/modal-shell.js"></script>
+  <script src="components/topbar/topbar.js"></script>
+  <script src="job-detail.js"></script>
+  <script src="components/production-tab/production-tab.js"></script>
+  <script src="components/shipping-tab/shipping-tab.js"></script>
+  <script src="modals/detail-edit-modal/detail-edit-modal.js"></script>
+  <script src="modals/edit-job-modal/edit-job-modal.js"></script>
+  <script src="modals/trello-confirm-modal/trello-confirm-modal.js"></script>
+  <script src="modals/proof-contacts-modal/proof-contacts-modal.js"></script>
+  <script src="modals/time-entries-modal/time-entries-modal.js"></script>
+  <script src="modals/scan-history-modal/scan-history-modal.js"></script>
 </body>
 
 </html>

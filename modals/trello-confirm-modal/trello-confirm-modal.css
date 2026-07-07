@@ -1,0 +1,18 @@
+#modal-trelloConfirm .modal-body {
+      padding: 24px 32px;
+      gap: 8px;
+    }
+
+/* Trello confirm modal text */
+
+.trello-confirm-heading {
+      font-size: var(--fontsize-body-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+    }
+
+.trello-confirm-body {
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }

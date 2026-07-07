@@ -1,0 +1,87 @@
+.header-wrap{
+  width: var(--container-workspace);
+  margin: auto;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── JOB HEADER — styled as account card ── */
+
+.job-header-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background-color: var(--bg-surface);
+  border-radius: 8px;
+  border: solid 1px var(--border-default);
+}
+
+/* inner rows mirror .account .inner-row */
+
+.inner-row {
+  display: flex;
+  gap: 12px;
+  padding: 0;
+  align-items: flex-start;
+  padding: 16px;
+}
+
+.inner-row.border-top {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 12px;
+  padding-top: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inner-row-col {
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Job header layout helpers */
+
+.job-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.job-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fontsize-body-lg);
+  color: var(--text-primary);
+}
+
+.job-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+/* status pill */
+
+.status-pill {
+  text-transform: uppercase;
+  background: var(--interactive-bg-subtle);
+  border: solid 1px var(--interactive-default);
+  color: var(--text-interactive);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.status-pill:hover {
+  opacity: 0.75;
+}
+
+/* action buttons row */
+
+.job-actions {
+  display: flex;
+  gap: 8px;
+}

@@ -1,0 +1,84 @@
+/* Time entry cell text */
+
+.te-val     { font-size: var(--fontsize-body-sm); color: var(--text-primary); }
+
+.te-val-sec { font-size: var(--fontsize-body-sm); color: var(--text-secondary); }
+
+/* Time entry compact inputs */
+
+.te-input-sm   { font-size: var(--fontsize-body-sm) !important; padding: 5px 8px !important; }
+
+.te-input-time { font-size: var(--fontsize-body-sm) !important; padding: 5px 6px !important; width: 48px; text-align: center; }
+
+/* ── Time Entries Modal ── */
+
+.te-header-row {
+      display: grid;
+      grid-template-columns: 28px 160px 100px 120px 1fr 32px;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--bg-page);
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: var(--fontsize-label);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+.te-entry {
+      display: grid;
+      grid-template-columns: 28px 160px 100px 120px 1fr 32px;
+      gap: 8px;
+      padding: 6px 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+.te-entry:nth-child(even) {
+      background: var(--bg-muted);
+    }
+
+.te-initials {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--border-radius-full);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--fontsize-label);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+.te-time-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+.te-time-sep {
+      font-size: var(--fontsize-body-sm);
+      color: var(--text-tertiary);
+    }
+
+.te-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+.te-add-row {
+      display: grid;
+      grid-template-columns: 28px 160px 100px 120px 1fr 32px;
+      gap: 8px;
+      padding: 10px 12px;
+      align-items: end;
+      border-bottom: 2px solid var(--border-subtle);
+      flex-shrink: 0;
+      background: var(--bg-surface);
+    }
+
+.modal-scroll .te-list { overflow-y: auto; flex: 1; }

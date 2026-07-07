@@ -1,18 +1,15 @@
 ### Healey's To-do list
 
 - [ ] online note 1 / online note 2
-- [ ] bindery calculator
+- [ ] notes????
+- [ ] bindery calculator links
 - [ ] code menu???
 - [ ] commercial invoice
 - [ ] do we move purchase orders into inventory?
 - [ ] status button area--still icky
 - [ ] remove interior boards button
 
-- [ ] schedule meeting with accounting team to better understand their needs
-	- [ ] what is the invoicing process?
-	- [ ] what happens in web gold?
-	- [ ] what do yall do with customer maintenance?
-- [ ] or maybe billing becomes an aside rather than a whole tab for now
+- [ ] billing aside
 	- [ ] PO# / agent
 	- [ ] invoice table (read only)
 	- [ ] billing notes
