@@ -1,13 +1,7 @@
 ### Healey's To-do list
 
-- [ ] online note 1 / online note 2
-- [ ] notes????
 - [ ] bindery calculator links
-- [ ] code menu???
 - [ ] commercial invoice
-- [ ] do we move purchase orders into inventory?
-- [ ] status button area--still icky
-- [ ] remove interior boards button
 
 - [ ] billing aside
 	- [ ] PO# / agent
