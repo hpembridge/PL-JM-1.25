@@ -64,11 +64,16 @@
         });
       }
 
-      // Show/hide body sections
+      // Show/hide section content vs empty state
       const sectionKeys = Object.keys(DETAIL_SECTION_LABELS);
       sectionKeys.forEach(key => {
         const el = document.getElementById(`ds-${key}-${num}`);
-        if (el) el.classList.toggle('hidden-section', !state[key]);
+        if (!el) return;
+        el.classList.remove('hidden-section');
+        const empty = el.querySelector('.detail-empty-prompt');
+        const fields = el.querySelector('.detail-fields');
+        if (empty) empty.classList.toggle('hidden-section', !!state[key]);
+        if (fields) fields.classList.toggle('hidden-section', !state[key]);
       });
     }
     // ── Collapsible sections ──

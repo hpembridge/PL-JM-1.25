@@ -108,7 +108,7 @@ body {
   width: var(--container-workspace);
 }
 #tab-panel-shipping{
-  width: var(--container-data);
+  width: var(--container-workspace);
 }
 
 /* ── PAGE CONTENT ── */
@@ -218,7 +218,7 @@ body {
 }
 
 .hidden-section {
-  display: none;
+  display: none !important;
 }
 
 /* primary button */
@@ -258,6 +258,13 @@ body {
 
 textarea.form-input {
   resize: vertical;
+}
+
+.form-help {
+  margin-top: 6px;
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-tertiary);
+  font-style: italic;
 }
 
 .eyebrow {

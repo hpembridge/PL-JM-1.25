@@ -41,6 +41,7 @@
 
 .modal-panel {
       width: var(--container-aside);
+      max-width: var(--container-aside);
       height: 100vh;
       background: var(--bg-surface);
       box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
@@ -72,7 +73,15 @@
       font-size: var(--fontsize-body-md);
       font-weight: var(--font-weight-bold);
       color: var(--text-primary);
+      flex: 1;
     }
+
+.activity-log-scope {
+  width: auto;
+  font-size: var(--fontsize-body-sm);
+  padding: 4px 28px 4px 10px;
+  margin-right: 8px;
+}
 
 .modal-body {
       padding: 24px 32px;

@@ -1,3 +1,11 @@
+/* ── DETAIL GRID ── */
+
+.detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
 /* ── DETAIL CARDS ── */
 
 .detail-card {
@@ -9,11 +17,9 @@
 
 .detail-card-header {
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 16px;
+      padding: 14px 18px;
       border-bottom: 1px solid var(--border-subtle);
       background: var(--bg-muted);
     }
@@ -21,18 +27,18 @@
 .detail-card-title {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-weight: var(--font-weight-semibold);
-      font-size: var(--fontsize-body-sm);
-      color: var(--text-secondary);
+      font-size: var(--fontsize-body-md);
+      color: var(--text-primary);
     }
 
 .detail-num {
-      width: 22px;
-      height: 22px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: var(--interactive-default);
-      color: white;
+      color: var(--color-white);
       font-size: var(--fontsize-body-sm);
       font-weight: var(--font-weight-bold);
       display: flex;
@@ -42,11 +48,25 @@
     }
 
 .detail-card-body {
-      padding: 16px;
+      padding: 18px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: flex-start;
+      flex-direction: column;
+      gap: 0;
+      align-items: stretch;
+    }
+
+.detail-section + .detail-section,
+.detail-card-notes + .detail-section,
+.detail-section + .detail-card-notes {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+.detail-card-notes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
 /* ── SECTION PILLS (detail card header) ── */
@@ -80,78 +100,81 @@
       user-select: none;
     }
 
-.section-pill.active {
-      background: var(--interactive-bg-subtle);
-      border-color: var(--interactive-default);
-      color: var(--interactive-default);
-    }
 
 /* ── READ-ONLY DETAIL SECTIONS ── */
 
 .detail-section {
-      flex: 1 1 200px;
-      min-width: 300px;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-md);
-      overflow: hidden;
       display: flex;
       flex-direction: column;
+      gap: 8px;
+    }
+
+.detail-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
 .detail-section-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 7px 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      background: var(--bg-surface);
+      gap: 6px;
+    }
+
+.detail-section-icon {
+      font-size: 13px;
+      color: var(--status-success-border);
+      flex-shrink: 0;
     }
 
 .detail-section-title {
-      font-size: var(--fontsize-label);
+      font-size: 11px;
       font-weight: var(--font-weight-bold);
       text-transform: uppercase;
-      color: var(--text-tertiary);
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
     }
 
-.detail-fields {
-      display: contents;
-    }
-
-.detail-field-row {
+.spec-tiles {
       display: flex;
-      align-items: baseline;
+      flex-wrap: wrap;
       gap: 8px;
-      padding: 5px 12px;
     }
 
-.detail-field-row:nth-child(odd) {
+.spec-tile {
       background: var(--bg-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--border-radius-sm);
+      padding: 6px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 40%;
     }
 
-.detail-field-row:nth-child(even) {
-      background: var(--bg-surface);
-    }
-
-.detail-field-label {
-      font-size: var(--fontsize-body-sm);
+.spec-tile-label {
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
       color: var(--text-tertiary);
-      flex: 0 0 90px;
-      white-space: nowrap;
+      text-align: center;
     }
 
-.detail-field-value {
-      font-size: var(--fontsize-body-sm);
+.spec-tile-value {
+      font-size: var(--fontsize-body-md);
+      font-weight: var(--font-weight-semibold);
       color: var(--text-primary);
-      font-weight: var(--font-weight-medium);
+      text-align: center;
     }
 
 .detail-empty-prompt {
-      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       color: var(--text-tertiary);
       font-size: var(--fontsize-body-sm);
       font-style: italic;
-      text-align: center;
     }
 
 .add-list-btn {

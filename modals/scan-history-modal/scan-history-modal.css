@@ -1,147 +1,144 @@
-/* scan history status bar */
-
-.scan-status-bar {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 32px;
-      padding-bottom: 0px;
-      flex-shrink: 0;
-    }
-
-.scan-status-search-wrap {
-      position: relative;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-sm);
-      background: white;
-      overflow: visible;
-    }
-
-.scan-status-search-wrap:focus-within {
-      border-color: var(--border-focus);
-    }
-
-.scan-status-search {
-      flex: 1;
-      font-size: var(--fontsize-body-sm);
-      padding: 8px 12px;
-      border: none;
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      background: transparent;
-      color: var(--text-primary);
-    }
+/* ── Activity Timeline — Scan History Modal ── */
 
 #modal-scanHistory .modal-panel {
-      overflow: hidden;
-    }
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
-.btn-sm {
-      padding: 5px 12px;
-      font-size: var(--fontsize-body-sm);
-    }
+/* Outer wrapper: fills modal-panel below the header */
+.activity-timeline {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  padding: 32px 32px 0;
+}
 
-/* ── Scan History Modal ── */
+/* Scrollable timeline rows */
+.timeline-scroll {
+  overflow-y: auto;
+  padding-bottom: 16px;
+}
 
-.scan-tabs {
-      display: flex;
-      padding: 32px;
-      padding-bottom: 0px;
-      gap: 24px;
-      flex-shrink: 0;
-    }
+/* ── Timeline Row ── */
 
-.scan-tab {
-      flex: 1;
-      padding: 10px 20px;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-interactive);
-      background: white;
-      border: solid 1px var(--border-subtle);
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
+.timeline-row {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+}
 
-.scan-tab:hover {
-      color: var(--interactive-hover);
-    }
+/* Date column */
+.timeline-date {
+  width: 80px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
 
-.scan-tab.active {
-      background: var(--interactive-default);
-      color: var(--color-white);
-      border-color: var(--interactive-default);
-    }
+/* Connector column: full-height vertical line + horizontal tick */
+.timeline-connector {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-shrink: 0;
+}
 
-.scan-tab-panel {
-      display: none;
-      flex-direction: column;
-      flex: 1;
-      overflow: visible;
-      gap: 16px;
-    }
+.timeline-line {
+  width: 0px;
+  border: solid 1px var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 0;
+}
 
-.scan-tab-panel.active {
-      display: flex;
-    }
+/* First row: line starts ~20px down, tick floats to the top */
+.timeline-connector--first .timeline-line {
+  align-items: flex-start;
+  padding-top: 20px;
+  padding-bottom: 0;
+}
 
-.scan-table-wrap {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 32px 32px;
-    }
+/* Last row: line ends before the bottom */
+.timeline-connector--last .timeline-line {
+  align-items: flex-end;
+  padding-bottom: 20px;
+  padding-top: 0;
+}
 
-.scan-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: var(--fontsize-body-sm);
-    }
+/* Horizontal tick mark branching from the line */
+.timeline-tick {
+  width: 8px;
+  height: 8px;
+  background: var(--interactive-hover);
+  border-radius: var(--border-radius-full);
+  flex-shrink: 0;
+}
 
-.scan-table th {
-      text-align: left;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-bold);
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      padding: 8px 10px;
-      border-bottom: 1px solid var(--border-subtle);
-      white-space: nowrap;
-    }
+/* Event text column */
+.timeline-event {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
 
-.scan-table td {
-      padding: 7px 10px;
-      color: var(--text-primary);
-      border-bottom: 1px solid var(--border-tertiary);
-    }
+/* First row overrides: primary color, body/md */
+.timeline-row--first .timeline-event {
+  color: var(--text-primary);
+}
 
-.scan-table .col-timestamp {
-      color: var(--text-tertiary);
-      font-size: var(--fontsize-body-sm);
-      white-space: nowrap;
-    }
+/* ── Status Update Row (aligned to event column) ── */
 
-.scan-table .col-arrow {
-      color: var(--text-tertiary);
-      padding-left: 4px;
-      padding-right: 4px;
-    }
+.timeline-status-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+}
 
-.scan-table tr:nth-child(even) td {
-      background: var(--bg-muted);
-    }
+.timeline-date-spacer {
+  width: 80px;
+  flex-shrink: 0;
+}
 
-/* Detail tab filter select */
+.timeline-connector-spacer {
+  display: none;
+}
 
-.detail-filter-select {
-      width: auto;
-      min-width: 40px;
-      flex-shrink: 0;
-    }
+.timeline-status-select-wrap {
+  flex: 1;
+}
+
+.timeline-status-select-wrap .form-input {
+  width: 100%;
+}
+
+/* ── Metadata Footer ── */
+
+.timeline-meta {
+  flex-shrink: 0;
+  padding-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 16px;
+}
+
+.timeline-meta-label {
+  color: var(--text-primary);
+  padding: 4px 0;
+}

@@ -2,12 +2,6 @@
     function openModal(section) {
       document.getElementById('modal-' + section).classList.add('open');
       document.body.style.overflow = 'hidden';
-      if (section === 'timeEntries') {
-        const dateInput = document.getElementById('teDate');
-        if (dateInput && !dateInput.value) {
-          dateInput.value = new Date().toISOString().split('T')[0];
-        }
-      }
       if (section === 'scanHistory') {
         initStatusModal();
       }

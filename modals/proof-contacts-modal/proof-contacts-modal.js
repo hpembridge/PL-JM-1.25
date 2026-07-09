@@ -173,13 +173,20 @@
       if (prodWrap) prodWrap.classList.toggle('hidden-section', !proofEmails.length);
       if (prodEl)   prodEl.textContent = proofEmails.join(', ');
 
-      // Shipping: shipping contacts' names
-      const shipNames = [...pcAdded].filter(e => pcReceives[e]?.has('shipping'))
-        .map(e => PC_CONTACTS.find(c => c.email === e)?.name).filter(Boolean);
-      const shipWrap = document.getElementById('pcShipWrap');
-      const shipEl   = document.getElementById('pcShipNames');
-      if (shipWrap) shipWrap.classList.toggle('hidden-section', !shipNames.length);
-      if (shipEl)   shipEl.textContent = shipNames.join(', ');
+      // Shipping: render name + email in sidebar widget
+      const shipContacts = [...pcAdded]
+        .filter(e => pcReceives[e]?.has('shipping'))
+        .map(e => PC_CONTACTS.find(c => c.email === e))
+        .filter(Boolean);
+      const shipList = document.getElementById('shipCnContactsList');
+      if (shipList) {
+        shipList.classList.toggle('hidden-section', !shipContacts.length);
+        shipList.innerHTML = shipContacts.map(c => `
+          <div class="cn-contact-item">
+            <span class="cn-contact-name">${c.name}</span>
+            <span class="cn-contact-email">${c.email}</span>
+          </div>`).join('');
+      }
 
       // Billing: invoice contacts' names
       const billNames = [...pcAdded].filter(e => pcReceives[e]?.has('invoices'))
@@ -195,6 +202,15 @@ function pcCopyText(textElId, btnId) {
         const btn = document.getElementById(btnId);
         btn.innerHTML = '<i class="fa-solid fa-check icon-success"></i>';
         setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i>'; }, 1800);
+      });
+    }
+
+    function pcCopyContacts(textElId, wrapId) {
+      const text = document.getElementById(textElId).textContent;
+      const wrap = document.getElementById(wrapId);
+      navigator.clipboard.writeText(text).then(() => {
+        wrap.classList.add('cn-contacts--copied');
+        setTimeout(() => wrap.classList.remove('cn-contacts--copied'), 1800);
       });
     }
     // Close dropdowns on outside click

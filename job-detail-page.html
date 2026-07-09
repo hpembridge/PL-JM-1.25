@@ -20,8 +20,8 @@
   <link rel="stylesheet" href="modals/detail-edit-modal/detail-edit-modal.css" />
   <link rel="stylesheet" href="modals/trello-confirm-modal/trello-confirm-modal.css" />
   <link rel="stylesheet" href="modals/proof-contacts-modal/proof-contacts-modal.css" />
-  <link rel="stylesheet" href="modals/time-entries-modal/time-entries-modal.css" />
   <link rel="stylesheet" href="modals/scan-history-modal/scan-history-modal.css" />
+  <link rel="stylesheet" href="modals/manage-notes-modal/manage-notes-modal.css" />
 </head>
 
 <body data-theme="titanium">
@@ -30,7 +30,7 @@
     <!-- ── TOP BAR (components/topbar) ── -->
     <div class="topbar">
       <div class="breadcrumb type-body-sm">
-        <a><i class="fa-solid fa-folder"></i>Jobs</a>
+        <a></i>Dashboard</a>
         <span class="sep">›</span>
         <a>(2030) Pizza Hut Corporation</a>
         <span class="sep">›</span>
@@ -64,29 +64,33 @@
         <div class="job-header-card">
         <div class="inner-row inner-row-col">
           <div class="job-header-top">
-            <div class="job-title-row">
-              <span class="semibold">232323</span>
-              <span>2018 Standard Menu Single Fold Jan 2018 Ws</span>
-            </div>
+            <h6 class="job-title-row">
+              <span>232323</span>
+              <span id="description">2018 Standard Menu Single Fold Jan 2018 Ws</span>
+              <p class="pill">Bindery on Cart</p>
+            </h6>
+            
             <button class="icon-btn" title="Edit job information" onclick="openModal('editJob')">
               <i class="fa-solid fa-pen"></i>
             </button>
           </div>
-          <div class="job-tags">
-            <span class="pill">New Job</span>
-            <span class="pill">Printing</span>
-            <span class="pill">Received 12/08/17</span>
-          </div>
+          
+          <p class="job-meta type-body-md semibold"><span>New Job</span> • <span>Printing</span></p>
+          <p class="job-meta type-body-sm">Last Modified by Healey Pembridge on 3/03/25</p>
         </div>
         <div class="inner-row border-top">
           <div class="job-actions">
-            <button class="btn-secondary btn-secondary-sm" onclick="openModal('timeEntries')">Manage Time
-              Entries</button>
-            <button class="btn-secondary btn-secondary-sm" id="trello-btn" onclick="trelloAction()">Send to
-              Trello</button>
+            
+            <button class="btn-secondary" onclick="openModal('manageNotes')">
+              Manage Notes
+            </button>
+            <button class="btn-secondary" id="statusPill" title="Bindery On Cart" onclick="openModal('scanHistory')">
+              View Activity Log
+            </button>
           </div>
-          <span class="pill status-pill" id="statusPill" title="Bindery On Cart"
-            onclick="openModal('scanHistory')">STATUS: IN PRODUCTION</span>
+          <button class="btn-secondary" id="trello-btn" onclick="trelloAction()">
+              Send to Trello
+            </button>
         </div>
       </div>
 
@@ -101,140 +105,348 @@
       <!-- ── SHIPPING PANEL (components/shipping-tab) ── -->
       <div class="tab-panel hidden-section" id="tab-panel-shipping">
 
-        <!-- Field tabs + bulk apply -->
-        <div class="ship-toolbar">
-          <div class="ship-field-tabs-wrap">
-            <span class="ship-field-label">Editing Field</span>
-            <div class="ship-field-tabs">
-              <button class="ship-field-tab active" onclick="switchShipField(this, 'quantity')">Quantity</button>              
-              <button class="ship-field-tab" onclick="switchShipField(this, 'method')">Method</button>
-              <button class="ship-field-tab" onclick="switchShipField(this, 'attn')">ATTN</button>
-              <button class="ship-field-tab" onclick="switchShipField(this, 'info')">Notes</button>
-            </div>
-            <div class="notice" id="pcShipWrap">
-              <button class="inline-icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
-                <i class="fa-regular fa-pen"></i>
-              </button>
-              <p>
-                <span class="pc-email-string-text semibold" id="pcShipNames"></span>
-                receives shipping notifications
-              </p>
-              
-            </div>
-          </div>
-          <div class="ship-bulk-wrap">
-            <span class="ship-bulk-label" id="shipBulkLabel">APPLY TO ALL CHECKED (0 of 10 checked)</span>
-            <div class="ship-bulk-controls">
-              <div class="ship-stepper">
-                <button class="ship-stepper-btn" onclick="stepBulk(-1)">−</button>
-                <input class="ship-stepper-val" id="bulkQtyInput" type="number" value="0" min="0"
-                  oninput="onBulkInput()">
-                <button class="ship-stepper-btn" onclick="stepBulk(1)">+</button>
+        <div class="ship-layout">
+
+          <!-- Left: cn-widget -->
+          <div class="cn-widget ship-cn-widget">
+
+            <!-- Shipping Notifications -->
+            <div class="cn-section" id="pcShipWrap">
+              <div class="cn-section-header">
+                <span class="cn-section-label">Shipping Notifications</span>
+                <button class="icon-btn" title="Manage contacts" onclick="openModal('proofContacts')">
+                  <i class="fa-regular fa-pen"></i>
+                </button>
               </div>
-              <button class="btn-primary" id="shipApplyBtn" onclick="applyBulkShip()" disabled>Apply</button>
+              <div class="cn-contact-list hidden-section" id="shipCnContactsList"></div>
             </div>
-          </div>
-        </div>
 
+            <!-- Shipping Notes -->
+            <div class="cn-section">
+              <div class="cn-section-header">
+                <span class="cn-section-label">Shipping Notes</span>
+                <button class="icon-btn" title="Manage notes" onclick="openModal('manageNotes')">
+                  <i class="fa-regular fa-pen"></i>
+                </button>
+              </div>
+              <div class="cn-notes">
+                <div class="cn-note-item">
+                  <span class="cn-note-num">(1)</span>
+                  <p class="cn-note-text">Ship via UPS ground. Ensure all boxes are labeled with the job number before pickup. Contact Diane Kovach if there are any delays.</p>
+                </div>
+              </div>
+            </div>
 
-        <!-- Address list -->
+          </div><!-- /.ship-cn-widget -->
+
+          <!-- Right: table area -->
+          <div class="ship-table-area">
+
+        <!-- Address table -->
         <div class="search-list ship-address-list">
           <div class="search-list-header">
-            <input type="checkbox" class="select-all-cb" id="selectAllAddresses" onchange="toggleSelectAll(this)">
             <input type="text" placeholder="Search Addresses…" oninput="filterAddresses(this.value)">
-            <button class="icon-btn" onclick="addShippingAddress()" title="Add address"><i
-                class="fa-solid fa-plus"></i></button>
+            <button class="icon-btn" title="Add shipping address" onclick="openShipAdd()"><i class="fa-regular fa-plus"></i></button>
+            <button class="icon-btn" title="Table settings" onclick="openModal('shipSettings')"><i class="fa-regular fa-gear"></i></button>
           </div>
-          <div class="list-items" id="shipAddressList">
 
-            <div class="list-item ship-address-row" data-id="1">
-              <input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()">
-              <div class="list-item-name">Main Address</div>
-              <div class="list-item-value">710 S Wayside Drive, Houston, TX 77023</div>
-              <div class="ship-stepper">
-                <button class="ship-stepper-btn" onclick="stepRow(this,-1)">−</button>
-                <input class="ship-stepper-val" type="number" value="100" min="0">
-                <button class="ship-stepper-btn" onclick="stepRow(this,1)">+</button>
-              </div>
-              <div class="list-item-actions">
-                <button class="icon-btn" title="Edit address"><i class="fa-regular fa-pen"></i></button>
-                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i
-                    class="fa-regular fa-trash-can"></i></button>
-              </div>
+          <div class="ship-table-wrap">
+          <table class="ship-table">
+            <thead>
+              <tr>
+                <th class="ship-col-cb"><label class="cb-cell-label"><input type="checkbox" class="select-all-cb" id="selectAllAddresses" onchange="toggleSelectAll(this)"></label></th>
+                <th class="ship-col-addr">Address</th>
+                <th class="ship-col-delivery">Delivery</th>
+                <th class="ship-col-notes">Notes</th>
+                <th class="ship-col-qty">Qty<div id="shipQtyFooter"></div></th>
+                <th class="ship-col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="shipAddressList">
+
+              <tr class="ship-address-row" data-id="1" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="G M" data-notes="2233" data-qty="100">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: G M</span><span class="ship-addr-name">Main Address</span><span class="ship-addr-street">710 S Wayside Drive</span><span class="ship-addr-street">Houston, TX 77023</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>2233</td>
+                <td class="ship-col-qty">100</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="2" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="" data-notes="" data-qty="100">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-name">Clearwood</span><span class="ship-addr-street">8925 Clearwood St</span><span class="ship-addr-street">Houston, TX 77075</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">100</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="3" data-carrier="FedEx" data-method="2-Day" data-account="CMP FedEx Account" data-attn="Office Mgr" data-notes="" data-qty="100">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: Office Mgr</span><span class="ship-addr-name">Office Address</span><span class="ship-addr-street">1441 East 17th Street</span><span class="ship-addr-street">Cleveland, OH 44114</span></td>
+                <td><span class="ship-delivery-method">FedEx 2-Day</span><span class="ship-delivery-account">CMP FedEx Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">100</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="4" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="Store Mgr" data-notes="" data-qty="75">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: Store Mgr</span><span class="ship-addr-name">Westpark</span><span class="ship-addr-street">3131 Westpark Dr</span><span class="ship-addr-street">Houston, TX 77005</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">75</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="5" data-carrier="FedEx" data-method="Overnight" data-account="Customer Account" data-attn="D. Torres" data-notes="Fragile" data-qty="50">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: D. Torres</span><span class="ship-addr-name">Memorial City</span><span class="ship-addr-street">303 Memorial City Way</span><span class="ship-addr-street">Houston, TX 77024</span></td>
+                <td><span class="ship-delivery-method">FedEx Overnight</span><span class="ship-delivery-account">Customer Account</span></td>
+                <td>Fragile</td>
+                <td class="ship-col-qty">50</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="6" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="" data-notes="" data-qty="125">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-name">Almeda</span><span class="ship-addr-street">11055 Almeda Genoa Rd</span><span class="ship-addr-street">Houston, TX 77034</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">125</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="7" data-carrier="USPS" data-method="Priority" data-account="Customer Account" data-attn="R. Kim" data-notes="Hold at door" data-qty="60">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: R. Kim</span><span class="ship-addr-name">Pasadena</span><span class="ship-addr-street">4120 Spencer Hwy</span><span class="ship-addr-street">Pasadena, TX 77504</span></td>
+                <td><span class="ship-delivery-method">USPS Priority</span><span class="ship-delivery-account">Customer Account</span></td>
+                <td>Hold at door</td>
+                <td class="ship-col-qty">60</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="8" data-carrier="FedEx" data-method="Ground" data-account="CMP FedEx Account" data-attn="GM" data-notes="" data-qty="80">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: GM</span><span class="ship-addr-name">Pearland</span><span class="ship-addr-street">2850 Smith Ranch Rd</span><span class="ship-addr-street">Pearland, TX 77584</span></td>
+                <td><span class="ship-delivery-method">FedEx Ground</span><span class="ship-delivery-account">CMP FedEx Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">80</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="9" data-carrier="UPS" data-method="2-Day" data-account="CMP UPS Account" data-attn="T. Walsh" data-notes="" data-qty="90">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: T. Walsh</span><span class="ship-addr-name">Sugar Land</span><span class="ship-addr-street">16535 Southwest Fwy</span><span class="ship-addr-street">Sugar Land, TX 77479</span></td>
+                <td><span class="ship-delivery-method">UPS 2-Day</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">90</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="10" data-carrier="FedEx" data-method="2-Day" data-account="CMP FedEx Account" data-attn="" data-notes="Call ahead" data-qty="110">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-name">Katy</span><span class="ship-addr-street">25475 Katy Fwy</span><span class="ship-addr-street">Katy, TX 77494</span></td>
+                <td><span class="ship-delivery-method">FedEx 2-Day</span><span class="ship-delivery-account">CMP FedEx Account</span></td>
+                <td>Call ahead</td>
+                <td class="ship-col-qty">110</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="11" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="P. Brooks" data-notes="" data-qty="95">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: P. Brooks</span><span class="ship-addr-name">The Woodlands</span><span class="ship-addr-street">1201 Lake Woodlands Dr</span><span class="ship-addr-street">The Woodlands, TX 77380</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">95</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="12" data-carrier="Will Call" data-method="—" data-account="—" data-attn="J. Navarro" data-notes="Pickup by Friday" data-qty="40">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: J. Navarro</span><span class="ship-addr-name">Friendswood</span><span class="ship-addr-street">130 W Edgewood Dr</span><span class="ship-addr-street">Friendswood, TX 77546</span></td>
+                <td><span class="ship-delivery-method">Will Call</span></td>
+                <td>Pickup by Friday</td>
+                <td class="ship-col-qty">40</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="13" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="" data-notes="" data-qty="150">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-name">League City</span><span class="ship-addr-street">2920 Marina Bay Dr</span><span class="ship-addr-street">League City, TX 77573</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">150</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="14" data-carrier="FedEx" data-method="Overnight" data-account="Customer Account" data-attn="M. Chen" data-notes="Rush order" data-qty="30">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: M. Chen</span><span class="ship-addr-name">Baytown</span><span class="ship-addr-street">4500 Garth Rd</span><span class="ship-addr-street">Baytown, TX 77521</span></td>
+                <td><span class="ship-delivery-method">FedEx Overnight</span><span class="ship-delivery-account">Customer Account</span></td>
+                <td>Rush order</td>
+                <td class="ship-col-qty">30</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="15" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="L. Grant" data-notes="" data-qty="85">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: L. Grant</span><span class="ship-addr-name">Conroe</span><span class="ship-addr-street">1301 N Loop 336 W</span><span class="ship-addr-street">Conroe, TX 77304</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">85</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="16" data-carrier="USPS" data-method="Priority" data-account="Customer Account" data-attn="" data-notes="" data-qty="55">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-name">Humble</span><span class="ship-addr-street">8950 FM 1960 Bypass Rd W</span><span class="ship-addr-street">Humble, TX 77338</span></td>
+                <td><span class="ship-delivery-method">USPS Priority</span><span class="ship-delivery-account">Customer Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">55</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="17" data-carrier="FedEx" data-method="Ground" data-account="CMP FedEx Account" data-attn="A. Reyes" data-notes="Back entrance" data-qty="70">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: A. Reyes</span><span class="ship-addr-name">Cypress</span><span class="ship-addr-street">9720 Fry Rd</span><span class="ship-addr-street">Cypress, TX 77433</span></td>
+                <td><span class="ship-delivery-method">FedEx Ground</span><span class="ship-delivery-account">CMP FedEx Account</span></td>
+                <td>Back entrance</td>
+                <td class="ship-col-qty">70</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="18" data-carrier="UPS" data-method="2-Day" data-account="CMP UPS Account" data-attn="S. Patel" data-notes="" data-qty="120">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: S. Patel</span><span class="ship-addr-name">Spring</span><span class="ship-addr-street">19190 I-45 N</span><span class="ship-addr-street">Spring, TX 77373</span></td>
+                <td><span class="ship-delivery-method">UPS 2-Day</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">120</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="19" data-carrier="FedEx" data-method="2-Day" data-account="CMP FedEx Account" data-attn="" data-notes="Dock B" data-qty="200">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-name">Distribution Center</span><span class="ship-addr-street">6600 Gulf Fwy</span><span class="ship-addr-street">Houston, TX 77087</span></td>
+                <td><span class="ship-delivery-method">FedEx 2-Day</span><span class="ship-delivery-account">CMP FedEx Account</span></td>
+                <td>Dock B</td>
+                <td class="ship-col-qty">200</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+              <tr class="ship-address-row" data-id="20" data-carrier="UPS" data-method="Ground" data-account="CMP UPS Account" data-attn="C. Morris" data-notes="" data-qty="65">
+                <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()"></label></td>
+                <td><span class="ship-addr-attn">ATTN: C. Morris</span><span class="ship-addr-name">Stafford</span><span class="ship-addr-street">12800 Murphy Rd</span><span class="ship-addr-street">Stafford, TX 77477</span></td>
+                <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS Account</span></td>
+                <td>—</td>
+                <td class="ship-col-qty">65</td>
+                <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button><button class="icon-btn" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+              </tr>
+
+            </tbody>
+          </table>
+          </div><!-- /ship-table-wrap -->
+
+          <div class="ship-empty-state hidden-section" id="shipEmptyState">
+            <div class="ship-empty-illustration">
+              <i class="fa-regular fa-sun-bright"></i>
+              <i class="fa-regular fa-island-tropical"></i>
             </div>
-
-            <div class="list-item ship-address-row" data-id="2">
-              <input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()">
-              <div class="list-item-name">Clearwood</div>
-              <div class="list-item-value">8925 Clearwood St, Houston, TX 77075</div>
-              <div class="ship-stepper">
-                <button class="ship-stepper-btn" onclick="stepRow(this,-1)">−</button>
-                <input class="ship-stepper-val" type="number" value="100" min="0">
-                <button class="ship-stepper-btn" onclick="stepRow(this,1)">+</button>
-              </div>
-              <div class="list-item-actions">
-                <button class="icon-btn" title="Edit address"><i class="fa-regular fa-pen"></i></button>
-                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i
-                    class="fa-regular fa-trash-can"></i></button>
-              </div>
-            </div>
-
-            <div class="list-item ship-address-row" data-id="3">
-              <input type="checkbox" class="item-cb ship-row-check" onchange="onRowCheck()">
-              <div class="list-item-name">Office Address</div>
-              <div class="list-item-value">1441 East 17th Street, Cleveland, OH 44114</div>
-              <div class="ship-stepper">
-                <button class="ship-stepper-btn" onclick="stepRow(this,-1)">−</button>
-                <input class="ship-stepper-val" type="number" value="100" min="0">
-                <button class="ship-stepper-btn" onclick="stepRow(this,1)">+</button>
-              </div>
-              <div class="list-item-actions">
-                <button class="icon-btn" title="Edit address"><i class="fa-regular fa-pen"></i></button>
-                <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i
-                    class="fa-regular fa-trash-can"></i></button>
-              </div>
-            </div>
-
+            <p class="ship-empty-text">Nothing to see here. Turns out hiding everything makes for a very tidy table.</p>
+            <button class="btn-primary" onclick="openModal('shipSettings')">Open Settings</button>
           </div>
-          <div class="list-footer">
-            <span class="list-footer-count" id="shipAddrCount">3 ADDRESSES</span>
-            <span class="pill pill-success" id="qty-count">300/300</span>
-            <div class="action-container">
-              <button class="icon-btn" title="Export address list"><i
-                  class="fa-solid fa-arrow-down-from-bracket"></i></button>
-              <button class="icon-btn" title="Import addresses"><i
-                  class="fa-solid fa-arrow-up-from-bracket"></i></button>
+
+          <div class="ship-table-footer">
+            <div class="ship-footer-left">
+              <span class="list-footer-count" id="shipAddrCount">20 ADDRESSES</span>
+              <div class="ship-selection-actions" id="shipSelectionActions">
+                <button class="inline-icon-btn" onclick="openShipEditSelected()" title="Edit selected"><i class="fa-regular fa-pen"></i></button>
+                <button class="inline-icon-btn" onclick="openDeleteSelectedConfirm()" title="Delete selected"><i class="fa-regular fa-trash-can"></i></button>
+                <button class="inline-icon-btn" onclick="clearShipSelection()" title="Deselect all"><i class="fa-regular fa-xmark"></i></button>
+              </div>
+            </div>
+            <div class="ship-footer-right">
+              <div class="action-container">
+                <button class="icon-btn" title="Export address list"><i class="fa-solid fa-arrow-down-from-bracket"></i></button>
+                <button class="icon-btn" title="Import addresses"><i class="fa-solid fa-arrow-up-from-bracket"></i></button>
+              </div>
             </div>
           </div>
         </div>
+
+          </div><!-- /.ship-table-area -->
+        </div><!-- /.ship-layout -->
+
       </div>
 
       <!-- ── PRODUCTION PANEL (components/production-tab) ── -->
       <div class="tab-panel" id="tab-panel-production">
-        <span class="eyebrow">Proofing Contacts</span>
-        <div class="pc-email-string hidden-section" id="pcProdEmailStringWrap">
-          <span class="pc-email-string-text" id="pcProdEmailString"></span>
-          <button class="icon-btn" id="pcProdCopyBtn" title="Copy all emails"
-            onclick="pcCopyText('pcProdEmailString','pcProdCopyBtn')">
-            <i class="fa-regular fa-copy"></i>
-          </button>
-          <button class="icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
-            <i class="fa-regular fa-pen"></i>
-          </button>
-        </div>
-        <h6 class="section-title">Production Details</h6>
+
         <button class="add-list-btn" onclick="addDetail()">+ ADD JOB DETAIL</button>
 
+        <div class="detail-grid" id="detail-grid">
+
+        <!-- Combined contacts + notes widget -->
+        <div class="cn-widget">
+
+          
+
+          <!-- Proofing Contacts -->
+          <div class="cn-section">
+            <div class="cn-section-header">
+              <span class="cn-section-label">PROOFING CONTACTS</span>
+              <button class="icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <p class="cn-copy-hint">Click to copy</p>
+            <div class="cn-contacts hidden-section" id="pcProdEmailStringWrap"
+              onclick="pcCopyContacts('pcProdEmailString', 'pcProdEmailStringWrap')"
+              title="Click to copy">
+              <span class="pc-email-string-text" id="pcProdEmailString"></span>
+            </div>
+          </div>
+          <!-- MenuMaker Details -->
+          <div class="cn-section">
+            <div class="cn-section-header">
+              <span class="cn-section-label">MenuMaker Details</span>
+            </div>
+            <div class="spec-tiles">
+              <div class="spec-tile">
+                <span class="spec-tile-label">Order Number</span>
+                <span class="spec-tile-value">MM-2024-8841</span>
+              </div>
+              <div class="spec-tile">
+                <span class="spec-tile-label">Menu Number</span>
+                <span class="spec-tile-value">MNU-4421</span>
+              </div>
+            </div>
+          </div>
+          <!-- General Notes -->
+          <div class="cn-section">
+            <div class="cn-section-header">
+              <span class="cn-section-label">GENERAL NOTES</span>
+              <button class="icon-btn" title="Manage notes" onclick="openModal('manageNotes')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <div class="cn-notes">
+              <div class="cn-note-item">
+                <span class="cn-note-num">(1)</span>
+                <p class="cn-note-text">Send a "Zero" proof of the Alchamey menu inserts for hotels to update their content. Send PDF proof to hotel for approval, then once approved send to Megan and Josh for their approval.</p>
+              </div>
+            </div>
+          </div>
+          
+
+        </div><!-- /.cn-widget -->
         <!-- Detail Card 1 -->
         <div class="detail-card" id="detail-1">
           <div class="detail-card-header">
             <div class="detail-card-title">
               <span class="detail-num">1</span>
-              2018 Standard Menu Single Fold
-            </div>
-            <div class="detail-pills" id="detail-pills-1">
-              <span class="section-pill active">General</span>
-              <span class="section-pill active">Paper</span>
+              Folder
             </div>
             <div class="detail-card-actions">
               <button class="icon-btn" title="Edit detail" onclick="openDetailEdit('detail-1')">
@@ -248,71 +460,114 @@
           <div class="detail-card-body">
             <!-- General -->
             <div class="detail-section" id="ds-general-1">
-              <div class="detail-section-header">
-                <span class="detail-section-title">General</span>
-              </div>
               <div class="detail-fields">
-                <div class="detail-field-row">
-                  <span class="detail-field-label">Quantity</span>
-                  <span class="detail-field-value">300</span>
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">General</span>
                 </div>
-                <div class="detail-field-row">
-                  <span class="detail-field-label"># Panels</span>
-                  <span class="detail-field-value">1</span>
+                <div class="spec-tiles">
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Quantity</span>
+                    <span class="spec-tile-value">300</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Number of Panels</span>
+                    <span class="spec-tile-value">1</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Number of Sides</span>
+                    <span class="spec-tile-value">2</span>
+                  </div>
                 </div>
-                <div class="detail-field-row">
-                  <span class="detail-field-label"># Sides</span>
-                  <span class="detail-field-value">2</span>
-                </div>
+              </div>
+              <div class="detail-empty-prompt hidden-section">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No general info specified.</span>
               </div>
             </div>
             <!-- Paper -->
             <div class="detail-section" id="ds-paper-1">
-              <div class="detail-section-header">
-                <span class="detail-section-title">Paper</span>
-              </div>
               <div class="detail-fields">
-                <div class="detail-field-row">
-                  <span class="detail-field-label">Size</span>
-                  <span class="detail-field-value">13 x 19</span>
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Paper</span>
                 </div>
-                <div class="detail-field-row">
-                  <span class="detail-field-label">Type</span>
-                  <span class="detail-field-value">durapoly</span>
+                <div class="spec-tiles">
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Size</span>
+                    <span class="spec-tile-value">13 x 19</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Type</span>
+                    <span class="spec-tile-value">Durapoly</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Weight</span>
+                    <span class="spec-tile-value">14pt</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Color</span>
+                    <span class="spec-tile-value">White</span>
+                  </div>
                 </div>
-                <div class="detail-field-row">
-                  <span class="detail-field-label">Weight</span>
-                  <span class="detail-field-value">14pt</span>
-                </div>
-                <div class="detail-field-row">
-                  <span class="detail-field-label">Color</span>
-                  <span class="detail-field-value">white</span>
-                </div>
+              </div>
+              <div class="detail-empty-prompt hidden-section">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No paper info specified.</span>
+              </div>
+            </div>
+            <!-- Detail notes -->
+            <div class="detail-card-notes" id="detail-notes-1">
+              <div class="cn-note-item">
+                <span class="cn-note-num">(1)</span>
+                <p class="cn-note-text">Confirm durapoly stock availability with vendor before going to press.</p>
               </div>
             </div>
             <!-- Print Finishing -->
-            <div class="detail-section hidden-section" id="ds-print-1">
-              <div class="detail-section-header">
-                <span class="detail-section-title">Print Finishing</span>
+            <div class="detail-section" id="ds-print-1">
+              <div class="detail-fields hidden-section">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Print Finishing</span>
+                </div>
+                <div class="spec-tiles"></div>
               </div>
-              <div class="detail-empty-prompt">No print finishing specified.</div>
+              <div class="detail-empty-prompt">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No print finishing specified.</span>
+              </div>
             </div>
             <!-- Bindery Finishing -->
-            <div class="detail-section hidden-section" id="ds-bindery-1">
-              <div class="detail-section-header">
-                <span class="detail-section-title">Bindery Finishing</span>
+            <div class="detail-section" id="ds-bindery-1">
+              <div class="detail-fields hidden-section">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Bindery Finishing</span>
+                </div>
+                <div class="spec-tiles"></div>
               </div>
-              <div class="detail-empty-prompt">No bindery finishing specified.</div>
+              <div class="detail-empty-prompt">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No bindery finishing specified.</span>
+              </div>
             </div>
             <!-- Interior Boards -->
-            <div class="detail-section hidden-section" id="ds-boards-1">
-              <div class="detail-section-header">
-                <span class="detail-section-title">Interior Boards</span>
+            <div class="detail-section" id="ds-boards-1">
+              <div class="detail-fields hidden-section">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Interior Boards</span>
+                </div>
+                <div class="spec-tiles"></div>
               </div>
-              <div class="detail-empty-prompt">No interior boards specified.</div>
+              <div class="detail-empty-prompt">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No interior boards specified.</span>
+              </div>
             </div>
           </div>
         </div>
+        </div><!-- /.detail-grid -->
 
       </div><!-- /tab-panel-production -->
 
@@ -356,11 +611,18 @@
           <button class="detail-edit-tab" data-tab="boards" onclick="switchDetailTab(this, 'boards')">Interior
             Boards</button>
         </div>
+        <!-- Detail notes -->
+        <div class="detail-card-notes" id="modal-detail-notes-1">
+          <div class="cn-note-item">
+            <span class="cn-note-num">(1)</span>
+            <p class="cn-note-text">Confirm durapoly stock availability with vendor before going to press.</p>
+          </div>
+        </div>
         <!-- General -->
         <div class="detail-edit-panel active" id="dep-general">
           <div class="form-group">
             <label class="form-label">Description</label>
-            <input class="form-input" type="text" value="2018 Standard Menu Single Fold Jan 2018 Ws" />
+            <input class="form-input" type="text" value="Folder" />
           </div>
           <div class="form-row form-row-3 form-group">
             <div>
@@ -368,11 +630,11 @@
               <input class="form-input" type="number" value="200" />
             </div>
             <div>
-              <label class="form-label"># Panels</label>
+              <label class="form-label">Number of Panels</label>
               <input class="form-input" type="number" value="1" />
             </div>
             <div>
-              <label class="form-label"># Sides</label>
+              <label class="form-label">Number of Sides</label>
               <input class="form-input" type="number" value="2" />
             </div>
           </div>
@@ -390,7 +652,6 @@
           </div>
           <div class="form-group check-grid check-grid-2">
             <label><input type="checkbox" /> Show Pre-Press Box</label>
-            <label><input type="checkbox" /> Fixed Quantity (per order)</label>
           </div>
         </div>
 
@@ -731,300 +992,501 @@
     </div>
   </div>
 
-  <!-- ── MODAL: Manage Time Entries (modals/time-entries-modal) ── -->
-  <div class="modal-overlay" id="modal-timeEntries" onclick="handleOverlayClick(event, 'timeEntries')">
-    <div class="modal-panel modal-scroll">
-      <div class="modal-header">
-        <span class="modal-title">Manage Time Entries</span>
-        <button class="icon-btn" onclick="closeModal('timeEntries')"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-
-      <!-- Column headers -->
-      <div class="te-header-row">
-        <span></span>
-        <span>Date</span>
-        <span>Time</span>
-        <span>Proof Sent</span>
-        <span>Task</span>
-        <span></span>
-      </div>
-
-      <!-- Add row -->
-      <div class="te-add-row" id="teAddRow">
-        <div class="te-initials">HP</div>
-        <input class="form-input te-input-sm" type="date" id="teDate" />
-        <div class="te-time-wrap">
-          <input class="form-input te-input-time" type="number" id="teHours" placeholder="HH" min="0" max="23" />
-          <span class="te-time-sep">:</span>
-          <input class="form-input te-input-time" type="number" id="teMinutes" placeholder="MM" min="0" max="59" />
-        </div>
-        <input class="form-input te-input-sm" type="text" id="teProofSent" placeholder="Sent proof?" />
-        <input class="form-input te-input-sm" type="text" id="teTask" placeholder="Task"
-          onkeydown="if(event.key==='Enter') teAddEntry()" />
-        <button class="icon-btn" onclick="teAddEntry()" title="Add entry"><i class="fa-solid fa-plus"></i></button>
-      </div>
-
-      <!-- Entry list -->
-      <div class="te-list" id="teList">
-        <div class="te-entry">
-          <div class="te-initials">HP</div>
-          <span class="te-val">12/10/24</span>
-          <span class="te-val">09:15</span>
-          <span class="te-val-sec">—</span>
-          <span class="te-val">Initial layout setup</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
-              class="fa-regular fa-trash-can"></i></button>
-        </div>
-        <div class="te-entry">
-          <div class="te-initials">HP</div>
-          <span class="te-val">12/12/24</span>
-          <span class="te-val">14:30</span>
-          <span class="te-val-sec">Sent proof?</span>
-          <span class="te-val">Sent PDF proof to Diane</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
-              class="fa-regular fa-trash-can"></i></button>
-        </div>
-        <div class="te-entry">
-          <div class="te-initials">HP</div>
-          <span class="te-val">12/16/24</span>
-          <span class="te-val">10:00</span>
-          <span class="te-val-sec">—</span>
-          <span class="te-val">Revisions from client markup</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
-              class="fa-regular fa-trash-can"></i></button>
-        </div>
-        <div class="te-entry">
-          <div class="te-initials">HP</div>
-          <span class="te-val">12/18/24</span>
-          <span class="te-val">08:45</span>
-          <span class="te-val-sec">Sent proof?</span>
-          <span class="te-val">Re-proof after revisions</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
-              class="fa-regular fa-trash-can"></i></button>
-        </div>
-        <div class="te-entry">
-          <div class="te-initials">HP</div>
-          <span class="te-val">01/06/25</span>
-          <span class="te-val">11:20</span>
-          <span class="te-val-sec">—</span>
-          <span class="te-val">Prepress check &amp; file prep</span>
-          <button class="icon-btn" title="Remove" onclick="this.closest('.te-entry').remove()"><i
-              class="fa-regular fa-trash-can"></i></button>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn-secondary" onclick="closeModal('timeEntries')">Cancel</button>
-        <button class="btn-primary" onclick="saveModal('timeEntries')">Save</button>
-      </div>
-    </div>
-  </div>
-
   <!-- ── MODAL: Scan History (modals/scan-history-modal) ── -->
   <div class="modal-overlay" id="modal-scanHistory" onclick="handleOverlayClick(event, 'scanHistory')">
     <div class="modal-panel">
       <div class="modal-header">
-        <span class="modal-title">Scan History</span>
+        <span class="modal-title">Activity Log</span>
+        <select class="form-select activity-log-scope" id="activityLogScope">
+          <option value="job" selected>Job</option>
+          <option value="detail-1">Detail 1</option>
+        </select>
         <button class="icon-btn" onclick="closeModal('scanHistory')"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Tabs -->
-      <div class="scan-tabs">
-        <button class="scan-tab active" onclick="switchScanTab('job', this)">Job</button>
-        <button class="scan-tab" onclick="switchScanTab('detail', this)">Detail</button>
-      </div>
+      <!-- Activity Timeline -->
+      <div class="activity-timeline">
 
-      <!-- Job Tab -->
-      <div class="scan-tab-panel active" id="scan-panel-job">
-        <!-- Status Changer -->
-        <div class="scan-status-bar">
-          <div class="scan-status-search-wrap">
-            <input type="text" class="scan-status-search" id="statusSearchInput" autocomplete="off"
-              oninput="filterStatusDropdown(this.value)">
+        <div class="timeline-scroll">
+
+          <!-- Created (first row — semibold, body/md, primary) -->
+          <div class="timeline-row timeline-row--first">
+            <div class="timeline-date type-body-sm">12/08/2017</div>
+            <div class="timeline-connector timeline-connector--first">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event">
+              <span class="semibold" style="font-size: var(--fontsize-body-md); line-height: var(--line-height-body-md);">Created by Healey Pembridge</span>
+            </div>
           </div>
-          <button class="btn-primary btn-sm" id="applyStatusBtn" onclick="applyStatusChange()" disabled>Apply</button>
-        </div>
-        <div class="scan-table-wrap">
-          <table class="scan-table">
-            <thead>
-              <tr>
-                <th class="col-timestamp">Timestamp</th>
-                <th>From</th>
-                <th class="col-arrow"></th>
-                <th>To</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="col-timestamp">01/03/24 12:17PM</td>
-                <td>Billed</td>
-                <td class="col-arrow">→</td>
-                <td>Paper on Order</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/02/24 11:00AM</td>
-                <td>Paper on Order</td>
-                <td class="col-arrow">→</td>
-                <td>Bindery Metal</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/24/24 8:48AM</td>
-                <td>Die Cutter</td>
-                <td class="col-arrow">→</td>
-                <td>Proof Out</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/24/24 10:46AM</td>
-                <td>Proof Out</td>
-                <td class="col-arrow">→</td>
-                <td>To Be Figured</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/24/24 1:44PM</td>
-                <td>Wood Shop</td>
-                <td class="col-arrow">→</td>
-                <td>Jayne</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/24/24 2:00PM</td>
-                <td>Tape Machine</td>
-                <td class="col-arrow">→</td>
-                <td>Prototype Out</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">11/22/24 9:53AM</td>
-                <td>Prototype Out</td>
-                <td class="col-arrow">→</td>
-                <td>Tape Machine</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">12/12/24 8:31AM</td>
-                <td>Tape Machine</td>
-                <td class="col-arrow">→</td>
-                <td>Greg K - Proof Out</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">12/12/24 8:32AM</td>
-                <td>Greg K - Proof Out</td>
-                <td class="col-arrow">→</td>
-                <td>Shipped</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">12/13/24 10:37AM</td>
-                <td>Shipped</td>
-                <td class="col-arrow">→</td>
-                <td>Jordan S - Proof Out</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">02/17/25 12:21PM</td>
-                <td>Jordan S - Proof Out</td>
-                <td class="col-arrow">→</td>
-                <td>Paper on Order</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">03/03/25 10:52AM</td>
-                <td>Paper on Order</td>
-                <td class="col-arrow">→</td>
-                <td>BIP Glue Stamp</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">03/10/25 7:30AM</td>
-                <td>BIP Glue Stamp</td>
-                <td class="col-arrow">→</td>
-                <td>Not Scanned In</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/15/25 7:49AM</td>
-                <td>Shipping</td>
-                <td class="col-arrow">→</td>
-                <td>Shipped</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/15/25 8:46AM</td>
-                <td>Shipped</td>
-                <td class="col-arrow">→</td>
-                <td>Cancelled</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/16/25 9:54AM</td>
-                <td>Cancelled</td>
-                <td class="col-arrow">→</td>
-                <td>Gary Tuttle</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/16/25 10:00AM</td>
-                <td>Shipping</td>
-                <td class="col-arrow">→</td>
-                <td>Shipped</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/16/25 10:00AM</td>
-                <td>Shipped</td>
-                <td class="col-arrow">→</td>
-                <td>Digital Solutions</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/20/25 1:20PM</td>
-                <td>Digital Solutions</td>
-                <td class="col-arrow">→</td>
-                <td>Bindery Quality Check</td>
-              </tr>
-              <tr>
-                <td class="col-timestamp">10/20/25 1:20PM</td>
-                <td>Bindery Quality Check</td>
-                <td class="col-arrow">→</td>
-                <td>Bindery On Cart</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">01/03/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Paper on Order</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/02/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Bindery Metal</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Proof Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">To Be Figured</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Jayne</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Prototype Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">11/22/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Tape Machine</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">12/12/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Greg K - Proof Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">12/12/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Shipped</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">12/13/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Jordan S - Proof Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">02/17/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Paper on Order</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">03/03/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">BIP Glue Stamp</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">03/10/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Not Scanned In</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/15/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line"><div class="timeline-tick"></div></div>
+            </div>
+            <div class="timeline-event type-body-md">Shipped</div>
+          </div>
+
+          
+
+          <!-- Status Update (indented to event column) -->
+          <div class="timeline-status-row">
+            <div class="timeline-status-select-wrap">
+              <input class="form-input" type="text" id="statusUpdateInput"
+                list="statusOptions" autocomplete="off"
+                placeholder="Search to Update Status" />
+              <datalist id="statusOptions">
+                <option>Paper on Order</option>
+                <option>Bindery Metal</option>
+                <option>Proof Out</option>
+                <option>Prototype Out</option>
+                <option>Tape Machine</option>
+                <option>Shipped</option>
+                <option>Cancelled</option>
+                <option>Bindery On Cart</option>
+                <option>Bindery Quality Check</option>
+                <option>Digital Solutions</option>
+                <option>BIP Glue Stamp</option>
+                <option>Not Scanned In</option>
+              </datalist>
+            </div>
+          </div>
+
+        </div><!-- /.timeline-scroll -->
+
+
+      </div><!-- /.activity-timeline -->
+
+    </div>
+  </div>
+
+  <!-- ── MODAL: Manage Notes (modals/manage-notes-modal) ── -->
+  <div class="modal-overlay modal-notes" id="modal-manageNotes" onclick="handleOverlayClick(event, 'manageNotes')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">Manage Notes</span>
+        <button class="icon-btn" onclick="closeModal('manageNotes')"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- Detail Tab -->
-      <div class="scan-tab-panel" id="scan-panel-detail">
-        <div class="scan-status-bar">
-          <select class="form-select detail-filter-select" id="detailFilterSelect" onchange="filterDetailScans(this)"
-            disabled>
-            <option value="1">Detail 1</option>
+      <!-- Filter pills -->
+      <div class="notes-filter-bar">
+        <button class="notes-pill active" data-type="all" onclick="filterNotes('all', this)">All</button>
+        <button class="notes-pill" data-type="general" onclick="filterNotes('general', this)">General</button>
+        <button class="notes-pill" data-type="shipping" onclick="filterNotes('shipping', this)">Shipping</button>
+        <button class="notes-pill" data-type="detail" onclick="filterNotes('detail', this)">Detail</button>
+        <button class="notes-pill" data-type="billing" onclick="filterNotes('billing', this)">Billing</button>
+      </div>
+
+      <!-- Search + add -->
+      <div class="notes-search-row">
+        <input class="form-input" type="text" id="notesSearchInput" placeholder="Search notes…"
+          oninput="filterNotesList(this.value)">
+        <button class="icon-btn notes-add-btn" id="notesAddBtn" title="Add note" onclick="toggleNoteEditor()">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <!-- Note cards (hidden when editor is open) -->
+      <div class="notes-card-list" id="notesCardList">
+
+        <div class="notes-card" data-note-type="general">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">General</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Send a "Zero" proof of the Alchamey menu inserts for hotels to update their content. Send PDF proof to hotel for approval, then once approved send to Megan and Josh for their approval.</p>
+          <div class="notes-card-meta">
+            <span>Gerry Ramella</span>
+            <span>10/01/25</span>
+          </div>
+        </div>
+
+        <div class="notes-card" data-note-type="shipping">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">Shipping</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Call Pearland location ahead of delivery — receiving dock is closed Mondays.</p>
+          <div class="notes-card-meta">
+            <span>Gerry Ramella</span>
+            <span>10/14/25</span>
+          </div>
+        </div>
+
+        <div class="notes-card" data-note-type="detail">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">Detail</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Confirm durapoly stock availability with vendor before going to press.</p>
+          <div class="notes-card-meta">
+            <span>Dawn Leahy</span>
+            <span>10/18/25</span>
+          </div>
+        </div>
+
+        <div class="notes-card" data-note-type="billing">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">Billing</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Note text rijirohrwglijori gjo;ering;oientr ;ogi neo; rijg n; oer ijln l ;gknerl;kngo ;einro ;kner;lkv ne;l rkng;lw krnbv; ;obivne;o rvawje4o2f o24j vlr vj ...</p>
+          <div class="notes-card-meta">
+            <span>Dawn Leahy</span>
+            <span>10/25/25</span>
+          </div>
+        </div>
+
+      </div><!-- /.notes-card-list -->
+
+      <!-- Note editor (hidden until add/edit) -->
+      <div class="notes-editor-pane" id="notesEditorPane">
+
+        <!-- Note Type -->
+        <div class="form-group">
+          <label class="form-label">Note Type</label>
+          <select class="form-select" id="noteTypeSelect" onchange="updateNoteTypeHelp(this)">
+            <option value="" disabled selected></option>
+            <option value="general">General</option>
+            <option value="shipping">Shipping</option>
+            <option value="detail">Detail 1 — Folder</option>
+            <option value="billing">Billing</option>
           </select>
-          <div class="scan-status-search-wrap">
-            <input type="text" class="scan-status-search" id="detailStatusSearchInput" autocomplete="off"
-              oninput="filterDetailStatusDropdown(this.value)">
-          </div>
-          <button class="btn-primary btn-sm" id="applyDetailStatusBtn" onclick="applyDetailStatusChange()"
-            disabled>Apply</button>
+          <p class="form-help hidden-section" id="noteTypeHelp"></p>
         </div>
-        <div class="scan-table-wrap">
-          <table class="scan-table">
-            <thead>
-              <tr>
-                <th class="col-timestamp">Timestamp</th>
-                <th>#</th>
-                <th>From</th>
-                <th class="col-arrow"></th>
-                <th>To</th>
-              </tr>
-            </thead>
-            <tbody id="detailScanBody">
-              <tr data-detail="1">
-                <td class="col-timestamp">12/12/24 8:31AM</td>
-                <td>1</td>
-                <td>Tape Machine</td>
-                <td class="col-arrow">→</td>
-                <td>Greg K - Proof Out</td>
-              </tr>
-              <tr data-detail="1">
-                <td class="col-timestamp">12/12/24 8:32AM</td>
-                <td>1</td>
-                <td>Greg K - Proof Out</td>
-                <td class="col-arrow">→</td>
-                <td>Shipped</td>
-              </tr>
-            </tbody>
-          </table>
+
+        <!-- Checkboxes -->
+        <div class="notes-editor-checks">
+          <label class="notes-check-label">
+            <input type="checkbox" id="notePrivate"> Private
+          </label>
+          <label class="notes-check-label">
+            <input type="checkbox" id="notePrintOnTicket"> Print on Ticket
+          </label>
+        </div>
+
+        <!-- Note text -->
+        <textarea class="form-input notes-editor-textarea" id="noteTextarea"
+          placeholder="Note Placeholder…."></textarea>
+
+        <!-- Editor actions -->
+        <div class="notes-editor-footer">
+          <button class="btn-secondary" onclick="clearNoteEditor()">Cancel</button>
+          <button class="btn-primary" onclick="saveNote()">Save</button>
+        </div>
+
+      </div><!-- /.notes-editor-pane -->
+    </div><!-- /.modal-panel -->
+  </div><!-- /#modal-manageNotes -->
+
+  <!-- ── MODAL: Ship Address Edit (components/shipping-tab) ── -->
+  <div class="modal-overlay" id="modal-shipEdit" onclick="handleOverlayClick(event, 'shipEdit')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title" id="shipEditTitle">Edit Shipping Address</span>
+        <button class="icon-btn" onclick="closeShipEdit()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group ship-edit-single-only">
+          <label class="form-label">Customer</label>
+          <select class="form-select" id="shipEditCustomer">
+            <option>Pizza Hut #032224</option>
+            <option>Pizza Hut Corporation</option>
+          </select>
+        </div>
+        <div class="form-group ship-edit-single-only">
+          <label class="form-label">Address Description</label>
+          <select class="form-select" id="shipEditAddrDesc">
+            <option>Main Address</option>
+            <option>Clearwood</option>
+            <option>Office Address</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quantity</label>
+          <div class="ship-stepper">
+            <button class="ship-stepper-btn" onclick="stepShipEdit(-1)">−</button>
+            <input class="ship-stepper-val" id="shipEditQty" type="number" value="0" min="0">
+            <button class="ship-stepper-btn" onclick="stepShipEdit(1)">+</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Carrier</label>
+          <select class="form-select" id="shipEditCarrier">
+            <option>UPS</option>
+            <option>FedEx</option>
+            <option>USPS</option>
+            <option>Will Call</option>
+          </select>
+        </div>
+        <div class="form-row form-row-2 form-group">
+          <div>
+            <label class="form-label">Account</label>
+            <select class="form-select" id="shipEditAccount">
+              <option>CMP UPS Account</option>
+              <option>CMP FedEx Account</option>
+              <option>Customer Account</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Method</label>
+            <select class="form-select" id="shipEditMethod">
+              <option>Ground</option>
+              <option>2-Day</option>
+              <option>Overnight</option>
+              <option>Priority</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Attn</label>
+          <input class="form-input" type="text" id="shipEditAttn" placeholder="Attention">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Additional Information</label>
+          <input class="form-input" type="text" id="shipEditNotes" placeholder="Notes or additional info">
         </div>
       </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeShipEdit()">Cancel</button>
+        <button class="btn-primary" onclick="saveShipEdit()">Save</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- ── MODAL: Delete Shipping Addresses Confirm (components/shipping-tab) ── -->
+  <div class="modal-overlay modal-centered" id="modal-shipDeleteConfirm"
+    onclick="handleOverlayClick(event, 'shipDeleteConfirm')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title" id="shipDeleteConfirmTitle">Delete addresses?</span>
+        <button class="icon-btn" onclick="cancelShipDelete()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="ship-delete-warning">This action cannot be undone</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="cancelShipDelete()">Cancel</button>
+        <button class="btn-primary btn-danger" onclick="confirmDeleteSelected()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ship Settings modal -->
+  <div class="modal-overlay" id="modal-shipSettings" onclick="handleOverlayClick(event, 'shipSettings')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">Shipping Table Settings</span>
+        <button class="icon-btn" onclick="closeModal('shipSettings')"><i class="fa-regular fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="ship-settings-note"><i class="fa-regular fa-clock"></i> These settings are temporary and will reset if you leave or refresh the page.</p>
+
+        <div class="ship-settings-group">
+
+          <!-- Address Column -->
+          <div class="ship-settings-row">
+            <label for="sToggleColAddr" class="ship-settings-label">Hide Address Column</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleColAddr" onchange="toggleShipCol('addr', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label for="sToggleFieldAttn" class="ship-settings-label">Hide ATTN Field</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleFieldAttn" class="addr-subfield" onchange="toggleShipField('attn', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label for="sToggleFieldAddrName" class="ship-settings-label">Hide Address Name Field</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleFieldAddrName" class="addr-subfield" onchange="toggleShipField('addr-name', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label for="sToggleFieldAddrStreet" class="ship-settings-label">Hide Address Field</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleFieldAddrStreet" class="addr-subfield" onchange="toggleShipField('addr-street', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <hr class="ship-settings-divider">
+
+          <!-- Delivery Column -->
+          <div class="ship-settings-row">
+            <label for="sToggleColDelivery" class="ship-settings-label">Hide Delivery Column</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleColDelivery" onchange="toggleShipCol('delivery', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label for="sToggleFieldCarrier" class="ship-settings-label">Hide Carrier Field</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleFieldCarrier" class="delivery-subfield" onchange="toggleShipField('carrier', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label for="sToggleFieldMethod" class="ship-settings-label">Hide Method Field</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleFieldMethod" class="delivery-subfield" onchange="toggleShipField('method-type', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label for="sToggleFieldAccount" class="ship-settings-label">Hide Account Field</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleFieldAccount" class="delivery-subfield" onchange="toggleShipField('account', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <hr class="ship-settings-divider">
+
+          <!-- Notes Column -->
+          <div class="ship-settings-row">
+            <label for="sToggleColNotes" class="ship-settings-label">Hide Notes Column</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleColNotes" onchange="toggleShipCol('notes', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <hr class="ship-settings-divider">
+
+          <!-- QTY Column -->
+          <div class="ship-settings-row">
+            <label for="sToggleColQty" class="ship-settings-label">Hide QTY Column</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sToggleColQty" onchange="toggleShipCol('qty', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1040,8 +1502,8 @@
   <script src="modals/edit-job-modal/edit-job-modal.js"></script>
   <script src="modals/trello-confirm-modal/trello-confirm-modal.js"></script>
   <script src="modals/proof-contacts-modal/proof-contacts-modal.js"></script>
-  <script src="modals/time-entries-modal/time-entries-modal.js"></script>
   <script src="modals/scan-history-modal/scan-history-modal.js"></script>
+  <script src="modals/manage-notes-modal/manage-notes-modal.js"></script>
 </body>
 
 </html>

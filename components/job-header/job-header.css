@@ -49,34 +49,26 @@
   width: 100%;
 }
 
+.job-header-card .pill{
+  padding: 0px 16px;
+  margin-left: 8px;
+  background-color: var(--status-warning-bg);
+  border: solid 1px var(--status-warning-border);
+}
+
 .job-title-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: var(--fontsize-body-lg);
   color: var(--text-primary);
 }
+.job-title-row #description{
+  font-weight: var(--font-weight-book);
 
-.job-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
 }
 
-/* status pill */
-
-.status-pill {
-  text-transform: uppercase;
-  background: var(--interactive-bg-subtle);
-  border: solid 1px var(--interactive-default);
-  color: var(--text-interactive);
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.status-pill:hover {
-  opacity: 0.75;
+.job-meta{
+  color: var(--text-secodary);
 }
 
 /* action buttons row */
