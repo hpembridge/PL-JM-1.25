@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ship Edit Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="../../components/shipping-tab/shipping-tab.css" />
+  <link rel="stylesheet" href="ship-edit-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay" id="modal-shipEdit" onclick="handleOverlayClick(event, 'shipEdit')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title" id="shipEditTitle">Edit Shipping Address</span>
+        <button class="icon-btn" onclick="closeShipEdit()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group ship-edit-single-only">
+          <label class="form-label">Customer</label>
+          <select class="form-select" id="shipEditCustomer">
+            <option>Pizza Hut #032224</option>
+            <option>Pizza Hut Corporation</option>
+          </select>
+        </div>
+        <div class="form-group ship-edit-single-only">
+          <label class="form-label">Address Description</label>
+          <select class="form-select" id="shipEditAddrDesc">
+            <option>Main Address</option>
+            <option>Clearwood</option>
+            <option>Office Address</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quantity</label>
+          <div class="ship-stepper">
+            <button class="ship-stepper-btn" onclick="stepShipEdit(-1)">−</button>
+            <input class="ship-stepper-val" id="shipEditQty" type="number" value="0" min="0">
+            <button class="ship-stepper-btn" onclick="stepShipEdit(1)">+</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Carrier</label>
+          <select class="form-select" id="shipEditCarrier">
+            <option>UPS</option>
+            <option>FedEx</option>
+            <option>USPS</option>
+            <option>Will Call</option>
+          </select>
+        </div>
+        <div class="form-row form-row-2 form-group">
+          <div>
+            <label class="form-label">Account</label>
+            <select class="form-select" id="shipEditAccount">
+              <option>CMP UPS Account</option>
+              <option>CMP FedEx Account</option>
+              <option>Customer Account</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Method</label>
+            <select class="form-select" id="shipEditMethod">
+              <option>Ground</option>
+              <option>2-Day</option>
+              <option>Overnight</option>
+              <option>Priority</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Attn</label>
+          <input class="form-input" type="text" id="shipEditAttn" placeholder="Attention">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Additional Information</label>
+          <input class="form-input" type="text" id="shipEditNotes" placeholder="Notes or additional info">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeShipEdit()">Cancel</button>
+        <button class="btn-primary" onclick="saveShipEdit()">Save</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

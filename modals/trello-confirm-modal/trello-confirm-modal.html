@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trello Confirm Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="trello-confirm-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay modal-centered" id="modal-trelloConfirm"
+    onclick="handleOverlayClick(event, 'trelloConfirm')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">Send to Trello</span>
+        <button class="icon-btn" onclick="closeModal('trelloConfirm')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="trello-confirm-heading">Are you sure?</p>
+        <p class="trello-confirm-body">This will create a new Trello card for
+          job 232323. This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('trelloConfirm')">Cancel</button>
+        <button class="btn-primary" onclick="confirmTrello()"> Yes, send to Trello</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

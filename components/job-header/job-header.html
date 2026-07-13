@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Header</title>
+    <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+    <link rel="stylesheet" href="../../job-detail.css" />
+    <link rel="stylesheet" href="job-header.css" />
+
+    <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+
+</head>
+
+<body>
+    <div class="header-wrap">
+
+        <!-- ── Above-card bar: status left, primary actions right ── -->
+        <div class="job-header-bar">
+            <p class="pill">Status: Bindery on Cart</p>
+            <div class="job-actions-right">
+                <button class="btn-secondary" id="trello-btn" onclick="trelloAction()">
+                    Send to Trello
+                </button>
+
+                <!-- Simple print button: shown when no interior boards or future print items exist -->
+                <button class="btn-primary" id="print-btn-simple" onclick="printTicket()">
+                    <i class="fa-regular fa-print"></i>
+                    Print Ticket
+                </button>
+
+                <!-- Split print button: shown when interior boards (or future items) are present -->
+                <!-- PROTOTYPE: forced visible; production should toggle via initPrintButton() -->
+                <div class="btn-split" id="print-btn-split">
+                    <button class="btn-split-main" onclick="printTicket()">
+                        <i class="fa-regular fa-print"></i>
+                        Print Ticket
+                    </button>
+                    <button class="btn-split-caret" onclick="togglePrintMenu(event)" aria-label="More print options">
+                        <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                    </button>
+                    <div class="btn-split-menu" id="print-menu">
+                        <button onclick="printItem('ticket')">
+                            <i class="fa-regular fa-file"></i>
+                            Ticket
+                        </button>
+                        <button onclick="printItem('board')">
+                            <i class="fa-regular fa-layer-group"></i>
+                            Interior Board Sheet
+                        </button>
+                        <div class="menu-divider"></div>
+                        <button onclick="printItem('all')">
+                            <i class="fa-regular fa-copy"></i>
+                            All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="job-header-card">
+            <div class="inner-row inner-row-col">
+                <div class="job-header-top">
+                    <h6 class="job-title-row">
+                        <span>232323</span>
+                        <span id="description">2018 Standard Menu Single Fold Jan 2018 Ws</span>
+                    </h6>
+                    <button class="icon-btn" title="Edit job information" onclick="openModal('editJob')">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                </div>
+                <p class="job-meta type-body-md semibold"><span>New Job</span> • <span>Printing</span></p>
+                <p class="job-meta type-body-sm">Last Modified by Healey Pembridge on 3/03/25</p>
+            </div>
+            <div class="inner-row border-top">
+                <div class="job-actions">
+                    <button class="btn-secondary" onclick="openModal('manageNotes')">
+                        Manage Notes
+                    </button>
+                    <button class="btn-secondary" onclick="openModal('proofContacts')">
+                        Manage Job Contacts
+                    </button>
+                    <button class="btn-secondary" id="statusPill" title="Bindery On Cart"
+                        onclick="openModal('scanHistory')">
+                        View Activity Log
+                    </button>
+                </div>
+            </div>
+        </div><!-- /.job-header-card -->
+    </div><!-- /.header-wrap -->
+</body>
+
+</html>

@@ -2,11 +2,12 @@
 
 - [ ] bindery calculator links
 - [ ] commercial invoice
+- [ ] billing & sales rep
+- [ ] net terms etc
+- [ ] clean up CSS
 
-- [ ] billing aside
-	- [ ] PO# / agent
-	- [ ] invoice table (read only)
-	- [ ] billing notes
+okay so close to done!!!
+
 ### Existing Platinum Functionality, New Location 
 
 *(skippable if we want...for now)*

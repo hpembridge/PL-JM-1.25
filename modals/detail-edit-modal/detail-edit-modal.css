@@ -303,49 +303,6 @@
       font-style: italic;
       text-align: center;
     }
-
-/* ── DETAIL EDIT MODAL TABS ── */
-
-.detail-edit-tabs {
-      display: flex;
-      flex-shrink: 0;
-            border-bottom: 1px solid var(--border-default);
-
-    }
-
-.detail-edit-tab {
-      padding: 10px 16px;
-      border: none;
-      border-bottom: 2px solid transparent;
-      background: transparent;
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-tertiary);
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: color 0.15s, background 0.15s;
-      flex: 1;
-    }
-
-.detail-edit-tab:hover {
-      color: var(--text-interactive);
-    }
-
-.detail-edit-tab.active {
-      color: var(--interactive-default);
-      background: var(--interactive-bg-subtle);
-      border-radius: 8px 8px 0px 0px;
-      border: solid 1px var(--interactive-hover);
-      border-bottom: none;
-    }
-
-.detail-edit-panel {
-      display: none;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-.detail-edit-panel.active {
-      display: flex;
-    }
+.detail-card-notes{
+  padding: 16px 32px 0px;
+}

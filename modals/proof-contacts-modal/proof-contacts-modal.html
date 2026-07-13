@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proof Contacts Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="proof-contacts-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay" id="modal-proofContacts" onclick="handleOverlayClick(event, 'proofContacts')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">Manage Job Contacts</span>
+        <button class="icon-btn" onclick="closeModal('proofContacts')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body contacts-modal-body">
+        <div class="form-group">
+          <label class="form-label">Add contact</label>
+          <div class="pc-combobox" id="pcCombobox">
+            <div class="pc-input-wrap">
+              <i class="fa-regular fa-magnifying-glass pc-search-icon"></i>
+              <input id="pcInput" class="pc-input" type="text" placeholder="Search by name or email…" autocomplete="off"
+                oninput="pcOnInput(this.value)" onkeydown="pcOnKeydown(event)" />
+            </div>
+            <div class="pc-dropdown hidden-section" id="pcDropdown"></div>
+          </div>
+        </div>
+
+        <table class="pc-table hidden-section" id="pcTable">
+          <thead>
+            <tr>
+              <th class="pc-th-name">Name</th>
+              <th class="pc-th-receives">Receives</th>
+              <th class="pc-th-action"></th>
+            </tr>
+          </thead>
+          <tbody id="pcList"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('proofContacts')">Cancel</button>
+        <button class="btn-primary" onclick="saveModal('proofContacts')">Save</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

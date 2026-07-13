@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shipping Tab</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="shipping-tab.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+    <div class="tab-panel hidden-section" id="tab-panel-shipping">
+
+      <div class="ship-layout">
+
+        <!-- Left: widget -->
+        <div class="widget ship-widget">
+
+          <!-- Shipping Notifications -->
+          <div class="widget-section" id="pcShipWrap">
+            <div class="widget-section-header">
+              <span class="widget-section-label">Shipping Notifications</span>
+              <button class="icon-btn" title="Manage contacts" onclick="openModal('proofContacts')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <div class="widget-contact-list hidden-section" id="shipCnContactsList"></div>
+          </div>
+
+          <!-- Shipping Notes -->
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">Shipping Notes</span>
+              <button class="icon-btn" title="Manage notes" onclick="openModal('manageNotes')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <div class="widget-notes">
+              <div class="widget-note-item ">
+                <span class="widget-note-num">(1)</span>
+                <p class="widget-note-text">Ship via UPS ground. Ensure all boxes are labeled with the job number before
+                  pickup. Contact Diane Kovach if there are any delays.</p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.ship-widget -->
+
+        <!-- Right: table area -->
+        <div class="ship-table-area">
+
+          <!-- Address table -->
+          <div class="search-list ship-address-list">
+            <div class="search-list-header">
+              <input type="text" placeholder="Search Addresses…" oninput="filterAddresses(this.value)">
+              <button class="icon-btn" title="Add shipping address" onclick="openShipAdd()"><i
+                  class="fa-regular fa-plus"></i></button>
+              <button class="icon-btn" title="Table settings" onclick="openModal('shipSettings')"><i
+                  class="fa-regular fa-gear"></i></button>
+            </div>
+
+            <div class="ship-table-wrap">
+              <table class="ship-table">
+                <thead>
+                  <tr>
+                    <th class="ship-col-cb"><label class="cb-cell-label"><input type="checkbox" class="select-all-cb"
+                          id="selectAllAddresses" onchange="toggleSelectAll(this)"></label></th>
+                    <th class="ship-col-addr">Address</th>
+                    <th class="ship-col-delivery">Delivery</th>
+                    <th class="ship-col-notes">Notes</th>
+                    <th class="ship-col-qty">Qty<div id="shipQtyFooter"></div>
+                    </th>
+                    <th class="ship-col-actions"></th>
+                  </tr>
+                </thead>
+                <tbody id="shipAddressList">
+
+                  <tr class="ship-address-row" data-id="1" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="G M" data-notes="2233" data-qty="100">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: G M</span><span class="ship-addr-name">Main
+                        Address</span><span class="ship-addr-street">710 S Wayside Drive</span><span
+                        class="ship-addr-street">Houston, TX 77023</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>2233</td>
+                    <td class="ship-col-qty">100</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="2" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="" data-notes="" data-qty="100">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-name">Clearwood</span><span class="ship-addr-street">8925 Clearwood
+                        St</span><span class="ship-addr-street">Houston, TX 77075</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">100</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="3" data-carrier="FedEx" data-method="2-Day"
+                    data-account="CMP FedEx Account" data-attn="Office Mgr" data-notes="" data-qty="100">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: Office Mgr</span><span class="ship-addr-name">Office
+                        Address</span><span class="ship-addr-street">1441 East 17th Street</span><span
+                        class="ship-addr-street">Cleveland, OH 44114</span></td>
+                    <td><span class="ship-delivery-method">FedEx 2-Day</span><span class="ship-delivery-account">CMP
+                        FedEx Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">100</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="4" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="Store Mgr" data-notes="" data-qty="75">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: Store Mgr</span><span
+                        class="ship-addr-name">Westpark</span><span class="ship-addr-street">3131 Westpark
+                        Dr</span><span class="ship-addr-street">Houston, TX 77005</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">75</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="5" data-carrier="FedEx" data-method="Overnight"
+                    data-account="Customer Account" data-attn="D. Torres" data-notes="Fragile" data-qty="50">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: D. Torres</span><span class="ship-addr-name">Memorial
+                        City</span><span class="ship-addr-street">303 Memorial City Way</span><span
+                        class="ship-addr-street">Houston, TX 77024</span></td>
+                    <td><span class="ship-delivery-method">FedEx Overnight</span><span
+                        class="ship-delivery-account">Customer Account</span></td>
+                    <td>Fragile</td>
+                    <td class="ship-col-qty">50</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="6" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="" data-notes="" data-qty="125">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-name">Almeda</span><span class="ship-addr-street">11055 Almeda Genoa
+                        Rd</span><span class="ship-addr-street">Houston, TX 77034</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">125</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="7" data-carrier="USPS" data-method="Priority"
+                    data-account="Customer Account" data-attn="R. Kim" data-notes="Hold at door" data-qty="60">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: R. Kim</span><span
+                        class="ship-addr-name">Pasadena</span><span class="ship-addr-street">4120 Spencer
+                        Hwy</span><span class="ship-addr-street">Pasadena, TX 77504</span></td>
+                    <td><span class="ship-delivery-method">USPS Priority</span><span
+                        class="ship-delivery-account">Customer Account</span></td>
+                    <td>Hold at door</td>
+                    <td class="ship-col-qty">60</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="8" data-carrier="FedEx" data-method="Ground"
+                    data-account="CMP FedEx Account" data-attn="GM" data-notes="" data-qty="80">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: GM</span><span class="ship-addr-name">Pearland</span><span
+                        class="ship-addr-street">2850 Smith Ranch Rd</span><span class="ship-addr-street">Pearland, TX
+                        77584</span></td>
+                    <td><span class="ship-delivery-method">FedEx Ground</span><span class="ship-delivery-account">CMP
+                        FedEx Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">80</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="9" data-carrier="UPS" data-method="2-Day"
+                    data-account="CMP UPS Account" data-attn="T. Walsh" data-notes="" data-qty="90">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: T. Walsh</span><span class="ship-addr-name">Sugar
+                        Land</span><span class="ship-addr-street">16535 Southwest Fwy</span><span
+                        class="ship-addr-street">Sugar Land, TX 77479</span></td>
+                    <td><span class="ship-delivery-method">UPS 2-Day</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">90</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="10" data-carrier="FedEx" data-method="2-Day"
+                    data-account="CMP FedEx Account" data-attn="" data-notes="Call ahead" data-qty="110">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-name">Katy</span><span class="ship-addr-street">25475 Katy
+                        Fwy</span><span class="ship-addr-street">Katy, TX 77494</span></td>
+                    <td><span class="ship-delivery-method">FedEx 2-Day</span><span class="ship-delivery-account">CMP
+                        FedEx Account</span></td>
+                    <td>Call ahead</td>
+                    <td class="ship-col-qty">110</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="11" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="P. Brooks" data-notes="" data-qty="95">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: P. Brooks</span><span class="ship-addr-name">The
+                        Woodlands</span><span class="ship-addr-street">1201 Lake Woodlands Dr</span><span
+                        class="ship-addr-street">The Woodlands, TX 77380</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">95</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="12" data-carrier="Will Call" data-method="—" data-account="—"
+                    data-attn="J. Navarro" data-notes="Pickup by Friday" data-qty="40">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: J. Navarro</span><span
+                        class="ship-addr-name">Friendswood</span><span class="ship-addr-street">130 W Edgewood
+                        Dr</span><span class="ship-addr-street">Friendswood, TX 77546</span></td>
+                    <td><span class="ship-delivery-method">Will Call</span></td>
+                    <td>Pickup by Friday</td>
+                    <td class="ship-col-qty">40</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="13" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="" data-notes="" data-qty="150">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-name">League City</span><span class="ship-addr-street">2920 Marina Bay
+                        Dr</span><span class="ship-addr-street">League City, TX 77573</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">150</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="14" data-carrier="FedEx" data-method="Overnight"
+                    data-account="Customer Account" data-attn="M. Chen" data-notes="Rush order" data-qty="30">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: M. Chen</span><span
+                        class="ship-addr-name">Baytown</span><span class="ship-addr-street">4500 Garth Rd</span><span
+                        class="ship-addr-street">Baytown, TX 77521</span></td>
+                    <td><span class="ship-delivery-method">FedEx Overnight</span><span
+                        class="ship-delivery-account">Customer Account</span></td>
+                    <td>Rush order</td>
+                    <td class="ship-col-qty">30</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="15" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="L. Grant" data-notes="" data-qty="85">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: L. Grant</span><span
+                        class="ship-addr-name">Conroe</span><span class="ship-addr-street">1301 N Loop 336 W</span><span
+                        class="ship-addr-street">Conroe, TX 77304</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">85</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="16" data-carrier="USPS" data-method="Priority"
+                    data-account="Customer Account" data-attn="" data-notes="" data-qty="55">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-name">Humble</span><span class="ship-addr-street">8950 FM 1960 Bypass Rd
+                        W</span><span class="ship-addr-street">Humble, TX 77338</span></td>
+                    <td><span class="ship-delivery-method">USPS Priority</span><span
+                        class="ship-delivery-account">Customer Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">55</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="17" data-carrier="FedEx" data-method="Ground"
+                    data-account="CMP FedEx Account" data-attn="A. Reyes" data-notes="Back entrance" data-qty="70">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: A. Reyes</span><span
+                        class="ship-addr-name">Cypress</span><span class="ship-addr-street">9720 Fry Rd</span><span
+                        class="ship-addr-street">Cypress, TX 77433</span></td>
+                    <td><span class="ship-delivery-method">FedEx Ground</span><span class="ship-delivery-account">CMP
+                        FedEx Account</span></td>
+                    <td>Back entrance</td>
+                    <td class="ship-col-qty">70</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="18" data-carrier="UPS" data-method="2-Day"
+                    data-account="CMP UPS Account" data-attn="S. Patel" data-notes="" data-qty="120">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: S. Patel</span><span
+                        class="ship-addr-name">Spring</span><span class="ship-addr-street">19190 I-45 N</span><span
+                        class="ship-addr-street">Spring, TX 77373</span></td>
+                    <td><span class="ship-delivery-method">UPS 2-Day</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">120</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="19" data-carrier="FedEx" data-method="2-Day"
+                    data-account="CMP FedEx Account" data-attn="" data-notes="Dock B" data-qty="200">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-name">Distribution Center</span><span class="ship-addr-street">6600 Gulf
+                        Fwy</span><span class="ship-addr-street">Houston, TX 77087</span></td>
+                    <td><span class="ship-delivery-method">FedEx 2-Day</span><span class="ship-delivery-account">CMP
+                        FedEx Account</span></td>
+                    <td>Dock B</td>
+                    <td class="ship-col-qty">200</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                  <tr class="ship-address-row" data-id="20" data-carrier="UPS" data-method="Ground"
+                    data-account="CMP UPS Account" data-attn="C. Morris" data-notes="" data-qty="65">
+                    <td><label class="cb-cell-label"><input type="checkbox" class="item-cb ship-row-check"
+                          onchange="onRowCheck()"></label></td>
+                    <td><span class="ship-addr-attn">ATTN: C. Morris</span><span
+                        class="ship-addr-name">Stafford</span><span class="ship-addr-street">12800 Murphy Rd</span><span
+                        class="ship-addr-street">Stafford, TX 77477</span></td>
+                    <td><span class="ship-delivery-method">UPS Ground</span><span class="ship-delivery-account">CMP UPS
+                        Account</span></td>
+                    <td>—</td>
+                    <td class="ship-col-qty">65</td>
+                    <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
+                          class="fa-regular fa-pen"></i></button><button class="icon-btn"
+                        onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div><!-- /ship-table-wrap -->
+
+            <div class="ship-empty-state hidden-section" id="shipEmptyState">
+              <div class="ship-empty-illustration">
+                <i class="fa-regular fa-sun-bright"></i>
+                <i class="fa-regular fa-island-tropical"></i>
+              </div>
+              <p class="ship-empty-text">Nothing to see here. Turns out hiding everything makes for a very tidy table.
+              </p>
+              <button class="btn-primary" onclick="openModal('shipSettings')">Open Settings</button>
+            </div>
+
+            <div class="ship-table-footer">
+              <div class="ship-footer-left">
+                <span class="list-footer-count" id="shipAddrCount">20 ADDRESSES</span>
+                <div class="ship-selection-actions" id="shipSelectionActions">
+                  <button class="inline-icon-btn" onclick="openShipEditSelected()" title="Edit selected"><i
+                      class="fa-regular fa-pen"></i></button>
+                  <button class="inline-icon-btn" onclick="openDeleteSelectedConfirm()" title="Delete selected"><i
+                      class="fa-regular fa-trash-can"></i></button>
+                  <button class="inline-icon-btn" onclick="clearShipSelection()" title="Deselect all"><i
+                      class="fa-regular fa-xmark"></i></button>
+                </div>
+              </div>
+              <div class="ship-footer-right">
+                <div class="action-container">
+                  <button class="icon-btn" title="Export address list"><i
+                      class="fa-solid fa-arrow-down-from-bracket"></i></button>
+                  <button class="icon-btn" title="Import addresses"><i
+                      class="fa-solid fa-arrow-up-from-bracket"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.ship-table-area -->
+      </div><!-- /.ship-layout -->
+
+    </div>
+
+</body>
+
+</html>

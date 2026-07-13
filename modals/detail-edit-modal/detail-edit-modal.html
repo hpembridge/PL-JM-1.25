@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail Edit Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="detail-edit-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay" id="modal-detailEdit" onclick="handleOverlayClick(event, 'detailEdit')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title" id="detailEditTitle">Edit Detail</span>
+        <button class="icon-btn" onclick="closeModal('detailEdit')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+
+
+      <div class="modal-body">
+        <div class="detail-edit-tabs">
+          <button class="detail-edit-tab active" data-tab="general"
+            onclick="switchDetailTab(this, 'general')">General</button>
+          <button class="detail-edit-tab" data-tab="paper" onclick="switchDetailTab(this, 'paper')">Paper</button>
+          <button class="detail-edit-tab" data-tab="print" onclick="switchDetailTab(this, 'print')">Print
+            Finishing</button>
+          <button class="detail-edit-tab" data-tab="bindery" onclick="switchDetailTab(this, 'bindery')">Bindery
+            Finishing</button>
+          <button class="detail-edit-tab" data-tab="boards" onclick="switchDetailTab(this, 'boards')">Interior
+            Boards</button>
+        </div>
+        <!-- Detail notes -->
+        <div class="detail-card-notes" id="modal-detail-notes-1">
+          <div class="widget-note-item ">
+            <span class="widget-note-num">(1)</span>
+            <p class="widget-note-text">Confirm durapoly stock availability with vendor before going to press.</p>
+          </div>
+        </div>
+        <!-- General -->
+        <div class="detail-edit-panel active" id="dep-general">
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <input class="form-input" type="text" value="Folder" />
+          </div>
+          <div class="form-row form-row-3 form-group">
+            <div>
+              <label class="form-label">Quantity</label>
+              <input class="form-input" type="number" value="200" />
+            </div>
+            <div>
+              <label class="form-label">Number of Panels</label>
+              <input class="form-input" type="number" value="1" />
+            </div>
+            <div>
+              <label class="form-label">Number of Sides</label>
+              <input class="form-input" type="number" value="2" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Size Desc</label>
+            <input class="form-input" type="text" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Menu Size</label>
+            <input class="form-input" type="text" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Insert Size</label>
+            <input class="form-input" type="text" />
+          </div>
+          <div class="form-group check-grid check-grid-2">
+            <label><input type="checkbox" /> Show Pre-Press Box</label>
+          </div>
+        </div>
+
+        <!-- Paper -->
+        <div class="detail-edit-panel" id="dep-paper">
+          <div class="form-row form-row-2 form-group">
+            <div>
+              <label class="form-label">Size</label>
+              <input class="form-input" type="text" value="13 x 19" />
+            </div>
+            <div>
+              <label class="form-label">Type</label>
+              <input class="form-input" type="text" value="durapoly" />
+            </div>
+          </div>
+          <div class="form-row form-row-2 form-group">
+            <div>
+              <label class="form-label">Weight</label>
+              <input class="form-input" type="text" value="14pt" />
+            </div>
+            <div>
+              <label class="form-label">Other</label>
+              <input class="form-input" type="text" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color</label>
+            <input class="form-input" type="text" value="white" />
+          </div>
+        </div>
+
+        <!-- Print Finishing -->
+        <div class="detail-edit-panel" id="dep-print">
+          <div class="toggle-row" onclick="toggleAddon('lam', this)">
+            <span class="toggle-label">Lamination</span>
+            <div class="toggle"></div>
+          </div>
+          <div class="addon-fields collapsed" id="lam">
+            <div class="form-row form-row-2">
+              <div>
+                <label class="form-label">Lamination</label>
+                <select class="form-select">
+                  <option value="">—</option>
+                  <option>Gloss</option>
+                  <option>Matte</option>
+                  <option>Soft-Touch</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Thickness</label>
+                <select class="form-select">
+                  <option value="">—</option>
+                  <option>1.5 mil</option>
+                  <option>3 mil</option>
+                  <option>5 mil</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row form-row-2">
+              <div>
+                <label class="form-label">Lam Type</label>
+                <select class="form-select">
+                  <option value="">—</option>
+                  <option>Single</option>
+                  <option>Double</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Other</label>
+                <input class="form-input" type="text" />
+              </div>
+            </div>
+          </div>
+          <div class="toggle-row" onclick="toggleAddon('uv', this)">
+            <span class="toggle-label">UV Coat</span>
+            <div class="toggle"></div>
+          </div>
+          <div class="addon-fields collapsed" id="uv">
+            <div class="form-group">
+              <label class="form-label">UV</label>
+              <select class="form-select">
+                <option value="">—</option>
+                <option>Gloss</option>
+                <option>Matte</option>
+                <option>Spot</option>
+              </select>
+            </div>
+          </div>
+          <div class="section-label-sm">Operations</div>
+          <div class="check-grid">
+            <label><input type="checkbox" /> Perf</label>
+            <label><input type="checkbox" /> Drill</label>
+            <label><input type="checkbox" /> Scored</label>
+            <label><input type="checkbox" /> Sew</label>
+            <label><input type="checkbox" /> Stapled</label>
+            <label><input type="checkbox" /> Folded</label>
+            <label><input type="checkbox" /> Collated</label>
+            <label><input type="checkbox" /> Spiraled</label>
+            <label><input type="checkbox" /> Die Cut</label>
+            <label><input type="checkbox" /> Tab Cut</label>
+            <label>
+              <input type="checkbox" id="roundCornersChk" onchange="toggleCornerSize(this)" />
+              Round Corners
+            </label>
+          </div>
+          <div class="addon-fields collapsed" id="cornerSize">
+            <label class="form-label">Corner Size</label>
+            <input class="form-input" type="text" placeholder='e.g. 1/4"' />
+          </div>
+        </div>
+
+        <!-- Bindery Finishing -->
+        <div class="detail-edit-panel" id="dep-bindery">
+          <div class="check-subgroup">
+            <div class="check-subgroup-label">Decoration</div>
+            <div class="check-grid">
+              <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Emboss</label>
+              <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Logojet</label>
+              <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Deboss</label>
+              <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Laser
+                Engrave</label>
+              <label><input type="checkbox" class="decoration-chk" onchange="onDecorationChange()" /> Flat Stamp</label>
+            </div>
+            <div class="addon-fields collapsed" id="decorationColor">
+              <label class="form-label">Color</label>
+              <input class="form-input" type="text" />
+            </div>
+          </div>
+          <div class="check-subgroup">
+            <div class="check-subgroup-label">Binding Type</div>
+            <div class="check-grid">
+              <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> Bands</label>
+              <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> Ring Binder</label>
+              <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> Cords</label>
+              <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> ScrewPosts</label>
+              <label><input type="checkbox" class="binding-chk" onchange="onBindingChange()" /> Slide-In Pocket</label>
+              <label><input type="checkbox" class="binding-chk" id="clipChk"
+                  onchange="onBindingChange(); onClipChange(this)" /> Clip</label>
+            </div>
+            <div class="addon-fields collapsed" id="clipColor">
+              <label class="form-label">Clip Color</label>
+              <select class="form-select">
+                <option value="">—</option>
+                <option>Black</option>
+                <option>Silver</option>
+                <option>Gold</option>
+              </select>
+            </div>
+            <div class="addon-fields collapsed" id="bindingDesc">
+              <label class="form-label">Binding Description</label>
+              <input class="form-input" type="text" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Interior Boards -->
+        <div class="detail-edit-panel" id="dep-boards">
+          <div class="boards-section">
+            <div class="boards-section-header">
+              <span class="boards-section-title">Insert Details</span>
+            </div>
+            <div class="boards-section-body">
+              <div class="insert-sizes-header">
+                <span></span>
+                <span>Insert Size(s)</span>
+                <span>Quantity</span>
+              </div>
+              <div id="insertSizeList">
+                <div class="insert-size-block" data-insert="1">
+                  <div class="insert-size-fields">
+                    <span class="insert-row-num">1</span>
+                    <div>
+                      <label class="form-label">Width</label>
+                      <input class="form-input" type="text" min="0" />
+                    </div>
+                    <div>
+                      <label class="form-label">Height</label>
+                      <input class="form-input" type="text" min="0" />
+                    </div>
+                    <div>
+                      <label class="form-label">Inserts</label>
+                      <input class="form-input" type="number" value="0" min="0" />
+                    </div>
+                    <div>
+                      <label class="form-label">Carriers</label>
+                      <input class="form-input" type="number" value="0" min="0" />
+                    </div>
+                    <button class="icon-btn" title="Remove" onclick="removeInsertSize(this)">
+                      <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-add-sub" onclick="addInsertSize()">
+                <i class="fa-solid fa-plus"></i> Add Insert Size
+              </button>
+            </div>
+          </div>
+          <div class="boards-section">
+            <div class="boards-section-header">
+              <span class="boards-section-title">Board Details</span>
+              <div class="seg-toggle" id="boardSegToggle">
+                <button class="seg-toggle-btn" onclick="selectBoardType('corners', this)">Corners</button>
+                <button class="seg-toggle-btn" onclick="selectBoardType('tabs', this)">Tabs</button>
+              </div>
+            </div>
+            <div class="boards-section-body">
+              <div id="boardDetailsEmpty" class="boards-empty-state">No board details specified.</div>
+            </div>
+          </div>
+          <div class="boards-section">
+            <div class="boards-section-header">
+              <span class="boards-section-title">Special Instructions</span>
+              <button class="icon-btn" title="Clear special instructions" onclick="clearSpecialInstructions()">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div>
+            <div class="boards-section-body" id="specialInstructionsBody">
+              <button class="btn-add-sub" onclick="addSpecialInstructions(this)">
+                <i class="fa-solid fa-plus"></i> Add Special Instructions
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /modal-body -->
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('detailEdit')">Cancel</button>
+        <button class="btn-primary" onclick="saveDetailEdit()">Save</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

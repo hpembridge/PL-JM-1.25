@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Production Tab</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="production-tab.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+    <div class="tab-panel" id="tab-panel-production">
+      <div class="detail-grid" id="detail-grid">
+
+        <!-- Combined contacts + notes widget -->
+        <div class="widget">
+          <button class="add-list-btn" onclick="addDetail()">+ ADD JOB DETAIL</button>
+          <!-- Proofing Contacts -->
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">PROOFING CONTACTS</span>
+              <button class="icon-btn" title="Manage job contacts" onclick="openModal('proofContacts')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <p class="widget-section-description">Click to copy</p>
+            <div class="copy-wrap hidden-section" id="pcProdEmailStringWrap"
+              onclick="pcCopyContacts('pcProdEmailString', 'pcProdEmailStringWrap')" title="Click to copy">
+              <span class="pc-email-string-text" id="pcProdEmailString"></span>
+            </div>
+          </div>
+          <!-- MenuMaker Details -->
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">MenuMaker Details </span>
+              <a href="https://menumaker.clevelandmenu.com/MenuEdit/1775/55035/ORDRMNG/0/RenderingViewer/8859887"
+                style="text-decoration: none;" class="icon-btn" target="_blank"> <i
+                  class="fa-regular fa-arrow-up-right"></i></a>
+            </div>
+            <div class="spec-tiles">
+              <div class="spec-tile">
+                <span class="spec-tile-label">Order Number</span>
+                <span class="spec-tile-value">49054</span>
+              </div>
+              <div class="spec-tile">
+                <span class="spec-tile-label">Menu Number</span>
+                <span class="spec-tile-value">55035</span>
+              </div>
+            </div>
+
+          </div>
+          <!-- General Notes -->
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">GENERAL NOTES</span>
+              <button class="icon-btn" title="Manage notes" onclick="openModal('manageNotes')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <div class="widget-notes">
+              <div class="widget-note-item ">
+                <span class="widget-note-num">(1)</span>
+                <p class="widget-note-text">Send a "Zero" proof of the Alchamey menu inserts for hotels to update their
+                  content. Send PDF proof to hotel for approval, then once approved send to Megan and Josh for their
+                  approval.</p>
+              </div>
+            </div>
+          </div>
+
+
+        </div><!-- /.widget -->
+        <!-- Detail Card 1 -->
+        <div class="detail-card" id="detail-1">
+          <div class="detail-card-header">
+            <div class="detail-card-title">
+              <span class="detail-num">1</span>
+              Folder
+            </div>
+            <div class="detail-card-actions">
+              <button class="icon-btn" title="Edit detail" onclick="openDetailEdit('detail-1')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+              <button class="icon-btn" title="Remove detail" onclick="this.closest('.detail-card').remove()">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+          <div class="detail-card-body">
+            <!-- General -->
+            <div class="detail-section" id="ds-general-1">
+              <div class="detail-fields">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">General</span>
+                </div>
+                <div class="spec-tiles">
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Quantity</span>
+                    <span class="spec-tile-value">300</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Number of Panels</span>
+                    <span class="spec-tile-value">1</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Number of Sides</span>
+                    <span class="spec-tile-value">2</span>
+                  </div>
+                </div>
+              </div>
+              <div class="detail-empty-prompt hidden-section">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No general info specified.</span>
+              </div>
+            </div>
+            <!-- Paper -->
+            <div class="detail-section" id="ds-paper-1">
+              <div class="detail-fields">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Paper</span>
+                </div>
+                <div class="spec-tiles">
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Size</span>
+                    <span class="spec-tile-value">13 x 19</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Type</span>
+                    <span class="spec-tile-value">Durapoly</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Weight</span>
+                    <span class="spec-tile-value">14pt</span>
+                  </div>
+                  <div class="spec-tile">
+                    <span class="spec-tile-label">Color</span>
+                    <span class="spec-tile-value">White</span>
+                  </div>
+                </div>
+              </div>
+              <div class="detail-empty-prompt hidden-section">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No paper info specified.</span>
+              </div>
+            </div>
+            <!-- Detail notes -->
+            <div class="detail-card-notes" id="detail-notes-1">
+              <div class="widget-note-item ">
+                <span class="widget-note-num">(1)</span>
+                <p class="widget-note-text">Confirm durapoly stock availability with vendor before going to press.</p>
+              </div>
+            </div>
+            <!-- Print Finishing -->
+            <div class="detail-section" id="ds-print-1">
+              <div class="detail-fields hidden-section">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Print Finishing</span>
+                </div>
+                <div class="spec-tiles"></div>
+              </div>
+              <div class="detail-empty-prompt">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No print finishing specified.</span>
+              </div>
+            </div>
+            <!-- Bindery Finishing -->
+            <div class="detail-section" id="ds-bindery-1">
+              <div class="detail-fields hidden-section">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Bindery Finishing</span>
+                </div>
+                <div class="spec-tiles"></div>
+              </div>
+              <div class="detail-empty-prompt">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No bindery finishing specified.</span>
+              </div>
+            </div>
+            <!-- Interior Boards -->
+            <div class="detail-section" id="ds-boards-1">
+              <div class="detail-fields hidden-section">
+                <div class="detail-section-header">
+                  <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                  <span class="detail-section-title">Interior Boards</span>
+                </div>
+                <div class="spec-tiles"></div>
+              </div>
+              <div class="detail-empty-prompt">
+                <i class="fa-regular fa-circle-minus"></i>
+                <span>No interior boards specified.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.detail-grid -->
+
+    </div><!-- /tab-panel-production -->
+
+</body>
+
+</html>

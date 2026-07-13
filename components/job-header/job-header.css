@@ -1,9 +1,32 @@
 .header-wrap{
   width: var(--container-workspace);
   margin: auto;
-  gap: 16px;
   display: flex;
   flex-direction: column;
+}
+
+/* ── Above-card bar: status pill left, primary actions right ── */
+.job-header-bar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+/* Status tab sits flush on top of the card — no bottom border, rounded top corners only */
+.job-header-bar .pill {
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  padding: 8px 16px;
+  display: flex;
+  align-self: stretch;
+  margin-left: 16px;
+  margin-top: auto;
+  background: var(--status-info-bg);
+  border: solid 1px var(--status-info-border);
+  border-bottom: none;
+}
+
+.job-header-bar .job-actions-right {
+  padding-bottom: 16px;
 }
 
 /* ── JOB HEADER — styled as account card ── */
@@ -76,4 +99,96 @@
 .job-actions {
   display: flex;
   gap: 8px;
+}
+
+/* ── Right-side action group (Trello + Print) ── */
+.job-actions-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ── Print split button (primary style) ── */
+.btn-split {
+  position: relative;
+  display: inline-flex;
+  border: 1px solid var(--interactive-default);
+  border-radius: var(--border-radius-full);
+  background: var(--interactive-default);
+}
+
+.btn-split-main,
+.btn-split-caret {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-white);
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+
+.btn-split-main {
+  padding: 6px 10px 6px 14px;
+  border-radius: var(--border-radius-full) 0 0 var(--border-radius-full);
+}
+
+.btn-split-caret {
+  padding: 6px 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0 var(--border-radius-full) var(--border-radius-full) 0;
+}
+
+.btn-split-main:hover,
+.btn-split-caret:hover {
+  background: var(--interactive-hover);
+}
+
+.btn-split-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  min-width: 190px;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.btn-split-menu.open {
+  display: block;
+}
+
+.btn-split-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+  transition: background 0.1s;
+}
+
+.btn-split-menu button:hover {
+  background: var(--interactive-bg-subtle);
+}
+
+.btn-split-menu .menu-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 4px 0;
 }

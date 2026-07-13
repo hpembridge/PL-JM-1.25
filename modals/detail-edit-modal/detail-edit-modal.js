@@ -28,10 +28,14 @@
       openModal('detailEdit');
     }
     function switchDetailTab(btn, tab) {
-      document.querySelectorAll('.detail-edit-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.detail-edit-panel').forEach(p => p.classList.remove('active'));
+      const modal = btn.closest('.modal-panel');
+      modal.querySelectorAll('.detail-edit-tab').forEach(t => t.classList.remove('active'));
+      modal.querySelectorAll('.detail-edit-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      document.getElementById('dep-' + tab).classList.add('active');
+      // Support data-panel attribute (generic) or fall back to dep- prefix (detail-edit modal)
+      const panel = modal.querySelector(`.detail-edit-panel[data-panel="${tab}"]`)
+        || document.getElementById('dep-' + tab);
+      if (panel) panel.classList.add('active');
     }
     function saveDetailEdit() {
       if (!currentDetailId) return;

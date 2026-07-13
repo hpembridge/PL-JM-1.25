@@ -182,9 +182,9 @@
       if (shipList) {
         shipList.classList.toggle('hidden-section', !shipContacts.length);
         shipList.innerHTML = shipContacts.map(c => `
-          <div class="cn-contact-item">
-            <span class="cn-contact-name">${c.name}</span>
-            <span class="cn-contact-email">${c.email}</span>
+          <div class="widget-contact-item">
+            <span class="widget-contact-name">${c.name}</span>
+            <span class="widget-contact-email">${c.email}</span>
           </div>`).join('');
       }
 
@@ -209,8 +209,8 @@ function pcCopyText(textElId, btnId) {
       const text = document.getElementById(textElId).textContent;
       const wrap = document.getElementById(wrapId);
       navigator.clipboard.writeText(text).then(() => {
-        wrap.classList.add('cn-contacts--copied');
-        setTimeout(() => wrap.classList.remove('cn-contacts--copied'), 1800);
+        wrap.classList.add('copy-wrap-copied');
+        setTimeout(() => wrap.classList.remove('copy-wrap-copied'), 1800);
       });
     }
     // Close dropdowns on outside click

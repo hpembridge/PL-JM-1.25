@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Notes Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="manage-notes-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay modal-notes" id="modal-manageNotes" onclick="handleOverlayClick(event, 'manageNotes')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">Manage Notes</span>
+        <button class="icon-btn" onclick="closeModal('manageNotes')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Filter pills -->
+      <div class="notes-filter-bar">
+        <button class="notes-pill active" data-type="all" onclick="filterNotes('all', this)">All</button>
+        <button class="notes-pill" data-type="general" onclick="filterNotes('general', this)">General</button>
+        <button class="notes-pill" data-type="shipping" onclick="filterNotes('shipping', this)">Shipping</button>
+        <button class="notes-pill" data-type="detail" onclick="filterNotes('detail', this)">Detail</button>
+        <button class="notes-pill" data-type="billing" onclick="filterNotes('billing', this)">Billing</button>
+      </div>
+
+      <!-- Search + add -->
+      <div class="notes-search-row">
+        <input class="form-input" type="text" id="notesSearchInput" placeholder="Search notes…"
+          oninput="filterNotesList(this.value)">
+        <button class="icon-btn notes-add-btn" id="notesAddBtn" title="Add note" onclick="toggleNoteEditor()">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <!-- Note cards (hidden when editor is open) -->
+      <div class="notes-card-list" id="notesCardList">
+
+        <div class="notes-card" data-note-type="general">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">General</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i
+                  class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Send a "Zero" proof of the Alchamey menu inserts for hotels to update their
+            content. Send PDF proof to hotel for approval, then once approved send to Megan and Josh for their approval.
+          </p>
+          <div class="notes-card-meta">
+            <span>Gerry Ramella</span>
+            <span>10/01/25</span>
+          </div>
+        </div>
+
+        <div class="notes-card" data-note-type="shipping">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">Shipping</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i
+                  class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Call Pearland location ahead of delivery — receiving dock is closed Mondays.</p>
+          <div class="notes-card-meta">
+            <span>Gerry Ramella</span>
+            <span>10/14/25</span>
+          </div>
+        </div>
+
+        <div class="notes-card" data-note-type="detail">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">Detail</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i
+                  class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Confirm durapoly stock availability with vendor before going to press.</p>
+          <div class="notes-card-meta">
+            <span>Dawn Leahy</span>
+            <span>10/18/25</span>
+          </div>
+        </div>
+
+        <div class="notes-card" data-note-type="billing">
+          <div class="notes-card-header">
+            <span class="notes-type-pill">Billing</span>
+            <div class="notes-card-actions">
+              <button class="icon-btn" title="Edit" onclick="editNote(this)"><i class="fa-regular fa-pen"></i></button>
+              <button class="icon-btn" title="Delete" onclick="deleteNote(this)"><i
+                  class="fa-regular fa-trash-can"></i></button>
+            </div>
+          </div>
+          <p class="notes-card-text">Note text rijirohrwglijori gjo;ering;oientr ;ogi neo; rijg n; oer ijln l
+            ;gknerl;kngo ;einro ;kner;lkv ne;l rkng;lw krnbv; ;obivne;o rvawje4o2f o24j vlr vj ...</p>
+          <div class="notes-card-meta">
+            <span>Dawn Leahy</span>
+            <span>10/25/25</span>
+          </div>
+        </div>
+
+      </div><!-- /.notes-card-list -->
+
+      <!-- Note editor (hidden until add/edit) -->
+      <div class="notes-editor-pane" id="notesEditorPane">
+
+        <!-- Note Type -->
+        <div class="form-group">
+          <label class="form-label">Note Type</label>
+          <select class="form-select" id="noteTypeSelect" onchange="updateNoteTypeHelp(this)">
+            <option value="" disabled selected></option>
+            <option value="general">General</option>
+            <option value="shipping">Shipping</option>
+            <option value="detail">Detail 1 — Folder</option>
+            <option value="billing">Billing</option>
+          </select>
+          <p class="form-help hidden-section" id="noteTypeHelp"></p>
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="notes-editor-checks">
+          <label class="notes-check-label">
+            <input type="checkbox" id="notePrivate"> Private
+          </label>
+          <label class="notes-check-label">
+            <input type="checkbox" id="notePrintOnTicket"> Print on Ticket
+          </label>
+        </div>
+
+        <!-- Note text -->
+        <textarea class="form-input notes-editor-textarea" id="noteTextarea"
+          placeholder="Note Placeholder…."></textarea>
+
+        <!-- Editor actions -->
+        <div class="notes-editor-footer">
+          <button class="btn-secondary" onclick="clearNoteEditor()">Cancel</button>
+          <button class="btn-primary" onclick="saveNote()">Save</button>
+        </div>
+
+      </div><!-- /.notes-editor-pane -->
+    </div><!-- /.modal-panel -->
+  </div><!-- /#modal-manageNotes -->
+
+</body>
+
+</html>

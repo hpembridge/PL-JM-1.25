@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scan History Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="scan-history-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay" id="modal-scanHistory" onclick="handleOverlayClick(event, 'scanHistory')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">Activity Log</span>
+        <button class="icon-btn" onclick="closeModal('scanHistory')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        
+      <!-- Activity Timeline -->
+      <div class="activity-timeline">
+        <select class="form-select activity-log-scope" id="activityLogScope">
+          <option value="job" selected>Job</option>
+          <option value="detail-1">Detail 1</option>
+        </select>
+        <div class="timeline-scroll">
+          <!-- Created (first row — semibold, body/md, primary) -->
+          <div class="timeline-row timeline-row--first">
+            <div class="timeline-date type-body-sm">12/08/2017</div>
+            <div class="timeline-connector timeline-connector--first">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event">
+              <span class="semibold"
+                style="font-size: var(--fontsize-body-md); line-height: var(--line-height-body-md);">Created by Healey
+                Pembridge</span>
+            </div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">01/03/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Paper on Order</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/02/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Bindery Metal</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Proof Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">To Be Figured</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Jayne</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/24/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Prototype Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">11/22/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Tape Machine</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">12/12/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Greg K - Proof Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">12/12/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Shipped</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">12/13/2024</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Jordan S - Proof Out</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">02/17/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Paper on Order</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">03/03/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">BIP Glue Stamp</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">03/10/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Not Scanned In</div>
+          </div>
+
+          <div class="timeline-row">
+            <div class="timeline-date type-body-sm">10/15/2025</div>
+            <div class="timeline-connector">
+              <div class="timeline-line">
+                <div class="timeline-tick"></div>
+              </div>
+            </div>
+            <div class="timeline-event type-body-md">Shipped</div>
+          </div>
+
+
+
+          <!-- Status Update (indented to event column) -->
+          <div class="timeline-status-row">
+            <div class="timeline-status-select-wrap">
+              <input class="form-input" type="text" id="statusUpdateInput" list="statusOptions" autocomplete="off"
+                placeholder="Search to Update Status" />
+              <datalist id="statusOptions">
+                <option>Paper on Order</option>
+                <option>Bindery Metal</option>
+                <option>Proof Out</option>
+                <option>Prototype Out</option>
+                <option>Tape Machine</option>
+                <option>Shipped</option>
+                <option>Cancelled</option>
+                <option>Bindery On Cart</option>
+                <option>Bindery Quality Check</option>
+                <option>Digital Solutions</option>
+                <option>BIP Glue Stamp</option>
+                <option>Not Scanned In</option>
+              </datalist>
+            </div>
+          </div>
+
+        </div><!-- /.timeline-scroll -->
+
+
+      </div><!-- /.activity-timeline -->
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+</html>

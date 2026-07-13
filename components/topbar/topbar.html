@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Bar</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="topbar.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+    <div class="topbar">
+      <div class="breadcrumb type-body-sm">
+        <a></i>Dashboard</a>
+        <span class="sep">›</span>
+        <a>(2030) Pizza Hut Corporation</a>
+        <span class="sep">›</span>
+        <a>(13730) Pizza Hut AIGP</a>
+        <span class="sep">›</span>
+        <span>(232323) 2018 Standard Menu Single Fold Jan 2018 Ws</span>
+        <button id="search-btn" class="icon-btn" title="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+      <div class="topbar-row">
+        <div class="search-container">
+          <i class="fa-regular fa-magnifying-glass"></i>
+          <input type="text" id="search-input" class="search-input" placeholder="Search Jobs &amp; Customers…"
+            autocomplete="off" aria-autocomplete="list" aria-controls="search-results" aria-expanded="false" />
+          <ul id="search-results" class="search-dropdown" role="listbox" hidden>
+            <li role="option" tabindex="-1">232323 — 2018 Standard Menu Single Fold</li>
+            <li role="option" tabindex="-1">13730 — Pizza Hut AIGP</li>
+            <li role="option" tabindex="-1">2030 — Pizza Hut Corporation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+</body>
+
+</html>
