@@ -85,10 +85,6 @@
   border: solid 1px var(--border-subtle);
   color: var(--text-primary);
 }
-.unassigned {
-  border: 1px dashed var(--border-subtle);
-  color: var(--text-tertiary);
-}
 .avatar-label {
   color: var(--text-tertiary);
 }
@@ -215,10 +211,4 @@
 
 .btn-split-menu button:hover {
   background: var(--bg-muted);
-}
-
-.btn-split-menu .menu-divider {
-  height: 1px;
-  background: var(--border-subtle);
-  margin: 4px 0;
 }

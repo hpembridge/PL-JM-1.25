@@ -17,7 +17,7 @@
 
 <body data-theme="titanium">
   <div class="modal-overlay" id="modal-scanHistory" onclick="handleOverlayClick(event, 'scanHistory')">
-    <div class="modal-panel">
+    <div class="modal-panel modal-panel-fixed">
       <div class="modal-header">
         <span class="modal-title">Activity Log</span>
         <button class="icon-btn" onclick="closeModal('scanHistory')"><i class="fa-solid fa-xmark"></i></button>
@@ -32,9 +32,9 @@
         </select>
         <div class="timeline-scroll">
           <!-- Created (first row — semibold, body/md, primary) -->
-          <div class="timeline-row timeline-row--first">
+          <div class="timeline-row timeline-row-first">
             <div class="timeline-date type-body-sm">12/08/2017</div>
-            <div class="timeline-connector timeline-connector--first">
+            <div class="timeline-connector timeline-connector-first">
               <div class="timeline-line">
                 <div class="timeline-tick"></div>
               </div>
@@ -178,7 +178,7 @@
 
           <div class="timeline-row">
             <div class="timeline-date type-body-sm">10/15/2025</div>
-            <div class="timeline-connector">
+            <div class="timeline-connector timeline-connector-last">
               <div class="timeline-line">
                 <div class="timeline-tick"></div>
               </div>

@@ -3,7 +3,7 @@
 .invoice-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .invoice-item {
@@ -27,14 +27,3 @@
   flex-shrink: 0;
 }
 
-.invoice-link {
-  font-size: var(--fontsize-body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-interactive);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-}
-
-.invoice-link:hover {
-  text-decoration: underline;
-}

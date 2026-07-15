@@ -20,43 +20,6 @@
 
 
 
-/* ── BULK EDIT RECOMMENDATION ── */
-
-.ship-recommend-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  padding: 10px 12px;
-  background: var(--bg-subtle);
-  border-radius: var(--border-radius-sm);
-  font-size: var(--fontsize-body-sm);
-  color: var(--text-secondary);
-}
-
-.ship-recommend-remainder {
-  width: 52px;
-  padding: 3px 6px;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--border-radius-sm);
-  font-size: var(--fontsize-body-sm);
-  font-family: inherit;
-  color: var(--text-primary);
-  background: var(--bg-surface);
-  text-align: center;
-  outline: none;
-  -moz-appearance: textfield;
-}
-
-.ship-recommend-remainder::-webkit-outer-spin-button,
-.ship-recommend-remainder::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-
-.ship-recommend-remainder:focus {
-  border-color: var(--border-focus);
-}
-
 /* ── SHIPPING NOTIFICATIONS NOTICE ── */
 
 .notice {
@@ -70,7 +33,7 @@
 
 /* ── QTY COLUMN MISMATCH ── */
 
-.ship-col-qty--over {
+.ship-col-qty-over {
   background: var(--status-warning-bg);
       border-color: var(--status-warning-border);
     border-width: 0px 1px 0px 1px;
@@ -90,7 +53,7 @@
   font-size: var(--fontsize-body-sm);
 }
 
-.ship-qty-icon--disabled {
+.ship-qty-icon-disabled {
   cursor: default;
   opacity: 0.55;
 }
@@ -226,7 +189,7 @@
   background-color: var(--bg-muted);
 }
 
-.ship-address-row:hover .ship-col-qty--over{
+.ship-address-row:hover .ship-col-qty-over{
   background-color: color-mix(in srgb, var(--status-warning-border), var(--bg-muted) 95%);
 }
 

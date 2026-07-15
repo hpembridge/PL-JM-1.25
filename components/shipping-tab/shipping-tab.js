@@ -9,7 +9,7 @@
       const footerQtyCell = document.getElementById('shipQtyFooter');
 
       // Reset
-      qtyCells.forEach(td => td.classList.remove('ship-col-qty--over'));
+      qtyCells.forEach(td => td.classList.remove('ship-col-qty-over'));
       if (footerQtyCell) footerQtyCell.innerHTML = '';
 
       if (rows.length === 0 || total === SHIP_JOB_QTY) return;
@@ -20,7 +20,7 @@
 
       if (diff > remainder) {
         // Distributable — highlight column and show clickable icon
-        qtyCells.forEach(td => td.classList.add('ship-col-qty--over'));
+        qtyCells.forEach(td => td.classList.add('ship-col-qty-over'));
         const tipRemainder = remainder > 0 ? ` (remainder: ${remainder})` : '';
         const tip = `Click to evenly distribute quantity${tipRemainder}`;
         if (footerQtyCell) {
@@ -30,7 +30,7 @@
         // Minor mismatch — non-interactive span so title still shows on hover
         const tip = `${label} job quantity by ${diff}`;
         if (footerQtyCell) {
-          footerQtyCell.innerHTML = `<span class="ship-qty-icon ship-qty-icon--disabled" title="${tip}"><i class="fa-solid fa-triangle-exclamation"></i></span>`;
+          footerQtyCell.innerHTML = `<span class="ship-qty-icon ship-qty-icon-disabled" title="${tip}"><i class="fa-solid fa-triangle-exclamation"></i></span>`;
         }
       }
     }

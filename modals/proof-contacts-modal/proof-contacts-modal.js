@@ -33,8 +33,8 @@
       row.dataset.email = email;
       row.innerHTML = `
         <td>
-          <div class="pc-added-info">
-            <span class="pc-added-name">${contact.name}</span>
+          <div class="widget-contact-item">
+            <span class="widget-contact-name">${contact.name}</span>
             <span class="pc-added-email">${email}</span>
           </div>
         </td>
@@ -101,12 +101,12 @@
       results.forEach(c => { (groups[c.group] = groups[c.group] || []).push(c); });
       let html = '', globalIdx = 0;
       Object.entries(groups).forEach(([group, contacts], gi) => {
-        if (gi > 0) html += '<div class="pc-dd-divider"></div>';
+        if (gi > 0) html += '<div class="menu-divider"></div>';
         html += `<div class="pc-dd-group-label">${group}</div>`;
         contacts.forEach(c => {
           const hi = globalIdx === pcHighlightIndex ? ' highlighted' : '';
           html += `<div class="pc-dd-item${hi}" data-idx="${globalIdx}" onmousedown="pcSelect(${globalIdx})">
-            <span class="pc-dd-item-name">${c.name}</span>
+            <span class="widget-contact-name">${c.name}</span>
             <span class="pc-dd-item-email">${c.email}</span>
           </div>`;
           globalIdx++;

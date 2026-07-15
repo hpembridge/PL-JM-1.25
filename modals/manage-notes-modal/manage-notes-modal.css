@@ -1,10 +1,5 @@
 /* ── Manage Notes Modal ── */
-
-#modal-manageNotes .modal-panel {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+/* Panel layout (flex column, contained scroll) comes from .modal-panel-fixed (modal-shell.css) */
 
 /* Filter pills */
 .notes-filter-bar {

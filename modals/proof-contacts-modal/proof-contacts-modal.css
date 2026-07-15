@@ -68,21 +68,9 @@
       background: var(--interactive-bg-subtle);
     }
 
-.pc-dd-item-name {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-    }
-
 .pc-dd-item-email {
       font-size: var(--fontsize-body-sm);
       color: var(--text-tertiary);
-    }
-
-.pc-dd-divider {
-      height: 1px;
-      background: var(--border-subtle);
-      margin: 4px 0;
     }
 
 .pc-dd-empty {
@@ -93,34 +81,11 @@
       text-align: center;
     }
 
-.pc-email-string {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--bg-muted);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-sm);
-      margin-bottom: 24px;
-    }
-
 .pc-email-string-text {
       font-size: var(--fontsize-body-sm);
       color: var(--text-secondary);
       word-break: break-all;
       line-height: 1.5;
-    }
-
-.pc-added-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-.pc-added-name {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
     }
 
 .pc-added-email {
@@ -223,8 +188,3 @@
 .pc-receives-opt:hover { background: var(--interactive-bg-subtle); }
 
 .pc-receives-opt input[type="checkbox"] { width: 14px; height: 14px; flex-shrink: 0; }
-
-
-.contacts-modal-body{
-  padding: 24px;
-}

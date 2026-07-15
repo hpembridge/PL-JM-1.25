@@ -4,12 +4,7 @@
     }
 
 /* Trello confirm modal text */
-
-.trello-confirm-heading {
-      font-size: var(--fontsize-body-sm);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-    }
+/* .trello-confirm-heading styling comes from the shared .widget-contact-name class (job-detail.css) */
 
 .trello-confirm-body {
       font-size: var(--fontsize-body-sm);

@@ -24,12 +24,6 @@
   flex-direction: column;
 }
 
-.ship-settings-divider {
-  border: none;
-  border-top: 1px solid var(--border-subtle);
-  margin: 4px 0;
-}
-
 .ship-settings-row {
   display: flex;
   align-items: center;
@@ -44,12 +38,12 @@
   border-bottom: none;
 }
 
-.ship-settings-row--sub {
+.ship-settings-row-sub {
   padding-left: 20px;
   font-weight: var(--font-weight-book);
 }
 
-.ship-settings-row--sub:has(:disabled) {
+.ship-settings-row-sub:has(:disabled) {
   transform: scaleY(0);
   height: 0;
   margin: 0;
@@ -63,7 +57,7 @@
   user-select: none;
 }
 
-.ship-settings-row--sub .ship-settings-label {
+.ship-settings-row-sub .ship-settings-label {
   color: var(--text-secondary);
 }
 

@@ -1,10 +1,8 @@
 /* ── SHIP EDIT MODAL ── */
 
-/* Single vs. bulk-edit field visibility */
-.modal-panel:not(.bulk-edit) .ship-edit-bulk-only {
-  display: none;
-}
 
+/*JACK -- i think most of this can just be replaced by the existing stepper you have already built*/
+/* Single vs. bulk-edit field visibility */
 .modal-panel.bulk-edit .ship-edit-single-only {
   display: none;
 }

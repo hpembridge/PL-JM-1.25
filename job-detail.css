@@ -62,6 +62,14 @@ body {
   color: var(--text-primary);
 }
 
+/* Divider row for dropdown/menu lists (split-button menus, contact pickers, etc.) */
+
+.menu-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 4px 0;
+}
+
 /* ── TABS ── */
 
 .tabs {

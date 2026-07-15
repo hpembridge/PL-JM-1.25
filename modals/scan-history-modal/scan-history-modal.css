@@ -1,10 +1,5 @@
 /* ── Activity Timeline — Scan History Modal ── */
-
-#modal-scanHistory .modal-panel {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
+/* Panel layout (flex column, contained scroll) comes from .modal-panel-fixed (modal-shell.css) */
 
 /* Outer wrapper: fills modal-panel below the header */
 .activity-timeline {
@@ -12,7 +7,6 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
-  padding: 32px 32px 0;
 }
 
 /* Scrollable timeline rows */
@@ -58,14 +52,14 @@
 }
 
 /* First row: line starts ~20px down, tick floats to the top */
-.timeline-connector--first .timeline-line {
+.timeline-connector-first .timeline-line {
   align-items: flex-start;
   padding-top: 20px;
   padding-bottom: 0;
 }
 
 /* Last row: line ends before the bottom */
-.timeline-connector--last .timeline-line {
+.timeline-connector-last .timeline-line {
   align-items: flex-end;
   padding-bottom: 20px;
   padding-top: 0;
@@ -91,7 +85,7 @@
 }
 
 /* First row overrides: primary color, body/md */
-.timeline-row--first .timeline-event {
+.timeline-row-first .timeline-event {
   color: var(--text-primary);
 }
 
@@ -105,15 +99,6 @@
   padding-top: 8px;
 }
 
-.timeline-date-spacer {
-  width: 80px;
-  flex-shrink: 0;
-}
-
-.timeline-connector-spacer {
-  display: none;
-}
-
 .timeline-status-select-wrap {
   flex: 1;
 }
@@ -122,23 +107,3 @@
   width: 100%;
 }
 
-/* ── Metadata Footer ── */
-
-.timeline-meta {
-  flex-shrink: 0;
-  padding-bottom: 32px;
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline-meta-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-right: 16px;
-}
-
-.timeline-meta-label {
-  color: var(--text-primary);
-  padding: 4px 0;
-}
