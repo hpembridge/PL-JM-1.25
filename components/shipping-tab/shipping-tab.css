@@ -18,37 +18,9 @@
   min-width: 0;
 }
 
-/* Contact items inside shipping widget */
 
-.widget-contact-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.widget-contact-item {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.widget-contact-name {
-  font-size: var(--fontsize-body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-}
-
-.widget-contact-email {
-  font-size: var(--fontsize-body-sm);
-  color: var(--text-tertiary);
-  word-break: break-all;
-}
 
 /* ── BULK EDIT RECOMMENDATION ── */
-
-.modal-panel:not(.bulk-edit) .ship-edit-bulk-only {
-  display: none;
-}
 
 .ship-recommend-wrap {
   display: flex;
@@ -121,58 +93,6 @@
 .ship-qty-icon--disabled {
   cursor: default;
   opacity: 0.55;
-}
-
-/* ── STEPPER (used in edit modal) ── */
-
-.ship-stepper {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--border-radius-sm);
-  overflow: hidden;
-  background: var(--bg-surface);
-}
-
-.ship-stepper-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: none;
-  font-size: var(--fontsize-body-md);
-  line-height: 1;
-  color: var(--text-secondary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.1s;
-}
-
-.ship-stepper-btn:hover {
-  background: var(--bg-subtle);
-}
-
-.ship-stepper-val {
-  display: flex;
-  flex: 1;
-  border: none;
-  border-left: 1px solid var(--border-subtle);
-  border-right: 1px solid var(--border-subtle);
-  text-align: center;
-  font-size: var(--fontsize-body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-  padding: 4px 0;
-  outline: none;
-  -moz-appearance: textfield;
-  background: var(--bg-surface);
-}
-
-.ship-stepper-val::-webkit-outer-spin-button,
-.ship-stepper-val::-webkit-inner-spin-button {
-  -webkit-appearance: none;
 }
 
 /* ── ADDRESS LIST container ── */
@@ -426,37 +346,6 @@
   border-radius: 8px;
 }
 
-.modal-panel.bulk-edit .ship-edit-single-only {
-  display: none;
-}
-
-/* ── DELETE CONFIRM MODAL ── */
-
-.ship-delete-warning {
-  padding: 12px 16px;
-  border: 1px solid var(--status-error-border);
-  border-radius: var(--border-radius-sm);
-  background: var(--status-error-bg);
-  color: var(--text-primary);
-  font-size: var(--fontsize-body-sm);
-}
-
-.btn-danger {
-  background: var(--status-error-border);
-  border: solid 1px var(--status-error-border);
-  color: #fff;
-}
-
-.btn-danger:hover {
-  background: var(--status-error-border);
-  border: solid 1px var(--status-error-border);
-  opacity: 0.85;
-}
-
-.modal-centered .modal-body {
-  padding: 20px 24px;
-}
-
 .action-container {
   display: flex;
   gap: 4px;
@@ -514,119 +403,9 @@
   line-height: 1.5;
 }
 
-/* ── SHIPPING TABLE SETTINGS ── */
-
-.ship-settings-note {
-  font-size: var(--fontsize-body-sm);
-  color: var(--text-secondary);
-  padding: 10px 12px;
-  background: var(--bg-muted);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--border-radius-sm);
-  line-height: 1.5;
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-}
-
-.ship-settings-note i {
-  margin-top: 2px;
-  flex-shrink: 0;
-  color: var(--text-tertiary);
-}
-
-.ship-settings-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.ship-settings-divider {
-  border: none;
-  border-top: 1px solid var(--border-subtle);
-  margin: 4px 0;
-}
-
-.ship-settings-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.ship-settings-row:last-child {
-  border-bottom: none;
-}
-
-.ship-settings-row--sub {
-  padding-left: 20px;
-}
-
-.ship-settings-label {
-  font-size: var(--fontsize-body-sm);
-  color: var(--text-primary);
-  cursor: pointer;
-  user-select: none;
-}
-
-.ship-settings-row--sub .ship-settings-label {
-  color: var(--text-secondary);
-}
-
-/* Toggle switch component */
-
-.toggle-switch {
-  position: relative;
-  width: 36px;
-  height: 20px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-  position: absolute;
-}
-
-.toggle-slider {
-  position: absolute;
-  inset: 0;
-  background: var(--border-default);
-  border-radius: 10px;
-  transition: background 0.2s;
-  cursor: pointer;
-}
-
-.toggle-slider::before {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  left: 2px;
-  top: 2px;
-  border-radius: 50%;
-  background: var(--bg-surface);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
-}
-
-.toggle-switch input:checked + .toggle-slider {
-  background: var(--interactive-default);
-}
-
-.toggle-switch input:checked + .toggle-slider::before {
-  transform: translateX(16px);
-}
-
-.toggle-switch input:disabled + .toggle-slider {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
 /* ── COLUMN / FIELD VISIBILITY ── */
+/* Effects of the toggles in modals/ship-settings-modal — kept here since they
+   style .ship-table directly, alongside the table's own column rules. */
 
 /* Switch to auto layout so freed column space redistributes correctly */
 .ship-table.hide-col-addr,

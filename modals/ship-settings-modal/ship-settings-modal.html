@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ship Settings Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="ship-settings-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay" id="modal-shipSettings" onclick="handleOverlayClick(event, 'shipSettings')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">Visibility Settings</span>
+        <button class="icon-btn" onclick="closeModal('shipSettings')"><i class="fa-regular fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="ship-settings-note"><i class="fa-regular fa-clock"></i> These settings are temporary and will reset if
+          you leave or refresh the page.</p>
+
+        <div class="ship-settings-group">
+
+          <!-- Address Column -->
+          <div class="ship-settings-row">
+            <label class="ship-settings-label">Address Column</label>
+            <button type="button" class="icon-btn ship-visibility-toggle" id="sToggleColAddr"
+              onclick="toggleShipVisibility(this, 'col', 'addr')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label class="ship-settings-label">ATTN Field</label>
+            <button type="button" class="icon-btn ship-visibility-toggle addr-subfield" id="sToggleFieldAttn"
+              onclick="toggleShipVisibility(this, 'field', 'attn')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label class="ship-settings-label">Address Name Field</label>
+            <button type="button" class="icon-btn ship-visibility-toggle addr-subfield" id="sToggleFieldAddrName"
+              onclick="toggleShipVisibility(this, 'field', 'addr-name')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label class="ship-settings-label">Address Field</label>
+            <button type="button" class="icon-btn ship-visibility-toggle addr-subfield" id="sToggleFieldAddrStreet"
+              onclick="toggleShipVisibility(this, 'field', 'addr-street')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+
+          <!-- Delivery Column -->
+          <div class="ship-settings-row">
+            <label class="ship-settings-label">Delivery Column</label>
+            <button type="button" class="icon-btn ship-visibility-toggle" id="sToggleColDelivery"
+              onclick="toggleShipVisibility(this, 'col', 'delivery')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label class="ship-settings-label">Carrier Field</label>
+            <button type="button" class="icon-btn ship-visibility-toggle delivery-subfield" id="sToggleFieldCarrier"
+              onclick="toggleShipVisibility(this, 'field', 'carrier')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label class="ship-settings-label">Method Field</label>
+            <button type="button" class="icon-btn ship-visibility-toggle delivery-subfield" id="sToggleFieldMethod"
+              onclick="toggleShipVisibility(this, 'field', 'method-type')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="ship-settings-row ship-settings-row--sub">
+            <label class="ship-settings-label">Account Field</label>
+            <button type="button" class="icon-btn ship-visibility-toggle delivery-subfield" id="sToggleFieldAccount"
+              onclick="toggleShipVisibility(this, 'field', 'account')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+
+
+          <!-- Notes Column -->
+          <div class="ship-settings-row">
+            <label class="ship-settings-label">Notes Column</label>
+            <button type="button" class="icon-btn ship-visibility-toggle" id="sToggleColNotes"
+              onclick="toggleShipVisibility(this, 'col', 'notes')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+
+
+          <!-- QTY Column -->
+          <div class="ship-settings-row">
+            <label class="ship-settings-label">QTY Column</label>
+            <button type="button" class="icon-btn ship-visibility-toggle" id="sToggleColQty"
+              onclick="toggleShipVisibility(this, 'col', 'qty')" title="Hide" aria-pressed="false">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

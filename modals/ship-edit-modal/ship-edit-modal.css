@@ -1,0 +1,62 @@
+/* ── SHIP EDIT MODAL ── */
+
+/* Single vs. bulk-edit field visibility */
+.modal-panel:not(.bulk-edit) .ship-edit-bulk-only {
+  display: none;
+}
+
+.modal-panel.bulk-edit .ship-edit-single-only {
+  display: none;
+}
+
+/* Quantity stepper */
+
+.ship-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  background: var(--bg-surface);
+}
+
+.ship-stepper-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  font-size: var(--fontsize-body-md);
+  line-height: 1;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.1s;
+}
+
+.ship-stepper-btn:hover {
+  background: var(--bg-subtle);
+}
+
+.ship-stepper-val {
+  display: flex;
+  flex: 1;
+  border: none;
+  border-left: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  text-align: center;
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  padding: 4px 0;
+  outline: none;
+  -moz-appearance: textfield;
+  background: var(--bg-surface);
+}
+
+.ship-stepper-val::-webkit-outer-spin-button,
+.ship-stepper-val::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

@@ -23,6 +23,10 @@
   <link rel="stylesheet" href="modals/scan-history-modal/scan-history-modal.css" />
   <link rel="stylesheet" href="modals/manage-notes-modal/manage-notes-modal.css" />
   <link rel="stylesheet" href="modals/edit-job-modal/edit-job-modal.css" />
+  <link rel="stylesheet" href="modals/ship-edit-modal/ship-edit-modal.css" />
+  <link rel="stylesheet" href="modals/ship-delete-confirm-modal/ship-delete-confirm-modal.css" />
+  <link rel="stylesheet" href="modals/ship-settings-modal/ship-settings-modal.css" />
+  <link rel="stylesheet" href="modals/billing-details-modal/billing-details-modal.css" />
 </head>
 
 <body data-theme="titanium">
@@ -72,11 +76,17 @@
   <!-- ── MODAL: Manage Notes (modals/manage-notes-modal) ── -->
   <div data-include="modals/manage-notes-modal/manage-notes-modal.html"></div>
 
-  <!-- ── MODAL: Ship Address Edit (components/shipping-tab) ── -->
-  <div data-include="components/shipping-tab/ship-edit-modal.html"></div>
+  <!-- ── MODAL: Ship Address Edit (modals/ship-edit-modal) ── -->
+  <div data-include="modals/ship-edit-modal/ship-edit-modal.html"></div>
 
-  <!-- ── MODAL: Delete Shipping Addresses Confirm (components/shipping-tab) ── -->
-  <div data-include="components/shipping-tab/ship-delete-confirm-modal.html"></div>
+  <!-- ── MODAL: Delete Shipping Addresses Confirm (modals/ship-delete-confirm-modal) ── -->
+  <div data-include="modals/ship-delete-confirm-modal/ship-delete-confirm-modal.html"></div>
+
+  <!-- ── MODAL: Shipping Table Settings (modals/ship-settings-modal) ── -->
+  <div data-include="modals/ship-settings-modal/ship-settings-modal.html"></div>
+
+  <!-- ── MODAL: View Billing Details (modals/billing-details-modal) ── -->
+  <div data-include="modals/billing-details-modal/billing-details-modal.html"></div>
 
   <!-- Toast -->
   <div class="toast" id="toast">Detail saved</div>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billing Details Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="billing-details-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="modal-overlay" id="modal-billingDetails" onclick="handleOverlayClick(event, 'billingDetails')">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <span class="modal-title">View Billing Details</span>
+        <button class="icon-btn" onclick="closeModal('billingDetails')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="detail-edit-panel active">
+          <div class="spec-tiles">
+            <div class="spec-tile">
+              <span class="spec-tile-label">PO Number</span>
+              <span class="spec-tile-value">PO-2024-0042</span>
+            </div>
+            <div class="spec-tile">
+              <span class="spec-tile-label">PO Name</span>
+              <span class="spec-tile-value">Q2 Print Run</span>
+            </div>
+          </div>
+
+          <!-- Billing Notes -->
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">Billing Notes</span>
+              <button class="icon-btn" title="Manage invoice recipients" onclick="openModal('manageNotes')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <div class="widget-notes">
+              <div class="widget-note-item ">
+                <span class="widget-note-num">(1)</span>
+                <p class="widget-note-text">Invoice to AP department at corporate — do not send to location contact
+                  directly.</p>
+              </div>
+              <div class="widget-note-item ">
+                <span class="widget-note-num">(2)</span>
+                <p class="widget-note-text">Net 30 terms. Reference PO number on all invoices.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invoice Recipients -->
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">Invoice Recipients</span>
+              <button class="icon-btn" title="Manage invoice recipients" onclick="openModal('proofContacts')">
+                <i class="fa-regular fa-pen"></i>
+              </button>
+            </div>
+            <div class="widget-contact-list">
+              <div class="widget-contact-item">
+                <span class="widget-contact-name">Accounts Payable</span>
+                <span class="widget-contact-email">ap@pizzahut.com</span>
+              </div>
+              <div class="widget-contact-item">
+                <span class="widget-contact-name">Megan Torres</span>
+                <span class="widget-contact-email">megan.torres@pizzahut.com</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Invoice Links -->
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">Invoices</span>
+            </div>
+            <div class="invoice-list">
+              <div class="invoice-item">
+                <span class="invoice-date">Jun 12, 2025</span>
+                <a href="#" class="invoice-link">INV-084421</a>
+              </div>
+              <div class="invoice-item">
+                <span class="invoice-date">Mar 3, 2025</span>
+                <a href="#" class="invoice-link">INV-081103</a>
+              </div>
+              <div class="invoice-item">
+                <span class="invoice-date">Nov 18, 2024</span>
+                <a href="#" class="invoice-link">INV-077658</a>
+              </div>
+              <div class="invoice-item">
+                <span class="invoice-date">Aug 7, 2024</span>
+                <a href="#" class="invoice-link">INV-074290</a>
+              </div>
+              <div class="invoice-item">
+                <span class="invoice-date">Apr 22, 2024</span>
+                <a href="#" class="invoice-link">INV-070814</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

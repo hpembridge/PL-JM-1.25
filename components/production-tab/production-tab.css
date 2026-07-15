@@ -135,39 +135,6 @@
       color: var(--text-secondary);
     }
 
-.spec-tiles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-.spec-tile {
-      background: var(--bg-muted);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--border-radius-sm);
-      padding: 6px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-      min-width: 40%;
-    }
-
-.spec-tile-label {
-      font-size: 10px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      text-align: center;
-    }
-
-.spec-tile-value {
-      font-size: var(--fontsize-body-md);
-      font-weight: var(--font-weight-semibold);
-      color: var(--text-primary);
-      text-align: center;
-    }
-
 .detail-empty-prompt {
       display: flex;
       align-items: center;

@@ -34,6 +34,9 @@
     'modals/proof-contacts-modal/proof-contacts-modal.js',
     'modals/scan-history-modal/scan-history-modal.js',
     'modals/manage-notes-modal/manage-notes-modal.js',
+    'modals/ship-edit-modal/ship-edit-modal.js',
+    'modals/ship-delete-confirm-modal/ship-delete-confirm-modal.js',
+    'modals/ship-settings-modal/ship-settings-modal.js',
   ];
 
   // Replace one placeholder with the <body> contents of its component file.

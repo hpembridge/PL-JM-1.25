@@ -24,17 +24,19 @@
       </div>
       <div class="modal-body">
 
-        <!-- Tab bar -->
-        <div class="detail-edit-tabs">
-          <button class="detail-edit-tab active" data-tab="general"
-            onclick="switchDetailTab(this, 'general')">General</button>
-          <button class="detail-edit-tab" data-tab="billing" onclick="switchDetailTab(this, 'billing')">Billing</button>
-        </div>
-
-        <!-- General tab -->
-        <div class="detail-edit-panel active" data-panel="general">
+        <div class="detail-edit-panel active">
           <div class="check-grid check-grid-2">
             <label><input type="checkbox" checked /> For Distribution</label>
+          </div>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label">PO Number</label>
+              <input class="form-input" type="text" placeholder="e.g. PO-2024-0042" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">PO Name</label>
+              <input class="form-input" type="text" placeholder="e.g. Q2 Print Run" />
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Job Name</label>
@@ -65,90 +67,6 @@
           <div class="form-group">
             <label class="form-label">Menu Code</label>
             <input class="form-input" type="text" />
-          </div>
-        </div>
-
-        <!-- Billing tab -->
-        <div class="detail-edit-panel" data-panel="billing">
-          <div class="form-row form-row-2">
-            <div class="form-group">
-              <label class="form-label">PO Number</label>
-              <input class="form-input" type="text" placeholder="e.g. PO-2024-0042" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">PO Name</label>
-              <input class="form-input" type="text" placeholder="e.g. Q2 Print Run" />
-            </div>
-          </div>
-
-          <!-- Billing Notes -->
-          <div class="widget-section">
-            <div class="widget-section-header">
-              <span class="widget-section-label">Billing Notes</span>
-              <button class="icon-btn" title="Manage invoice recipients" onclick="openModal('manageNotes')">
-                <i class="fa-regular fa-pen"></i>
-              </button>
-            </div>
-            <div class="widget-notes">
-              <div class="widget-note-item ">
-                <span class="widget-note-num">(1)</span>
-                <p class="widget-note-text">Invoice to AP department at corporate — do not send to location contact
-                  directly.</p>
-              </div>
-              <div class="widget-note-item ">
-                <span class="widget-note-num">(2)</span>
-                <p class="widget-note-text">Net 30 terms. Reference PO number on all invoices.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Invoice Recipients -->
-          <div class="widget-section">
-            <div class="widget-section-header">
-              <span class="widget-section-label">Invoice Recipients</span>
-              <button class="icon-btn" title="Manage invoice recipients" onclick="openModal('proofContacts')">
-                <i class="fa-regular fa-pen"></i>
-              </button>
-            </div>
-            <div class="widget-contact-list">
-              <div class="widget-contact-item">
-                <span class="widget-contact-name">Accounts Payable</span>
-                <span class="widget-contact-email">ap@pizzahut.com</span>
-              </div>
-              <div class="widget-contact-item">
-                <span class="widget-contact-name">Megan Torres</span>
-                <span class="widget-contact-email">megan.torres@pizzahut.com</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Invoice Links -->
-          <div class="widget-section">
-            <div class="widget-section-header">
-              <span class="widget-section-label">Invoices</span>
-            </div>
-            <div class="invoice-list">
-              <div class="invoice-item">
-                <span class="invoice-date">Jun 12, 2025</span>
-                <a href="#" class="invoice-link">INV-084421</a>
-              </div>
-              <div class="invoice-item">
-                <span class="invoice-date">Mar 3, 2025</span>
-                <a href="#" class="invoice-link">INV-081103</a>
-              </div>
-              <div class="invoice-item">
-                <span class="invoice-date">Nov 18, 2024</span>
-                <a href="#" class="invoice-link">INV-077658</a>
-              </div>
-              <div class="invoice-item">
-                <span class="invoice-date">Aug 7, 2024</span>
-                <a href="#" class="invoice-link">INV-074290</a>
-              </div>
-              <div class="invoice-item">
-                <span class="invoice-date">Apr 22, 2024</span>
-                <a href="#" class="invoice-link">INV-070814</a>
-              </div>
-            </div>
           </div>
         </div>
 

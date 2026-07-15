@@ -52,15 +52,45 @@
 
 .inner-row.border-top {
   border-top: 1px solid var(--border-subtle);
-  margin-top: 12px;
   padding-top: 12px;
-  align-items: center;
   justify-content: space-between;
 }
 
 .inner-row-col {
   flex-direction: column;
   gap: 6px;
+}
+
+.acct-team {
+  display: flex;
+  gap: 12px;
+}
+
+.avatar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  border: solid 1px var(--border-subtle);
+  color: var(--text-primary);
+}
+.unassigned {
+  border: 1px dashed var(--border-subtle);
+  color: var(--text-tertiary);
+}
+.avatar-label {
+  color: var(--text-tertiary);
 }
 
 /* Job header layout helpers */
@@ -152,7 +182,7 @@
   display: none;
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
+  right: -4px;
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
   border-radius: var(--border-radius-md);
@@ -184,7 +214,7 @@
 }
 
 .btn-split-menu button:hover {
-  background: var(--interactive-bg-subtle);
+  background: var(--bg-muted);
 }
 
 .btn-split-menu .menu-divider {

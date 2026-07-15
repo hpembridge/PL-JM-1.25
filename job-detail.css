@@ -185,7 +185,7 @@ body {
 .check-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px 0;
+  gap: 4px 4px;
 }
 
 .check-grid-2 {
@@ -200,13 +200,15 @@ body {
   color: var(--text-secondary);
   cursor: pointer;
   white-space: nowrap;
-  padding: 4px 6px;
+  padding: 8px 8px;
   border-radius: var(--border-radius-sm);
   transition: background 0.15s;
+  border: solid 1px transparent;
 }
 
 .check-grid label:hover {
-  background: var(--bg-subtle);
+  background: var(--interactive-bg-subtle);
+  border: solid 1px var(--interactive-default);
 }
 
 .check-grid input[type="checkbox"] {
@@ -384,4 +386,65 @@ textarea.form-input {
 
 .widget-link:hover {
   text-decoration: underline;
+}
+
+/* Contact items inside shipping widget */
+
+.widget-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.widget-contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.widget-contact-name {
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.widget-contact-email {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-tertiary);
+  word-break: break-all;
+}
+
+/* ── SPEC TILES — read-only label/value pairs ── */
+
+.spec-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.spec-tile {
+  background: var(--bg-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-sm);
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 40%;
+}
+
+.spec-tile-label {
+  font-size: var(--fontsize-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.spec-tile-value {
+  font-size: var(--fontsize-body-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  text-align: center;
 }

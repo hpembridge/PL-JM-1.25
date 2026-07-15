@@ -1,0 +1,26 @@
+/* ── SHIP DELETE CONFIRM MODAL ── */
+
+#modal-shipDeleteConfirm .modal-body {
+  padding: 20px 24px;
+}
+
+.ship-delete-warning {
+  padding: 12px 16px;
+  border: 1px solid var(--status-error-border);
+  border-radius: var(--border-radius-sm);
+  background: var(--status-error-bg);
+  color: var(--text-primary);
+  font-size: var(--fontsize-body-sm);
+}
+
+.btn-danger {
+  background: var(--status-error-border);
+  border: solid 1px var(--status-error-border);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: var(--status-error-border);
+  border: solid 1px var(--status-error-border);
+  opacity: 0.85;
+}
