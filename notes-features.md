@@ -3,7 +3,6 @@
 - [ ] bindery calculator links
 - [ ] commercial invoice
 - [ ] net terms etc
-- [ ] clean up CSS
 ### Existing Platinum Functionality, New Location 
 - scan history/scan detail history
 - interior boards
