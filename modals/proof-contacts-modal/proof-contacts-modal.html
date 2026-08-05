@@ -22,29 +22,71 @@
         <span class="modal-title">Manage Job Contacts</span>
         <button class="icon-btn" onclick="closeModal('proofContacts')"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="modal-body ">
-        <div class="form-group">
-          <label class="form-label">Add contact</label>
-          <div class="pc-combobox" id="pcCombobox">
-            <div class="pc-input-wrap">
-              <i class="fa-regular fa-magnifying-glass pc-search-icon"></i>
-              <input id="pcInput" class="pc-input" type="text" placeholder="Search by name or email…" autocomplete="off"
-                oninput="pcOnInput(this.value)" onkeydown="pcOnKeydown(event)" />
-            </div>
-            <div class="pc-dropdown hidden-section" id="pcDropdown"></div>
-          </div>
-        </div>
+      <div class="modal-body jc-body">
 
-        <table class="pc-table hidden-section" id="pcTable">
-          <thead>
-            <tr>
-              <th class="pc-th-name">Name</th>
-              <th class="pc-th-receives">Receives</th>
-              <th class="pc-th-action"></th>
-            </tr>
-          </thead>
-          <tbody id="pcList"></tbody>
-        </table>
+        <!-- ── PROOFS ── -->
+        <section class="jc-card" data-channel="proofs">
+          <div class="jc-card-header">
+            <div class="jc-card-header-row">
+              <span class="jc-card-title">Proofs</span>
+              <button class="icon-btn jc-add-btn" title="Add address" onclick="jcToggleAdd('proofs')">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+            <div class="jc-search-wrap hidden-section">
+              <input class="jc-search" type="text" placeholder="Search by name or email…" autocomplete="off"
+                oninput="jcOnInput('proofs', this.value)" onkeydown="jcOnKeydown(event, 'proofs')" />
+              <div class="jc-dropdown hidden-section"></div>
+            </div>
+          </div>
+          <div class="jc-list"></div>
+          <div class="jc-card-footer">
+            <span class="jc-count">0 ADDRESSES</span>
+          </div>
+        </section>
+
+        <!-- ── INVOICES ── -->
+        <section class="jc-card" data-channel="invoices">
+          <div class="jc-card-header">
+            <div class="jc-card-header-row">
+              <span class="jc-card-title">Invoices</span>
+              <button class="icon-btn jc-add-btn" title="Add address" onclick="jcToggleAdd('invoices')">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+            <div class="jc-search-wrap hidden-section">
+              <input class="jc-search" type="text" placeholder="Search by name or email…" autocomplete="off"
+                oninput="jcOnInput('invoices', this.value)" onkeydown="jcOnKeydown(event, 'invoices')" />
+              <div class="jc-dropdown hidden-section"></div>
+            </div>
+          </div>
+          <div class="jc-list"></div>
+          <div class="jc-card-footer">
+            <span class="jc-count">0 ADDRESSES</span>
+          </div>
+        </section>
+
+        <!-- ── SHIPPING NOTIFICATIONS ── -->
+        <section class="jc-card" data-channel="shipping">
+          <div class="jc-card-header">
+            <div class="jc-card-header-row">
+              <span class="jc-card-title">Shipping Notifications</span>
+              <button class="icon-btn jc-add-btn" title="Add address" onclick="jcToggleAdd('shipping')">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+            <div class="jc-search-wrap hidden-section">
+              <input class="jc-search" type="text" placeholder="Search by name or email…" autocomplete="off"
+                oninput="jcOnInput('shipping', this.value)" onkeydown="jcOnKeydown(event, 'shipping')" />
+              <div class="jc-dropdown hidden-section"></div>
+            </div>
+          </div>
+          <div class="jc-list"></div>
+          <div class="jc-card-footer">
+            <span class="jc-count">0 ADDRESSES</span>
+          </div>
+        </section>
+
       </div>
       <div class="modal-footer">
         <button class="btn-secondary" onclick="closeModal('proofContacts')">Cancel</button>
