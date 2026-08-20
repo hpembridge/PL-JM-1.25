@@ -36,20 +36,102 @@
       const panel = modal.querySelector(`.detail-edit-panel[data-panel="${tab}"]`)
         || document.getElementById('dep-' + tab);
       if (panel) panel.classList.add('active');
+      refreshDetailTabs();
     }
     function saveDetailEdit() {
       if (!currentDetailId) return;
-      const activeTab = document.querySelector('.detail-edit-tab.active')?.dataset.tab;
-      if (activeTab) {
-        if (!detailSectionState[currentDetailId]) detailSectionState[currentDetailId] = {};
-        detailSectionState[currentDetailId][activeTab] = true;
-        updateDetailPills(currentDetailId);
-      }
+      if (!detailSectionState[currentDetailId]) detailSectionState[currentDetailId] = {};
+      Object.keys(DETAIL_SECTION_LABELS).forEach(key => {
+        detailSectionState[currentDetailId][key] = panelHasData(document.getElementById('dep-' + key));
+      });
+      updateDetailPills(currentDetailId);
       closeModal('detailEdit');
       const t = document.getElementById('toast');
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2500);
     }
+
+    // ── Live "does this tab have anything in it?" detection ──
+    // Rule: "X" (clear) shows only when a tab is open AND has data (something to clear).
+    // Recomputed on every input/change inside the modal, so it tracks typing live.
+    function panelHasData(panel) {
+      if (!panel) return false;
+      const fields = panel.querySelectorAll('input, select, textarea');
+      for (const el of fields) {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          if (el.checked) return true;
+          continue;
+        }
+        if (el.tagName === 'SELECT') {
+          if (el.value !== '') return true;
+          continue;
+        }
+        if (el.type === 'number') {
+          const v = el.value.trim();
+          if (v !== '' && v !== '0') return true;
+          continue;
+        }
+        if (el.value && el.value.trim() !== '') return true;
+      }
+      if (panel.querySelector('.toggle-row.on')) return true;
+      if (panel.querySelector('.seg-toggle-btn.active')) return true;
+      return false;
+    }
+    function refreshDetailTabs() {
+      const modal = document.getElementById('modal-detailEdit');
+      if (!modal) return;
+      modal.querySelectorAll('.detail-edit-tab').forEach(tabBtn => {
+        const tab = tabBtn.dataset.tab;
+        const panel = document.getElementById('dep-' + tab);
+        const hasData = panelHasData(panel);
+        const isActive = tabBtn.classList.contains('active');
+        const clearEl = tabBtn.querySelector('.tab-clear-icon');
+        if (clearEl) clearEl.classList.toggle('hidden-section', !(isActive && hasData));
+      });
+    }
+    function clearDetailTab(evt, tab) {
+      evt.stopPropagation();
+      const panel = document.getElementById('dep-' + tab);
+      if (!panel) return;
+      clearPanelFields(panel);
+      refreshDetailTabs();
+    }
+    function clearPanelFields(panel) {
+      panel.querySelectorAll('input[type="text"], input[type="tel"], input[type="email"], textarea').forEach(el => { el.value = ''; });
+      panel.querySelectorAll('input[type="number"]').forEach(el => { el.value = '0'; });
+      panel.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => {
+        if (el.checked) {
+          el.checked = false;
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+      panel.querySelectorAll('select').forEach(el => { el.value = ''; });
+      panel.querySelectorAll('.toggle-row.on').forEach(el => el.classList.remove('on'));
+      panel.querySelectorAll('.addon-fields').forEach(el => el.classList.add('collapsed'));
+      panel.querySelectorAll('.seg-toggle-btn.active').forEach(el => el.classList.remove('active'));
+      const boardsEmpty = panel.querySelector('#boardDetailsEmpty');
+      if (boardsEmpty) boardsEmpty.style.display = '';
+      const insertList = panel.querySelector('#insertSizeList');
+      if (insertList) {
+        insertList.querySelectorAll('.insert-size-block').forEach((block, i) => {
+          if (i > 0) { block.remove(); return; }
+          block.querySelectorAll('input[type="text"]').forEach(el => { el.value = ''; });
+          block.querySelectorAll('input[type="number"]').forEach(el => { el.value = '0'; });
+        });
+        insertSizeCount = 1;
+      }
+      const specialBody = panel.querySelector('#specialInstructionsBody');
+      if (specialBody) {
+        specialBody.innerHTML = `<button class="btn-add-sub" onclick="addSpecialInstructions(this)"><i class="fa-solid fa-plus"></i> Add Special Instructions</button>`;
+      }
+    }
+    // Live-update tab adornments as the user types/checks/selects inside the modal.
+    document.addEventListener('input', e => {
+      if (e.target.closest && e.target.closest('#modal-detailEdit')) refreshDetailTabs();
+    }, true);
+    document.addEventListener('change', e => {
+      if (e.target.closest && e.target.closest('#modal-detailEdit')) refreshDetailTabs();
+    }, true);
     function updateDetailPills(cardId) {
       const num = cardId.replace('detail-', '');
       const state = detailSectionState[cardId] || {};
@@ -90,6 +172,7 @@ function selectBoardType(type, btn) {
       if (!wasActive) btn.classList.add('active');
       const anyActive = document.querySelector('#boardSegToggle .seg-toggle-btn.active');
       document.getElementById('boardDetailsEmpty').style.display = anyActive ? 'none' : '';
+      refreshDetailTabs();
     }
     function addInsertSize() {
       insertSizeCount++;
@@ -110,10 +193,12 @@ function selectBoardType(type, btn) {
         `;
       list.appendChild(block);
       renumberInsertSizes();
+      refreshDetailTabs();
     }
     function removeInsertSize(btn) {
       btn.closest('.insert-size-block').remove();
       renumberInsertSizes();
+      refreshDetailTabs();
     }
     function renumberInsertSizes() {
       document.querySelectorAll('#insertSizeList .insert-size-block').forEach((block, i) => {
@@ -128,10 +213,12 @@ function selectBoardType(type, btn) {
       ta.rows = 4;
       ta.placeholder = 'Enter special instructions…';
       body.appendChild(ta);
+      refreshDetailTabs();
     }
     function clearSpecialInstructions() {
       const body = document.getElementById('specialInstructionsBody');
       body.innerHTML = `<button class="btn-add-sub" onclick="addSpecialInstructions(this)"><i class="fa-solid fa-plus"></i> Add Special Instructions</button>`;
+      refreshDetailTabs();
     }
     // ── Bindery conditional fields ──
     function onDecorationChange() {
@@ -149,8 +236,10 @@ function selectBoardType(type, btn) {
     function toggleAddon(id, row) {
       row.classList.toggle('on');
       document.getElementById(id).classList.toggle('collapsed', !row.classList.contains('on'));
+      refreshDetailTabs();
     }
     // ── Round Corners toggle ──
     function toggleCornerSize(chk) {
       document.getElementById('cornerSize').classList.toggle('collapsed', !chk.checked);
+      refreshDetailTabs();
     }

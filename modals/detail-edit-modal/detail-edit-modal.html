@@ -23,15 +23,21 @@
         <button class="icon-btn" onclick="closeModal('detailEdit')"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="detail-edit-tabs">
-          <button class="detail-edit-tab active" data-tab="general"
-            onclick="switchDetailTab(this, 'general')">General</button>
-          <button class="detail-edit-tab" data-tab="paper" onclick="switchDetailTab(this, 'paper')">Paper</button>
-          <button class="detail-edit-tab" data-tab="print" onclick="switchDetailTab(this, 'print')">Print
-            Finishing</button>
-          <button class="detail-edit-tab" data-tab="bindery" onclick="switchDetailTab(this, 'bindery')">Bindery
-            Finishing</button>
-          <button class="detail-edit-tab" data-tab="boards" onclick="switchDetailTab(this, 'boards')">Interior
-            Boards</button>
+          <button class="detail-edit-tab active" data-tab="general" onclick="switchDetailTab(this, 'general')">
+            <span class="tab-label-text">General</span><span class="tab-clear-icon hidden-section" title="Clear General" onclick="clearDetailTab(event, 'general')"><i class="fa-solid fa-xmark"></i></span>
+          </button>
+          <button class="detail-edit-tab" data-tab="paper" onclick="switchDetailTab(this, 'paper')">
+            <span class="tab-label-text">Paper</span><span class="tab-clear-icon hidden-section" title="Clear Paper" onclick="clearDetailTab(event, 'paper')"><i class="fa-solid fa-xmark"></i></span>
+          </button>
+          <button class="detail-edit-tab" data-tab="print" onclick="switchDetailTab(this, 'print')">
+            <span class="tab-label-text">Print Finishing</span><span class="tab-clear-icon hidden-section" title="Clear Print Finishing" onclick="clearDetailTab(event, 'print')"><i class="fa-solid fa-xmark"></i></span>
+          </button>
+          <button class="detail-edit-tab" data-tab="bindery" onclick="switchDetailTab(this, 'bindery')">
+            <span class="tab-label-text">Bindery Finishing</span><span class="tab-clear-icon hidden-section" title="Clear Bindery Finishing" onclick="clearDetailTab(event, 'bindery')"><i class="fa-solid fa-xmark"></i></span>
+          </button>
+          <button class="detail-edit-tab" data-tab="boards" onclick="switchDetailTab(this, 'boards')">
+            <span class="tab-label-text">Interior Boards</span><span class="tab-clear-icon hidden-section" title="Clear Interior Boards" onclick="clearDetailTab(event, 'boards')"><i class="fa-solid fa-xmark"></i></span>
+          </button>
         </div>
 
 

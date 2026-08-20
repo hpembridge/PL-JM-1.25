@@ -1,3 +1,27 @@
+/* detail-edit-tab: label, "X" (open, has data) */
+
+.detail-edit-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+.tab-clear-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: var(--border-radius-sm);
+      color: var(--text-tertiary);
+      transition: background 0.15s, color 0.15s;
+    }
+
+.tab-clear-icon:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
 /* check subgroups */
 
 .section-label-sm {
