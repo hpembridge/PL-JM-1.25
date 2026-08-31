@@ -197,15 +197,16 @@
 .ship-addr-attn {
   display: block;
   font-size: var(--fontsize-body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-secondary);
+  line-height: var(--lin);
+  color: var(--text-tertiary);
 }
 
 .ship-addr-name {
   display: block;
-  margin: 4px 0px 8px;
-  text-transform: uppercase;
+  margin: 8px 0px 8px;
+  text-transform: capitalize;
   font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-secondary);
 }
 
