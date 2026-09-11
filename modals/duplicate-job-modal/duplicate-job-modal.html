@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Duplicate Job Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="../proof-contacts-modal/proof-contacts-modal.css" />
+  <link rel="stylesheet" href="../detail-edit-modal/detail-edit-modal.css" />
+  <link rel="stylesheet" href="duplicate-job-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+
+  <!-- ══ MODAL: Duplicate Job ══════════════════════════════════════════
+       Flyout wizard — four steps: Content · Production · Job Contacts · Billing.
+       Tabs are clickable AND show progression: the rail under the tab row
+       fills to the current step (see .dj-steps in duplicate-job-modal.css).
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-duplicateJob" onclick="handleOverlayClick(event, 'duplicateJob')">
+    <div class="modal-panel modal-panel-fixed">
+
+      <div class="modal-header">
+        <span class="modal-title">Duplicate Job</span>
+        <button class="icon-btn" onclick="closeModal('duplicateJob')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- ── Step tabs + progress rail ── -->
+      <div class="dj-steps">
+        <div class="dj-steps-row">
+          <button class="dj-step active" data-step="content" onclick="djRequestStep('content')">Content<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+          <button class="dj-step" data-step="production" onclick="djRequestStep('production')">Production<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+          <button class="dj-step" data-step="contacts" onclick="djRequestStep('contacts')">Job Contacts<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+          <button class="dj-step" data-step="billing" onclick="djRequestStep('billing')">Billing<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+        </div>
+        <div class="dj-steps-rail">
+          <div class="dj-steps-rail-fill" id="dj-steps-rail-fill"></div>
+        </div>
+      </div>
+
+      <div class="modal-body dj-body">
+
+        <!-- ══ STEP 1: Content — conditional copy list ═══════════════════
+             Every possible copy target is in the markup and tagged
+             data-copy="<key>". duplicate-job-modal.js hides the rows the
+             current job does not define (.dj-hidden) and collapses a
+             group's children when its parent is unchecked.
+        ═════════════════════════════════════════════════════════════ -->
+        <div class="dj-panel active" data-panel="content">
+          <p class="dj-intro type-body-sm semibold">
+            Select which parts of the existing job you would like to copy over to the new job
+          </p>
+
+          <div class="dj-copy-list" id="dj-copy-list">
+
+            <!-- Billing Information -->
+            <div class="dj-copy-group" data-copy="billing">
+              <label class="dj-copy-row dj-copy-row--parent">
+                <input type="checkbox" data-copy-parent="billing" /> Billing Information
+              </label>
+              <div class="dj-copy-children" data-children="billing">
+                <label class="dj-copy-row" data-copy="billing.poNumber"><input type="checkbox" data-copy-child="billing" /> PO Number</label>
+                <label class="dj-copy-row" data-copy="billing.poName"><input type="checkbox" data-copy-child="billing" /> PO Name</label>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="dj-copy-group" data-copy="notes">
+              <label class="dj-copy-row dj-copy-row--parent">
+                <input type="checkbox" data-copy-parent="notes" /> Notes
+              </label>
+              <div class="dj-copy-children" data-children="notes">
+                <label class="dj-copy-row" data-copy="notes.billing"><input type="checkbox" data-copy-child="notes" /> Billing Notes</label>
+                <label class="dj-copy-row" data-copy="notes.shipping"><input type="checkbox" data-copy-child="notes" /> Shipping Notes</label>
+                <label class="dj-copy-row" data-copy="notes.paper"><input type="checkbox" data-copy-child="notes" /> Paper Notes</label>
+                <label class="dj-copy-row" data-copy="notes.detail"><input type="checkbox" data-copy-child="notes" /> Detail Notes</label>
+              </div>
+            </div>
+
+            <!-- Job Contacts -->
+            <div class="dj-copy-group" data-copy="contacts">
+              <label class="dj-copy-row dj-copy-row--parent">
+                <input type="checkbox" data-copy-parent="contacts" /> Job Contacts
+              </label>
+              <div class="dj-copy-children" data-children="contacts">
+                <label class="dj-copy-row" data-copy="contacts.billing"><input type="checkbox" data-copy-child="contacts" /> Billing Contacts</label>
+                <label class="dj-copy-row" data-copy="contacts.shipping"><input type="checkbox" data-copy-child="contacts" /> Shipping Contacts</label>
+                <label class="dj-copy-row" data-copy="contacts.proofing"><input type="checkbox" data-copy-child="contacts" /> Proofing Contacts</label>
+              </div>
+            </div>
+
+            <!-- Shipping Distribution (no children) -->
+            <div class="dj-copy-group" data-copy="shipping">
+              <label class="dj-copy-row dj-copy-row--parent">
+                <input type="checkbox" data-copy-single="shipping" /> Shipping Distribution
+              </label>
+            </div>
+
+            <!-- Detail 1 — repeated block; becomes @for over job.details -->
+            <div class="dj-copy-group" data-copy="detail-1">
+              <label class="dj-copy-row dj-copy-row--parent">
+                <input type="checkbox" data-copy-parent="detail-1" />
+                <span class="dj-detail-label">Detail 1 • Detail Name</span>
+              </label>
+              <div class="dj-copy-children" data-children="detail-1">
+                <label class="dj-copy-row" data-copy="detail-1.general"><input type="checkbox" data-copy-child="detail-1" /> General</label>
+                <label class="dj-copy-row" data-copy="detail-1.paper"><input type="checkbox" data-copy-child="detail-1" /> Paper</label>
+                <label class="dj-copy-row" data-copy="detail-1.print"><input type="checkbox" data-copy-child="detail-1" /> Print Finishing</label>
+                <label class="dj-copy-row" data-copy="detail-1.bindery"><input type="checkbox" data-copy-child="detail-1" /> Bindery Finishing</label>
+                <label class="dj-copy-row" data-copy="detail-1.boards"><input type="checkbox" data-copy-child="detail-1" /> Interior Boards</label>
+              </div>
+            </div>
+
+            <!-- Detail 2 -->
+            <div class="dj-copy-group" data-copy="detail-2">
+              <label class="dj-copy-row dj-copy-row--parent">
+                <input type="checkbox" data-copy-parent="detail-2" />
+                <span class="dj-detail-label">Detail 2 • Detail Name</span>
+              </label>
+              <div class="dj-copy-children" data-children="detail-2">
+                <label class="dj-copy-row" data-copy="detail-2.general"><input type="checkbox" data-copy-child="detail-2" /> General</label>
+                <label class="dj-copy-row" data-copy="detail-2.paper"><input type="checkbox" data-copy-child="detail-2" /> Paper</label>
+                <label class="dj-copy-row" data-copy="detail-2.print"><input type="checkbox" data-copy-child="detail-2" /> Print Finishing</label>
+                <label class="dj-copy-row" data-copy="detail-2.bindery"><input type="checkbox" data-copy-child="detail-2" /> Bindery Finishing</label>
+                <label class="dj-copy-row" data-copy="detail-2.boards"><input type="checkbox" data-copy-child="detail-2" /> Interior Boards</label>
+              </div>
+            </div>
+
+            <!-- Detail 3 -->
+            <div class="dj-copy-group" data-copy="detail-3">
+              <label class="dj-copy-row dj-copy-row--parent">
+                <input type="checkbox" data-copy-parent="detail-3" />
+                <span class="dj-detail-label">Detail 3 • Detail Name</span>
+              </label>
+              <div class="dj-copy-children" data-children="detail-3">
+                <label class="dj-copy-row" data-copy="detail-3.general"><input type="checkbox" data-copy-child="detail-3" /> General</label>
+                <label class="dj-copy-row" data-copy="detail-3.paper"><input type="checkbox" data-copy-child="detail-3" /> Paper</label>
+                <label class="dj-copy-row" data-copy="detail-3.print"><input type="checkbox" data-copy-child="detail-3" /> Print Finishing</label>
+                <label class="dj-copy-row" data-copy="detail-3.bindery"><input type="checkbox" data-copy-child="detail-3" /> Bindery Finishing</label>
+                <label class="dj-copy-row" data-copy="detail-3.boards"><input type="checkbox" data-copy-child="detail-3" /> Interior Boards</label>
+              </div>
+            </div>
+
+          </div><!-- /.dj-copy-list -->
+
+          <p class="dj-field-error hidden-section" id="dj-copy-error">Select at least one thing to copy.</p>
+
+          <div class="dj-empty hidden-section" id="dj-copy-empty">
+            <i class="fa-regular fa-circle-minus"></i>
+            <span>This job has no content available to copy.</span>
+          </div>
+        </div><!-- /step: content -->
+
+        <!-- ══ STEP 2: Production ════════════════════════════════════ -->
+        <div class="dj-panel" data-panel="production">
+          <!-- Original description, for reference — read-only -->
+          <div class="dj-source-description">
+            <span class="dj-source-description-label">Current Job Description</span>
+            <span class="dj-source-description-value" id="dj-source-description"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dj-description">New Job Description <span class="dj-required">*</span></label>
+            <input class="form-input" type="text" id="dj-description" data-required oninput="djValidate()" />
+            <p class="dj-field-error hidden-section">Job description is required.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dj-job-type">Job Type <span class="dj-required">*</span></label>
+            <select class="form-select" id="dj-job-type" onchange="djOnJobTypeChange(this)">
+              <option value="" selected disabled>Select a job type…</option>
+              <option value="new">New Job</option>
+              <option value="rerun">Rerun w/ changes</option>
+              <option value="pull-plate">Pull-plate</option>
+              <option value="inventory-release">Inventory release</option>
+              <option value="replacement">Replacement ticket</option>
+            </select>
+            <p class="dj-select-desc type-body-sm" id="dj-job-type-desc"></p>
+            <p class="dj-field-error hidden-section">Job type is required.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dj-production-type">Production Type <span class="dj-required">*</span></label>
+            <select class="form-select" id="dj-production-type" data-required onchange="djValidate()">
+              <option value="" selected disabled>Select a production type…</option>
+              <option value="bindery">Bindery</option>
+              <option value="printing">Printing</option>
+              <option value="paper">Paper</option>
+              <option value="pdf-only">PDF Only</option>
+              <option value="woodshop">Woodshop</option>
+              <option value="menu-hardware">Menu Hardware</option>
+            </select>
+            <p class="dj-field-error hidden-section">Production type is required.</p>
+          </div>
+
+          <!-- Details — prefilled from the job being duplicated -->
+          <div class="dj-details">
+            <div class="section-label-sm">Details <span class="dj-required">*</span></div>
+            <div class="dj-detail-rows" id="dj-detail-rows">
+              <div class="dj-detail-row">
+                <span class="dj-detail-num">1</span>
+                <div class="form-group">
+                  <label class="form-label">Name</label>
+                  <input class="form-input dj-detail-name" type="text" oninput="djValidate()" />
+                </div>
+                <div class="form-group dj-detail-qty">
+                  <label class="form-label">Quantity</label>
+                  <input class="form-input dj-detail-quantity" type="number" oninput="djValidate()" />
+                </div>
+              </div>
+            </div>
+            <p class="dj-field-error hidden-section" id="dj-details-error">Add at least one detail with a quantity. -1 for TBD</p>
+            <button class="btn-add-sub" onclick="djAddDetailRow()">
+              <i class="fa-solid fa-plus"></i> Add Detail
+            </button>
+          </div>
+        </div><!-- /step: production -->
+
+        <!-- ══ STEP 3: Job Contacts ══════════════════════════════════
+             Same three-channel UI as the Manage Job Contacts modal
+             (modals/proof-contacts-modal), scoped with data-dj-channel so
+             the two instances don't collide. Rows prefill from the job.
+        ═════════════════════════════════════════════════════════════ -->
+        <div class="dj-panel" data-panel="contacts">
+          <div class="jc-body dj-contacts">
+
+            <!-- Proofs -->
+            <section class="jc-card" data-dj-channel="proofs">
+              <div class="jc-card-header">
+                <div class="jc-card-header-row">
+                  <span class="jc-card-title">Proofs</span>
+                </div>
+              </div>
+
+              <div class="jc-field" onclick="djcFocusInput('proofs')">
+                <div class="jc-chips"></div>
+                <div class="jc-input-wrap">
+                  <input class="jc-search" type="text" placeholder="Add a recipient…" autocomplete="off"
+                    name="jc-recipient" oninput="djcOnInput('proofs', this.value)"
+                    onkeydown="djcOnKeydown(event, 'proofs')" onfocus="djcOnInput('proofs', this.value)" />
+                  <div class="jc-dropdown hidden-section"></div>
+                </div>
+              </div>
+
+              <div class="jc-card-footer">
+                <span class="jc-count">0 ADDRESSES</span>
+              </div>
+            </section>
+
+            <!-- Invoices -->
+            <section class="jc-card" data-dj-channel="invoices">
+              <div class="jc-card-header">
+                <div class="jc-card-header-row">
+                  <span class="jc-card-title">Invoices</span>
+                </div>
+              </div>
+
+              <div class="jc-field" onclick="djcFocusInput('invoices')">
+                <div class="jc-chips"></div>
+                <div class="jc-input-wrap">
+                  <input class="jc-search" type="text" placeholder="Add a recipient…" autocomplete="off"
+                    name="jc-recipient" oninput="djcOnInput('invoices', this.value)"
+                    onkeydown="djcOnKeydown(event, 'invoices')" onfocus="djcOnInput('invoices', this.value)" />
+                  <div class="jc-dropdown hidden-section"></div>
+                </div>
+              </div>
+
+              <div class="jc-card-footer">
+                <span class="jc-count">0 ADDRESSES</span>
+              </div>
+            </section>
+
+            <!-- Shipping Notifications -->
+            <section class="jc-card" data-dj-channel="shipping">
+              <div class="jc-card-header">
+                <div class="jc-card-header-row">
+                  <span class="jc-card-title">Shipping Notifications</span>
+                </div>
+              </div>
+
+              <div class="jc-field" onclick="djcFocusInput('shipping')">
+                <div class="jc-chips"></div>
+                <div class="jc-input-wrap">
+                  <input class="jc-search" type="text" placeholder="Add a recipient…" autocomplete="off"
+                    name="jc-recipient" oninput="djcOnInput('shipping', this.value)"
+                    onkeydown="djcOnKeydown(event, 'shipping')" onfocus="djcOnInput('shipping', this.value)" />
+                  <div class="jc-dropdown hidden-section"></div>
+                </div>
+              </div>
+
+              <div class="jc-card-footer">
+                <span class="jc-count">0 ADDRESSES</span>
+              </div>
+            </section>
+
+          </div>
+        </div><!-- /step: contacts -->
+
+        <!-- ══ STEP 4: Billing ═══════════════════════════════════════ -->
+        <div class="dj-panel" data-panel="billing">
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="dj-po-number">PO Number <span class="dj-required">*</span></label>
+              <input class="form-input" type="text" id="dj-po-number" data-required oninput="djValidate()" />
+              <p class="dj-field-error hidden-section">PO number is required.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dj-po-name">PO Name</label>
+              <input class="form-input" type="text" id="dj-po-name" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dj-billing-note">Billing Note</label>
+            <textarea class="form-input dj-textarea" id="dj-billing-note" rows="5"></textarea>
+          </div>
+        </div><!-- /step: billing -->
+
+      </div><!-- /.modal-body -->
+
+      <!-- Wizard footer: Back / Next while stepping through, Create on the last step -->
+      <div class="modal-footer dj-footer">
+        <button class="btn-secondary" onclick="closeModal('duplicateJob')">Cancel</button>
+        <button class="btn-secondary hidden-section" id="dj-back-btn" onclick="djBack()">Back</button>
+        <button class="btn-primary" id="dj-next-btn" onclick="djNext()">Next</button>
+        <button class="btn-primary hidden-section" id="dj-create-btn" onclick="djCreate()">Create</button>
+      </div>
+
+    </div><!-- /.modal-panel -->
+  </div><!-- /#modal-duplicateJob -->
+
+  <!-- ══ IMPLEMENTATION NOTES ═══════════════════════════════════════════
+       Components
+         DuplicateJobModal      → #modal-duplicateJob · .modal-* (components/modal-shell.css)
+         DuplicateJobSteps      → .dj-steps markup · .dj-step / .dj-steps-rail styles
+                                  (tab + progress rail; fill width = step / 4)
+         DuplicateJobCopyList   → .dj-copy-list markup · .dj-copy-* styles
+         DuplicateJobProduction → [data-panel="production"] · .dj-details / .dj-detail-row
+         DuplicateJobContacts   → [data-panel="contacts"] · .jc-* classes reused from
+                                  modals/proof-contacts-modal (same component, scoped
+                                  here with data-dj-channel)
+         DuplicateJobBilling    → [data-panel="billing"] · shared .form-* classes
+
+       Simulated with JS (becomes Angular state / bindings)
+         · DUPLICATE_JOB_DEFINITION (duplicate-job-modal.js) is mock data standing in
+           for the job record: it drives which copy rows appear AND the prefilled
+           values on the Production, Job Contacts and Billing steps.
+         · djBuildCopyList() toggles .dj-hidden → @if / @for in the real template;
+           data-copy="<key>" maps 1:1 to job-model keys.
+         · Children collapse when their parent is unchecked → @if on the parent control.
+         · djGoToStep() sets the active panel and the rail fill → router/step state.
+         · djAddDetailRow() clones the first row → FormArray push + @for.
+         · Create stays disabled until Job Type is chosen → form validity.
+         · Detail 1/2/3 copy blocks are the same repeated structure; one @for is enough.
+  ═══════════════════════════════════════════════════════════════════ -->
+
+</body>
+
+</html>

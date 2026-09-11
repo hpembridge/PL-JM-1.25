@@ -45,25 +45,8 @@ const jcHighlight = { proofs: -1, invoices: -1, shipping: -1 };
 function jcCard(channel)     { return document.querySelector(`.jc-card[data-channel="${channel}"]`); }
 function jcEl(channel, sel)  { return jcCard(channel)?.querySelector(sel); }
 
-// ── Add / search toggle: the + swaps to an × and reveals the search field ──
-function jcToggleAdd(channel) {
-  const card = jcCard(channel);
-  if (!card) return;
-  const wrap = card.querySelector('.jc-search-wrap');
-  const btn  = card.querySelector('.jc-add-btn');
-  const open = wrap.classList.contains('hidden-section');   // about to open
-
-  wrap.classList.toggle('hidden-section', !open);
-  btn.innerHTML = open ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-plus"></i>';
-  btn.title = open ? 'Close' : 'Add address';
-
-  const input = card.querySelector('.jc-search');
-  if (open) {
-    input.value = '';
-    input.focus();
-  } else {
-    jcCloseDropdown(channel);
-  }
+function jcFocusInput(channel) {
+  jcEl(channel, '.jc-search')?.focus();
 }
 
 function jcCloseDropdown(channel) {
@@ -73,22 +56,23 @@ function jcCloseDropdown(channel) {
 }
 
 // ── Search ──
+// Every address the directory holds is a row of its own — one person with
+// three addresses is three rows, each showing that person's name. Addresses
+// already on this list are left out.
 function jcOnInput(channel, val) {
   const q = val.trim().toLowerCase();
-  if (!q) { jcCloseDropdown(channel); return; }
 
-  // Addresses already on this list are left out of the droplist entirely.
   const results = [];
   JC_CONTACTS.forEach(c => {
     const personMatch = c.name.toLowerCase().includes(q) || c.role.toLowerCase().includes(q);
     c.emails.forEach(email => {
       if (jcSelected[channel].includes(email)) return;
-      if (personMatch || email.toLowerCase().includes(q)) results.push({ contact: c, email });
+      if (!q || personMatch || email.toLowerCase().includes(q)) results.push({ contact: c, email });
     });
   });
 
   jcSearch[channel] = results;
-  jcHighlight[channel] = -1;   // nothing pre-highlighted — hover or arrow keys set it
+  jcHighlight[channel] = results.length ? 0 : -1;
   jcRenderDropdown(channel);
 }
 
@@ -99,6 +83,8 @@ function jcStepHighlight(channel, dir) {
 }
 
 function jcOnKeydown(e, channel) {
+  const input = e.target;
+
   if (e.key === 'ArrowDown') {
     e.preventDefault();
     jcStepHighlight(channel, 1);
@@ -109,19 +95,17 @@ function jcOnKeydown(e, channel) {
     jcRenderDropdown(channel);
   } else if (e.key === 'Enter') {
     e.preventDefault();
-    // Nothing highlighted yet → Enter takes the first available address.
-    if (jcHighlight[channel] < 0) jcStepHighlight(channel, 1);
     if (jcHighlight[channel] >= 0) jcAdd(channel, jcHighlight[channel]);
+  } else if (e.key === 'Backspace' && !input.value) {
+    // empty field: backspace peels off the last chip, as in Outlook
+    const last = jcSelected[channel][jcSelected[channel].length - 1];
+    if (last) jcRemove(channel, last);
   } else if (e.key === 'Escape') {
-    const dd = jcEl(channel, '.jc-dropdown');
-    if (dd && !dd.classList.contains('hidden-section')) jcCloseDropdown(channel);
-    else jcToggleAdd(channel);
+    jcCloseDropdown(channel);
   }
 }
 
-// Droplist: grouped by person (name + role as a non-selectable heading),
-// with each of that person's addresses as a selectable row underneath.
-// A group label + divider is shown whenever the parent org changes.
+// Droplist: one row per address — name on the left, address on the right.
 function jcRenderDropdown(channel) {
   const dd = jcEl(channel, '.jc-dropdown');
   if (!dd) return;
@@ -133,32 +117,23 @@ function jcRenderDropdown(channel) {
     return;
   }
 
-  let html = '';
-  let lastGroup = null;
-  let lastPerson = null;
+  dd.innerHTML = results.map((r, idx) => `
+    <div class="jc-dd-row${idx === jcHighlight[channel] ? ' highlighted' : ''}"
+         data-idx="${idx}" onmousedown="jcAdd('${channel}', ${idx})"
+         onmouseenter="jcHoverRow('${channel}', ${idx})">
+      <span class="jc-dd-row-name">${r.contact.name}</span>
+      <span class="jc-dd-row-email">${r.email}</span>
+      <span class="jc-dd-row-role">${r.contact.role}</span>
+    </div>`).join('');
 
-  results.forEach((r, idx) => {
-    if (r.contact.group !== lastGroup) {
-      if (lastGroup !== null) {
-        html += '<div class="jc-dd-divider"></div>' +
-                `<div class="jc-dd-group-label">${r.contact.group}</div>`;
-      }
-      lastGroup = r.contact.group;
-      lastPerson = null;
-    }
-    if (r.contact !== lastPerson) {
-      html += `<div class="jc-dd-person">
-                 <span class="jc-dd-person-name">${r.contact.name}</span>
-                 <span class="jc-dd-person-role">${r.contact.role}</span>
-               </div>`;
-      lastPerson = r.contact;
-    }
-    const cls = 'jc-dd-email' + (idx === jcHighlight[channel] ? ' highlighted' : '');
-    html += `<div class="${cls}" data-idx="${idx}" onmousedown="jcAdd('${channel}', ${idx})">${r.email}</div>`;
-  });
-
-  dd.innerHTML = html;
   dd.classList.remove('hidden-section');
+}
+
+function jcHoverRow(channel, idx) {
+  jcHighlight[channel] = idx;
+  jcCard(channel)?.querySelectorAll('.jc-dd-row').forEach(row => {
+    row.classList.toggle('highlighted', Number(row.dataset.idx) === idx);
+  });
 }
 
 // ── Add / remove ──
@@ -169,7 +144,7 @@ function jcAdd(channel, idx) {
   jcRenderList(channel);
   const input = jcEl(channel, '.jc-search');
   if (input) { input.value = ''; input.focus(); }
-  jcCloseDropdown(channel);
+  jcOnInput(channel, '');
   jcUpdateAllStrings();
 }
 
@@ -179,27 +154,23 @@ function jcRemove(channel, email) {
   jcUpdateAllStrings();
 }
 
-// ── Render ──
+// ── Render the chips ──
 function jcRenderList(channel) {
-  const list = jcEl(channel, '.jc-list');
-  if (!list) return;
+  const chips = jcEl(channel, '.jc-chips');
+  if (!chips) return;
   const emails = jcSelected[channel];
 
-  list.innerHTML = emails.length
-    ? emails.map(email => {
-        const c = JC_BY_EMAIL[email];
-        return `<div class="jc-row" data-email="${email}">
-                  <span class="jc-row-name">${c ? c.name : ''}</span>
-                  <span class="jc-row-email">${email}</span>
-                  <div class="jc-row-actions">
-                    <button class="icon-btn" title="Remove address"
-                      onclick="jcRemove('${channel}', '${email}')">
-                      <i class="fa-regular fa-trash-can"></i>
-                    </button>
-                  </div>
-                </div>`;
-      }).join('')
-    : '<div class="jc-empty">No addresses yet</div>';
+  chips.innerHTML = emails.map(email => {
+    const c = JC_BY_EMAIL[email];
+    return `<span class="jc-chip" title="${c ? c.name + ' — ' : ''}${email}">
+              <span class="jc-chip-name">${c ? c.name : email}</span>
+              <span class="jc-chip-email">${email}</span>
+              <button class="jc-chip-remove" aria-label="Remove ${email}"
+                onclick="event.stopPropagation(); jcRemove('${channel}', '${email}')">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </span>`;
+  }).join('');
 
   const count = jcEl(channel, '.jc-count');
   if (count) count.textContent = `${emails.length} ADDRESS${emails.length === 1 ? '' : 'ES'}`;
@@ -258,10 +229,10 @@ function pcCopyContacts(textElId, wrapId) {
   });
 }
 
-// ── Close an open droplist on outside click ──
+// ── Close an open droplist on any click outside its field ──
 document.addEventListener('mousedown', e => {
   JC_CHANNELS.forEach(channel => {
-    const wrap = jcEl(channel, '.jc-search-wrap');
-    if (wrap && !wrap.contains(e.target)) jcCloseDropdown(channel);
+    const field = jcEl(channel, '.jc-field');
+    if (field && !field.contains(e.target)) jcCloseDropdown(channel);
   });
 });

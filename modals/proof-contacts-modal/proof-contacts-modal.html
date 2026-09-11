@@ -29,17 +29,21 @@
           <div class="jc-card-header">
             <div class="jc-card-header-row">
               <span class="jc-card-title">Proofs</span>
-              <button class="icon-btn jc-add-btn" title="Add address" onclick="jcToggleAdd('proofs')">
-                <i class="fa-solid fa-plus"></i>
-              </button>
             </div>
-            <div class="jc-search-wrap hidden-section">
-              <input class="jc-search" type="text" placeholder="Search by name or email…" autocomplete="off"
-                oninput="jcOnInput('proofs', this.value)" onkeydown="jcOnKeydown(event, 'proofs')" />
+          </div>
+
+          <!-- Token field: selected addresses are chips, typing filters the
+               droplist, Enter or click adds, Backspace removes the last one. -->
+          <div class="jc-field" onclick="jcFocusInput('proofs')">
+            <div class="jc-chips"></div>
+            <div class="jc-input-wrap">
+              <input class="jc-search" type="text" placeholder="Add a recipient…" autocomplete="off" name="jc-recipient"
+                oninput="jcOnInput('proofs', this.value)" onkeydown="jcOnKeydown(event, 'proofs')"
+                onfocus="jcOnInput('proofs', this.value)" />
               <div class="jc-dropdown hidden-section"></div>
             </div>
           </div>
-          <div class="jc-list"></div>
+
           <div class="jc-card-footer">
             <span class="jc-count">0 ADDRESSES</span>
           </div>
@@ -50,17 +54,21 @@
           <div class="jc-card-header">
             <div class="jc-card-header-row">
               <span class="jc-card-title">Invoices</span>
-              <button class="icon-btn jc-add-btn" title="Add address" onclick="jcToggleAdd('invoices')">
-                <i class="fa-solid fa-plus"></i>
-              </button>
             </div>
-            <div class="jc-search-wrap hidden-section">
-              <input class="jc-search" type="text" placeholder="Search by name or email…" autocomplete="off"
-                oninput="jcOnInput('invoices', this.value)" onkeydown="jcOnKeydown(event, 'invoices')" />
+          </div>
+
+          <!-- Token field: selected addresses are chips, typing filters the
+               droplist, Enter or click adds, Backspace removes the last one. -->
+          <div class="jc-field" onclick="jcFocusInput('invoices')">
+            <div class="jc-chips"></div>
+            <div class="jc-input-wrap">
+              <input class="jc-search" type="text" placeholder="Add a recipient…" autocomplete="off" name="jc-recipient"
+                oninput="jcOnInput('invoices', this.value)" onkeydown="jcOnKeydown(event, 'invoices')"
+                onfocus="jcOnInput('invoices', this.value)" />
               <div class="jc-dropdown hidden-section"></div>
             </div>
           </div>
-          <div class="jc-list"></div>
+
           <div class="jc-card-footer">
             <span class="jc-count">0 ADDRESSES</span>
           </div>
@@ -71,17 +79,21 @@
           <div class="jc-card-header">
             <div class="jc-card-header-row">
               <span class="jc-card-title">Shipping Notifications</span>
-              <button class="icon-btn jc-add-btn" title="Add address" onclick="jcToggleAdd('shipping')">
-                <i class="fa-solid fa-plus"></i>
-              </button>
             </div>
-            <div class="jc-search-wrap hidden-section">
-              <input class="jc-search" type="text" placeholder="Search by name or email…" autocomplete="off"
-                oninput="jcOnInput('shipping', this.value)" onkeydown="jcOnKeydown(event, 'shipping')" />
+          </div>
+
+          <!-- Token field: selected addresses are chips, typing filters the
+               droplist, Enter or click adds, Backspace removes the last one. -->
+          <div class="jc-field" onclick="jcFocusInput('shipping')">
+            <div class="jc-chips"></div>
+            <div class="jc-input-wrap">
+              <input class="jc-search" type="text" placeholder="Add a recipient…" autocomplete="off" name="jc-recipient"
+                oninput="jcOnInput('shipping', this.value)" onkeydown="jcOnKeydown(event, 'shipping')"
+                onfocus="jcOnInput('shipping', this.value)" />
               <div class="jc-dropdown hidden-section"></div>
             </div>
           </div>
-          <div class="jc-list"></div>
+
           <div class="jc-card-footer">
             <span class="jc-count">0 ADDRESSES</span>
           </div>

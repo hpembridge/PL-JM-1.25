@@ -80,33 +80,14 @@ body {
   margin: auto;
 }
 
-.tab-btn {
-  padding: 10px 20px;
-  border: none;
-  background: none;
-  font-size: var(--fontsize-body-sm);
-  font-weight: var(--font-weight-bold);
-  text-transform: uppercase;
-  cursor: pointer;
-  color: var(--text-interactive);
-  background-color: white;
-  border: solid 1px var(--border-subtle);
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  border-radius: 8px;
-}
+/* Tabs use the shared .tab-btn from design-tokens.css — the same button
+   as the reports page and the inventory tool. The local copy of the
+   rule, its hover and its active state have been removed; only .tabs
+   (the row) stays here, since the spacing is page-specific. */
 
-.tab-btn:hover {
-  color: var(--interactive-hover);
-}
 
-.tab-btn.active {
-  color: var(--color-white);
-  background: var(--interactive-default);
-  border: solid 1px var(--interactive-default);
-}
+
+
 
 .tab-panel {
   display: flex;

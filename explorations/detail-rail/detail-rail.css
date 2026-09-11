@@ -1,0 +1,203 @@
+/* ══════════════════════════════════════════════════════════════
+   EXPLORATION: Detail Rail
+   Pulls the context widget out of .detail-grid and pins it as a
+   sticky rail beside the detail-card workspace.
+   Overrides only; assumes job-detail.css + production-tab.css load first.
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+  --rail-width: 300px;
+  --rail-gap: 24px;
+  /* distance from top of the scroll container to where the rail parks */
+  --rail-offset: 24px;
+  /* prototype only: clears the sticky control bar. In production this is
+     the topbar height + breathing room. */
+  --rail-offset: 68px;
+}
+
+/* ── PAGE SHELL ─────────────────────────────────────────────── */
+/* One shared container so the job header, tabs and workspace all share
+   the same left/right edge. Overrides the fixed --container-workspace
+   widths on .header-wrap and .tabs. */
+
+.detail-page {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detail-page .header-wrap,
+.detail-page .tabs {
+  width: 100%;
+  margin: 0;
+}
+
+.detail-page .tabs { margin-top: -8px; }
+
+/* Alignment variant: header + tabs start where the CARDS start,
+   leaving the rail as a distinct column that runs the full page height. */
+.detail-page[data-header-align="cards"] .header-wrap,
+.detail-page[data-header-align="cards"] .tabs {
+  margin-left: calc(var(--rail-width) + var(--rail-gap));
+  width: calc(100% - var(--rail-width) - var(--rail-gap));
+}
+
+/* ── WORKSPACE: rail + cards ────────────────────────────────── */
+
+.detail-workspace {
+  display: grid;
+  grid-template-columns: var(--rail-width) minmax(0, 1fr);
+  gap: var(--rail-gap);
+  align-items: start;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Right-hand variant — toggled by [data-rail-side="right"] on the workspace */
+.detail-workspace[data-rail-side="right"] {
+  grid-template-columns: minmax(0, 1fr) var(--rail-width);
+}
+.detail-workspace[data-rail-side="right"] .detail-rail  { order: 2; }
+.detail-workspace[data-rail-side="right"] .detail-cards { order: 1; }
+
+/* ── THE RAIL ───────────────────────────────────────────────── */
+
+.detail-rail {
+  position: sticky;
+  top: var(--rail-offset);
+  align-self: start;
+  max-height: calc(100vh - (var(--rail-offset) * 2));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* hide the scrollbar until the rail is hovered — it's a quiet surface */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  padding-right: 2px;
+}
+.detail-rail:hover { scrollbar-color: var(--border-default) transparent; }
+.detail-rail::-webkit-scrollbar { width: 6px; }
+.detail-rail::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+.detail-rail:hover::-webkit-scrollbar-thumb { background: var(--border-default); }
+
+/* The widget inside the rail loses its own card chrome and instead reads as
+   a single continuous panel with hairline-separated sections. */
+.detail-rail .widget {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.detail-rail .widget > .widget-section {
+  padding: 16px 16px;
+}
+.detail-rail .widget > .widget-section + .widget-section {
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Primary action gets pulled out of the widget and sits above it */
+.detail-rail .add-list-btn {
+  margin-bottom: 0;
+  background: var(--bg-surface);
+}
+
+/* In a 300px rail, two spec tiles per row is the readable max */
+.detail-rail .spec-tiles { gap: 6px; }
+.detail-rail .spec-tile  { min-width: calc(50% - 3px); }
+
+/* ── CARD FIELD ─────────────────────────────────────────────── */
+
+/* auto-fill (not auto-fit): one card stays one card wide instead of
+   stretching across the whole workspace. */
+.detail-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* ── COLLAPSED / NARROW ─────────────────────────────────────── */
+
+@media (max-width: 1180px) {
+  .detail-workspace,
+  .detail-workspace[data-rail-side="right"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .detail-rail {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+  .detail-workspace[data-rail-side="right"] .detail-rail  { order: 0; }
+  .detail-workspace[data-rail-side="right"] .detail-cards { order: 0; }
+  .detail-page[data-header-align="cards"] .header-wrap,
+  .detail-page[data-header-align="cards"] .tabs {
+    margin-left: 0;
+    width: 100%;
+  }
+  /* horizontal section layout when the rail is full-width */
+  .detail-rail .widget {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+  .detail-rail .widget > .widget-section + .widget-section {
+    border-top: none;
+    border-left: 1px solid var(--border-subtle);
+  }
+}
+
+/* ── PROTOTYPE CHROME (not production) ──────────────────────── */
+
+.proto-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-default);
+}
+.proto-group { display: flex; align-items: center; gap: 6px; }
+.proto-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-tertiary); margin-right: 2px;
+}
+.proto-btn {
+  padding: 5px 11px;
+  font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius-full, 999px);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.proto-btn[aria-pressed="true"] {
+  background: var(--interactive-default);
+  border-color: var(--interactive-default);
+  color: #fff;
+}
+.proto-note {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.proto-stage { padding: 24px 20px 160px; }
+.proto-filler {
+  height: 640px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  opacity: .5;
+}

@@ -1,0 +1,622 @@
+/* ══════════════════════════════════════════════════════════════
+   EXPLORATION: Detail Select
+   Master/detail layout borrowed from the contacts panel in customer
+   maintenance: a left rail lists the job's details, the right pane
+   shows only the selected one. Overrides only — assumes
+   job-detail.css + production-tab.css load first.
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+  --ds-rail-width: 280px;
+  --ds-rail-offset: 24px;
+}
+
+/* ── PAGE SHELL ─────────────────────────────────────────────── */
+
+body {
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+.ds-page {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+
+.ds-page .header-wrap,
+.ds-page .tabs {
+  width: 100%;
+  margin: 0;
+}
+
+/* .tabs is flex:1 on the job page, which stretches it inside this
+   column layout — pin it back to its own height. */
+.ds-page .tabs {
+  flex: 0 0 auto;
+}
+
+/* ── WORKSPACE: rail + pane, one bordered card ───────────────── */
+
+.ds-workspace {
+  display: grid;
+  grid-template-columns: var(--ds-rail-width) minmax(0, 1fr);
+  align-items: stretch;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+/* Shared small-caps label — one treatment for every section heading
+   in this layout, so nothing competes with the detail name. */
+
+.ds-section-label {
+  font-size: var(--fontsize-label);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+/* ── RAIL ────────────────────────────────────────────────────── */
+
+.ds-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  /* fills the full height of the workspace, however tall the pane gets */
+  align-self: stretch;
+}
+
+.ds-rail-widget {
+  background: var(--bg-surface);
+}
+
+.ds-rail-widget .widget-section-label {
+  letter-spacing: 0.04em;
+}
+
+.ds-rail-widget .spec-tiles {
+  gap: 8px;
+}
+
+/* Detail list — the master list */
+
+.ds-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ds-list-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 2px 2px;
+}
+
+.ds-list-count {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-tertiary);
+}
+
+.ds-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.ds-list-item:hover {
+  background: var(--interactive-bg-subtle);
+  border-color: var(--interactive-default);
+  color: var(--text-primary);
+}
+
+.ds-list-item.active {
+  background: var(--interactive-default);
+  border-color: var(--interactive-default);
+  color: var(--text-on-interactive, #fff);
+}
+
+.ds-list-item-num {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+  font-size: var(--fontsize-label);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-list-item.active .ds-list-item-num {
+  background: rgba(255, 255, 255, 0.22);
+  color: inherit;
+}
+
+.ds-list-item-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dot marks a detail that has something specified */
+.ds-list-item-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  flex-shrink: 0;
+}
+
+.ds-list-item.has-content .ds-list-item-dot {
+  background: var(--interactive-default);
+  border-color: var(--interactive-default);
+}
+
+.ds-list-item.active .ds-list-item-dot {
+  background: currentColor;
+  border-color: currentColor;
+}
+
+.ds-list .add-list-btn {
+  margin-top: 2px;
+}
+
+/* ── PANE: the selected detail ───────────────────────────────── */
+
+.ds-pane {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Job-level notes — visually a piece of job context, not detail content */
+
+/* Job-level notes — on the page above the workspace, not in the card */
+
+.ds-job-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 4px;
+}
+
+.ds-job-notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-pane-panel {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ds-pane-panel.active {
+  display: flex;
+}
+
+/* Detail head — number, name, actions and this detail's own notes */
+
+.ds-detail-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 24px;
+  background: var(--bg-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ds-detail-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ds-pane-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fontsize-heading-sm, 18px);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.ds-pane-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ds-detail-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Sections side by side. The grid is 12 narrow tracks and each section
+   spans a share of them, so the number of columns follows the number of
+   sections and the last row never leaves an orphan:
+
+     1 section  → 1 across      4 sections → 4 across
+     2 sections → 2 across      5 sections → 2 on top, 3 on bottom
+     3 sections → 3 across
+
+   The counts are read with :has() quantity queries — no JS, no classes. */
+
+.ds-sections {
+  --ds-col-gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--ds-col-gap);
+  align-content: start;
+  padding: 20px 24px;
+  flex: 1;
+}
+
+/* default: quarters (4 across, wrapping) */
+.ds-sections > .detail-section {
+  grid-column: span 3;
+}
+
+/* exactly 1 */
+.ds-sections:has(> .detail-section:first-child:last-child) > .detail-section {
+  grid-column: span 12;
+}
+
+/* exactly 2 */
+.ds-sections:has(> .detail-section:nth-child(2):last-child) > .detail-section {
+  grid-column: span 6;
+}
+
+/* exactly 3 */
+.ds-sections:has(> .detail-section:nth-child(3):last-child) > .detail-section {
+  grid-column: span 4;
+}
+
+/* exactly 5 — two on top, three on bottom */
+.ds-sections:has(> .detail-section:nth-child(5):last-child) > .detail-section {
+  grid-column: span 4;
+}
+
+.ds-sections:has(> .detail-section:nth-child(5):last-child) > .detail-section:nth-child(-n + 2) {
+  grid-column: span 6;
+}
+
+/* Narrower panes: two across, then one, whatever the section count */
+
+@media (max-width: 1280px) {
+  .ds-sections > .detail-section,
+  .ds-sections:has(> .detail-section:nth-child(5):last-child) > .detail-section,
+  .ds-sections:has(> .detail-section:nth-child(5):last-child) > .detail-section:nth-child(-n + 2),
+  .ds-sections:has(> .detail-section:nth-child(3):last-child) > .detail-section {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 820px) {
+  .ds-sections > .detail-section,
+  .ds-sections:has(> .detail-section:nth-child(5):last-child) > .detail-section,
+  .ds-sections:has(> .detail-section:nth-child(5):last-child) > .detail-section:nth-child(-n + 2),
+  .ds-sections:has(> .detail-section:nth-child(3):last-child) > .detail-section,
+  .ds-sections:has(> .detail-section:nth-child(2):last-child) > .detail-section {
+    grid-column: span 12;
+  }
+}
+
+/* Sections this detail has no entry for — one quiet line closing the card */
+
+.ds-empty-summary {
+  padding: 14px 24px;
+  background: var(--bg-muted);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ── SPEC SECTIONS ───────────────────────────────────────────── */
+/* Same markup as the production tab; here each section is a column and
+   its tiles stack down that column. */
+
+/* production-tab.css puts a rule + spacing between stacked sections;
+   here the sections are columns, so that divider is cancelled. */
+
+.ds-pane .detail-section + .detail-section,
+.ds-pane .detail-card-notes + .detail-section,
+.ds-pane .detail-section + .detail-card-notes {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.ds-pane .detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ds-pane .detail-section-title {
+  letter-spacing: 0.04em;
+}
+
+.ds-pane .spec-tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ds-pane .spec-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 12px;
+  text-align: left;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-sm);
+}
+
+.ds-pane .spec-tile-label {
+  font-size: var(--fontsize-label);
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+.ds-pane .spec-tile-value {
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+/* Check-style tile: an operation that is simply on */
+
+.ds-pane .spec-tile-check {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.spec-tile-check-icon {
+  color: var(--text-success, #2e7d32);
+  font-size: 12px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE JOB HEADER
+   Overrides scoped to .ds-page so the shared job-header component
+   is untouched. Three steps, each one triggered by what actually
+   breaks rather than by a device size:
+
+     ≤1180px  the two action groups wrap instead of squeezing
+     ≤900px   the status bar stacks, the job actions scroll
+     ≤620px   everything goes to one column, buttons go full width
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Step 1: let the button groups wrap ── */
+
+@media (max-width: 1180px) {
+  .ds-page .job-actions-right,
+  .ds-page .job-actions {
+    flex-wrap: wrap;
+  }
+
+  .ds-page .job-title-row {
+    flex-wrap: wrap;
+  }
+}
+
+/* ── Step 2: stack the status bar, keep the row of job actions
+      swipeable instead of letting it push the avatars out ── */
+
+@media (max-width: 900px) {
+  .ds-page .job-header-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .ds-page .job-header-bar .pill {
+    align-self: flex-start;
+    margin-left: 0;
+    border-radius: var(--border-radius-md);
+    border-bottom: solid 1px var(--status-info-border);
+  }
+
+  .ds-page .job-header-bar .job-actions-right {
+    padding-bottom: 8px;
+  }
+
+  .ds-page .inner-row.border-top {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ds-page .acct-team {
+    align-self: flex-start;
+  }
+}
+
+/* ── Step 3: single column — the card reads as a stack, and every
+      control is wide enough to hit on a small screen ── */
+
+@media (max-width: 620px) {
+  .ds-page {
+    padding: 12px;
+  }
+
+  .ds-page .job-header-bar .job-actions-right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .ds-page .job-header-bar .job-actions-right > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ds-page .job-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .ds-page .job-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .ds-page .job-actions > .btn-secondary {
+    width: 100%;
+  }
+
+  /* rail and pane stack instead of sitting side by side */
+  .ds-page .ds-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ds-page .ds-rail {
+    border-right: none;
+    border-bottom: 1px solid var(--border-default);
+  }
+}
+
+/* ── Full-screen actions sheet (small viewports) ──
+   The hamburger and the sheet only exist below 620px; there the bar keeps
+   the status pill full width and the job card carries no action buttons. */
+
+.ds-menu-btn {
+  display: none;
+  flex-shrink: 0;
+}
+
+.ds-menu-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+}
+
+.ds-menu-sheet[hidden] {
+  display: none;
+}
+
+.ds-menu-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-muted);
+}
+
+.ds-menu-sheet-title {
+  font-size: var(--fontsize-body-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.ds-menu-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+}
+
+.ds-menu-sheet-body .ds-section-label {
+  padding: 12px 4px 4px;
+}
+
+.ds-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 12px;
+  border: none;
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  text-align: left;
+  font-size: var(--fontsize-body-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.ds-menu-item i {
+  width: 18px;
+  color: var(--text-tertiary);
+}
+
+.ds-menu-item:active,
+.ds-menu-item:hover {
+  background: var(--interactive-bg-subtle);
+  color: var(--interactive-default);
+}
+
+.ds-menu-item:hover i {
+  color: var(--interactive-default);
+}
+
+@media (max-width: 620px) {
+  /* status spans the bar; every action lives in the sheet */
+  .ds-page .job-header-bar {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ds-page .job-header-bar .pill {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .ds-page .job-header-bar .job-actions-right,
+  .ds-page .job-header-card .job-actions,
+  .ds-page .job-header-top .icon-btn {
+    display: none;
+  }
+
+  .ds-page .ds-menu-btn {
+    display: inline-flex;
+  }
+
+  .ds-page .inner-row.border-top {
+    justify-content: flex-start;
+  }
+}

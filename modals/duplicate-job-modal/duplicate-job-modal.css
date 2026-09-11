@@ -1,0 +1,252 @@
+/* ── DUPLICATE JOB MODAL ──────────────────────────────────────────────
+   Form fields, buttons and the modal shell come from job-detail.css /
+   design-tokens.css / modal-shell.css. Contact cards reuse the .jc-*
+   styles from modals/proof-contacts-modal. Only this modal's own pieces
+   live here.
+──────────────────────────────────────────────────────────────────── */
+
+/* ── Step tabs + progress rail ── */
+
+.dj-steps {
+  flex-shrink: 0;
+  background: var(--bg-muted);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.dj-steps-row {
+  display: flex;
+  padding: 8px 32px 0;
+}
+
+.dj-step {
+  flex: 1;
+  padding: 12px 8px;
+  border: none;
+  background: transparent;
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.dj-step:hover {
+  color: var(--text-primary);
+}
+
+.dj-step.active {
+  color: var(--text-primary);
+}
+
+/* Steps already completed read as done, not inactive */
+.dj-step.complete {
+  color: var(--text-secondary);
+}
+
+.dj-steps-rail {
+  height: 3px;
+  background: var(--border-subtle);
+}
+
+.dj-steps-rail-fill {
+  height: 100%;
+  width: 25%;
+  background: var(--interactive-default);
+  transition: width 0.25s ease;
+}
+
+/* ── Panels ── */
+
+.dj-body {
+  overflow-y: auto;
+}
+
+.dj-panel {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dj-panel.active {
+  display: flex;
+}
+
+.dj-intro {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ── Conditional copy list ── */
+
+.dj-copy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dj-copy-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.dj-copy-children {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+}
+
+/* Children are only shown while the parent is checked */
+.dj-copy-children.dj-collapsed {
+  display: none;
+}
+
+.dj-copy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: var(--border-radius-sm);
+  border: solid 1px transparent;
+  transition: background 0.15s;
+}
+
+.dj-copy-row:hover {
+  background: var(--interactive-bg-subtle);
+  border-color: var(--interactive-default);
+}
+
+.dj-copy-row--parent {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.dj-copy-row input[type="checkbox"] {
+  accent-color: var(--interactive-default);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Rows the current job does not define */
+.dj-copy-group.dj-hidden,
+.dj-copy-row.dj-hidden {
+  display: none;
+}
+
+.dj-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-tertiary);
+}
+
+/* ── Production step ── */
+
+.dj-required {
+  color: var(--text-danger, #b3261e);
+}
+
+.dj-select-desc {
+  color: var(--text-tertiary);
+  margin: 6px 0 0;
+}
+
+.dj-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dj-detail-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dj-detail-row {
+  display: grid;
+  grid-template-columns: 20px 1fr 80px;
+  gap: 12px;
+  align-items: end;
+}
+
+.dj-detail-num {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-tertiary);
+  padding-bottom: 9px;
+}
+
+/* ── Job Contacts step ── */
+
+.dj-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0;
+}
+
+/* ── Billing step ── */
+
+.dj-textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* ── Validation ── */
+
+.dj-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dj-step-flag {
+  font-size: 11px;
+  color: var(--text-danger, #b3261e);
+}
+
+.dj-field-error {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-danger, #b3261e);
+  margin: 6px 0 0;
+}
+
+.form-input.dj-invalid,
+.form-select.dj-invalid {
+  border-color: var(--text-danger, #b3261e);
+}
+
+/* ── Wizard footer: Cancel sits left, step controls right ── */
+
+.dj-footer > .btn-secondary:first-child {
+  margin-right: auto;
+}
+
+/* ── Original job description (read-only reference) ── */
+
+.dj-source-description {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+}
+
+.dj-source-description-label {
+  font-size: var(--fontsize-label);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.dj-source-description-value {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-primary);
+}

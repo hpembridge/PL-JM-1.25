@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exploration — Detail Rail</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/job-header/job-header.css" />
+  <link rel="stylesheet" href="../../components/production-tab/production-tab.css" />
+  <link rel="stylesheet" href="detail-rail.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+  <div class="main">
+
+    <!-- ── PROTOTYPE CONTROLS (not part of the design) ── -->
+    <div class="proto-bar">
+      <div class="proto-group">
+        <span class="proto-label">Rail side</span>
+        <button class="proto-btn" aria-pressed="true"  onclick="setSide('left', this)">Left</button>
+        <button class="proto-btn" aria-pressed="false" onclick="setSide('right', this)">Right</button>
+      </div>
+      <div class="proto-group">
+        <span class="proto-label">Details</span>
+        <button class="proto-btn" aria-pressed="true"  onclick="setCount(1, this)">1</button>
+        <button class="proto-btn" aria-pressed="false" onclick="setCount(2, this)">2</button>
+        <button class="proto-btn" aria-pressed="false" onclick="setCount(3, this)">3</button>
+        <button class="proto-btn" aria-pressed="false" onclick="setCount(6, this)">6</button>
+      </div>
+      <div class="proto-group">
+        <span class="proto-label">Header</span>
+        <button class="proto-btn" aria-pressed="true"  onclick="setAlign('full', this)">Full width</button>
+        <button class="proto-btn" aria-pressed="false" onclick="setAlign('cards', this)">Aligned to cards</button>
+      </div>
+      <div class="proto-group">
+        <span class="proto-label">Rail width</span>
+        <button class="proto-btn" aria-pressed="false" onclick="setRail('260px', this)">260</button>
+        <button class="proto-btn" aria-pressed="true"  onclick="setRail('300px', this)">300</button>
+        <button class="proto-btn" aria-pressed="false" onclick="setRail('340px', this)">340</button>
+      </div>
+      <span class="proto-note">Scroll the page — the rail pins, the cards move.</span>
+    </div>
+
+
+    <div class="proto-stage">
+     <div class="detail-page" id="page" data-header-align="full">
+
+      <!-- ══ JOB HEADER (components/job-header) ══ -->
+      <div class="header-wrap">
+        <div class="job-header-bar">
+          <p class="pill">Status: Bindery on Cart</p>
+          <div class="job-actions-right">
+            <button class="btn-secondary">Send to Trello</button>
+            <div class="btn-split">
+              <button class="btn-split-main"><i class="fa-regular fa-print"></i> Print Ticket</button>
+              <button class="btn-split-caret" aria-label="More print options"><i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="job-header-card">
+          <div class="inner-row inner-row-col">
+            <div class="job-header-top">
+              <h6 class="job-title-row">
+                <span>287349</span>
+                <span id="description">Data Collection Lobby Bar Pdf Only</span>
+              </h6>
+              <button class="icon-btn" title="Edit job information"><i class="fa-solid fa-pen"></i></button>
+            </div>
+            <p class="job-meta type-body-md semibold"><span>Rerun W/ Changes</span> • <span>PDF Only</span></p>
+            <p class="job-meta type-body-sm">Last Modified by Rey Cede&ntilde;o on 7/23/2021</p>
+          </div>
+          <div class="inner-row border-top">
+            <div class="job-actions">
+              <button class="btn-secondary">Manage Notes</button>
+              <button class="btn-secondary">Manage Job Contacts</button>
+              <button class="btn-secondary">View Activity Log</button>
+              <button class="btn-secondary">View Billing Details</button>
+            </div>
+            <div class="acct-team">
+              <div class="avatar-group"><div class="avatar" style="background:#d8e2fb">GMR</div><div class="avatar-label type-body-sm">Sales</div></div>
+              <div class="avatar-group"><div class="avatar" style="background:#e8fbd4">SC</div><div class="avatar-label type-body-sm">Billing</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TABS ══ -->
+      <div class="tabs">
+        <button class="tab-btn active">Production</button>
+        <button class="tab-btn">Shipping</button>
+      </div>
+      <div class="detail-workspace" id="workspace" data-rail-side="left">
+
+        <!-- ══ THE RAIL ══ -->
+        <aside class="detail-rail">
+          <button class="add-list-btn" onclick="void 0">+ ADD JOB DETAIL</button>
+
+          <div class="widget">
+            <div class="widget-section">
+              <div class="widget-section-header">
+                <span class="widget-section-label">Proofing Contacts</span>
+                <button class="icon-btn" title="Manage job contacts"><i class="fa-regular fa-pen"></i></button>
+              </div>
+              <p class="widget-section-description">Click to copy</p>
+              <div class="copy-wrap" title="Click to copy">
+                <span class="pc-email-string-text">rreyes@omnihotels.com</span>
+              </div>
+              <div class="copy-wrap" title="Click to copy">
+                <span class="pc-email-string-text">kati.anderson@omnihotels.com</span>
+              </div>
+            </div>
+
+            <div class="widget-section">
+              <div class="widget-section-header">
+                <span class="widget-section-label">MenuMaker Details</span>
+                <a href="#" class="icon-btn" style="text-decoration:none"><i class="fa-regular fa-arrow-up-right"></i></a>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile"><span class="spec-tile-label">Order Number</span><span class="spec-tile-value">19860</span></div>
+                <div class="spec-tile"><span class="spec-tile-label">Menu Number</span><span class="spec-tile-value">14604</span></div>
+              </div>
+            </div>
+
+            <div class="widget-section">
+              <div class="widget-section-header">
+                <span class="widget-section-label">General Notes</span>
+                <button class="icon-btn" title="Manage notes"><i class="fa-regular fa-pen"></i></button>
+              </div>
+              <div class="widget-notes">
+                <div class="widget-note-item">
+                  <span class="widget-note-num">(1)</span>
+                  <p class="widget-note-text">Take copy from InDesign document generated by MenuMaker and format it into the property's current menu design. Do not overwrite original file since these are temporary menus. Proof to property then to corporate team for final approval.</p>
+                </div>
+                <div class="widget-note-item">
+                  <span class="widget-note-num">(2)</span>
+                  <p class="widget-note-text">Job created by AutoJobs for New System Order #19860 on 7/22/2021 2:38:05 PM using generic conversion process.</p>
+                </div>
+                <div class="widget-note-item">
+                  <span class="widget-note-num">(3)</span>
+                  <p class="widget-note-text">Online Go Live Date: 07/21/2021</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ══ CARD FIELD ══ -->
+        <div class="detail-cards" id="cards"></div>
+
+      </div>
+     </div>
+     <div class="proto-filler">scroll space &mdash; prototype only</div>
+    </div>
+  </div>
+
+<script>
+const DETAILS = [
+  { title: 'Rockboard Lobby Bar Menu Covers - Satchel Brown',
+    notes: ['We will be using Omni logo with "Battery Atlanta"',
+            'Rockboard front & back panels, Majilite spine one ribbon board inside left panel to hold one 7 x 7" insert. Spine has a menu cord that will hold two 14 x 7" scored inserts.'],
+    general: [['Quantity','50'],['Number of Panels','2'],['Number of Sides','menu cord'],['Menu Size','7.5 x 8.25'],['Insert Size','7 x 7" / 14" x 7"']],
+    paper: [['Type','Rockboard: Timber'],['Weight','Majilite: Satchel Brown']],
+    print: null, bindery: [['Laser Engrave','—'],['Cords','—']], boards: null },
+  { title: 'Bar Menu Boards Notched On The Left Side Only',
+    notes: [],
+    general: [['Quantity','140'],['Number of Panels','1'],['Number of Sides','0'],['Menu Size','6.75 x 9.75'],['Insert Size','6 x 9 folded']],
+    paper: [['Type','Masonite']], print: null, bindery: null, boards: null },
+  { title: 'Weaver Dark Brown Leather Lace Tighted Tight In The Notch',
+    notes: [],
+    general: [['Quantity','140'],['Number of Panels','1'],['Number of Sides','0']],
+    paper: [['Type','Latigo Lace'],['Weight','30-1836'],['Other','Weaver'],['Color','Dark Brown']],
+    print: null, bindery: null, boards: null },
+  { title: 'Mangia Mangia Promo Posters All New',
+    notes: ['Set-up for new pricing for each hotel for both the food & wine prices.'],
+    general: [['Quantity','12'],['Number of Panels','1'],['Number of Sides','1'],['Menu Size','20 X 28']],
+    paper: [['Size','20 x 28'],['Weight','columbia sussex'],['Color','Mangia Mangia posters']],
+    print: null, bindery: null, boards: null },
+  { title: '6 Panel 1 Color Carry Out Menu',
+    notes: ['Use text and pricing from job #123455','Take drinks off of the carryout menus'],
+    general: [['Quantity','52500'],['Number of Panels','3'],['Number of Sides','2'],['Menu Size','13.625 X 7.5']],
+    paper: [['Size','28 x 18'],['Type','finch opaque'],['Weight','70# text'],['Color','white']],
+    print: [['Folded','—']], bindery: null, boards: null },
+  { title: '#106 Black Rubber Bands - 500 Per Pack',
+    notes: [],
+    general: [['Quantity','500'],['Number of Sides','0']],
+    paper: null, print: null, bindery: null, boards: null },
+];
+
+const tiles = rows => `<div class="spec-tiles">${rows.map(([l,v]) =>
+  `<div class="spec-tile"><span class="spec-tile-label">${l}</span><span class="spec-tile-value">${v}</span></div>`).join('')}</div>`;
+
+const section = (title, rows, emptyMsg) => rows
+  ? `<div class="detail-section"><div class="detail-fields">
+       <div class="detail-section-header"><i class="fa-regular fa-circle-check detail-section-icon"></i><span class="detail-section-title">${title}</span></div>
+       ${tiles(rows)}</div></div>`
+  : `<div class="detail-section"><div class="detail-empty-prompt"><i class="fa-regular fa-circle-minus"></i><span>${emptyMsg}</span></div></div>`;
+
+const card = (d, i) => `
+  <div class="detail-card">
+    <div class="detail-card-header">
+      <div class="detail-card-title"><span class="detail-num">${i+1}</span>${d.title}</div>
+      <div class="detail-card-actions">
+        <button class="icon-btn" title="Edit detail"><i class="fa-regular fa-pen"></i></button>
+        <button class="icon-btn" title="Remove detail"><i class="fa-regular fa-trash-can"></i></button>
+      </div>
+    </div>
+    <div class="detail-card-body">
+      ${d.notes.length ? `<div class="detail-card-notes">${d.notes.map((n,k)=>
+        `<div class="widget-note-item"><span class="widget-note-num">(${k+1})</span><p class="widget-note-text">${n}</p></div>`).join('')}</div>` : ''}
+      ${section('General', d.general, 'No general info specified.')}
+      ${section('Paper', d.paper, 'No paper info specified.')}
+      ${section('Print Finishing', d.print, 'No print finishing specified.')}
+      ${section('Bindery Finishing', d.bindery, 'No bindery finishing specified.')}
+      ${section('Interior Boards', d.boards, 'No interior boards specified.')}
+    </div>
+  </div>`;
+
+function setCount(n, btn) {
+  document.getElementById('cards').innerHTML =
+    Array.from({length:n}, (_,i) => card(DETAILS[i % DETAILS.length], i)).join('');
+  press(btn);
+}
+function setSide(side, btn) { document.getElementById('workspace').dataset.railSide = side; press(btn); }
+function setAlign(a, btn) { document.getElementById('page').dataset.headerAlign = a; press(btn); }
+function setRail(w, btn) { document.documentElement.style.setProperty('--rail-width', w); press(btn); }
+function press(btn) {
+  btn.parentElement.querySelectorAll('.proto-btn').forEach(b => b.setAttribute('aria-pressed','false'));
+  btn.setAttribute('aria-pressed','true');
+}
+setCount(1, document.querySelector('.proto-bar .proto-group:nth-child(2) .proto-btn'));
+</script>
+</body>
+</html>

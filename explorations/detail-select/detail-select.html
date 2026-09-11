@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exploration — Detail Select</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/job-header/job-header.css" />
+  <link rel="stylesheet" href="../../components/production-tab/production-tab.css" />
+  <link rel="stylesheet" href="detail-select.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+
+  <div class="ds-page">
+
+    <!-- ══ JOB HEADER (components/job-header) ══════════════════════ -->
+    <div class="header-wrap">
+      <div class="job-header-bar">
+        <p class="pill">Status: Bindery on Cart</p>
+
+        <!-- Full-size: the actions sit in the bar -->
+        <div class="job-actions-right">
+          <button class="btn-secondary">Send to Trello</button>
+          <button class="btn-primary"><i class="fa-regular fa-copy"></i> Duplicate Job</button>
+          <button class="btn-primary"><i class="fa-regular fa-print"></i> Print Ticket</button>
+        </div>
+
+        <!-- Small screens: every action moves into a full-screen sheet -->
+        <button class="icon-btn ds-menu-btn" aria-label="Job actions" aria-expanded="false"
+          onclick="dsOpenMenu()">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="job-header-card">
+        <div class="inner-row inner-row-col">
+          <div class="job-header-top">
+            <h6 class="job-title-row">
+              <span>232323</span>
+              <span>2018 Standard Menu Single Fold Jan 2018 Ws</span>
+            </h6>
+            <button class="icon-btn" title="Edit job information"><i class="fa-solid fa-pen"></i></button>
+          </div>
+          <p class="job-meta type-body-md semibold"><span>New Job</span> • <span>Printing</span></p>
+          <p class="job-meta type-body-sm">Last Modified by Healey Pembridge on 3/03/25</p>
+        </div>
+        <div class="inner-row border-top">
+          <div class="job-actions">
+            <button class="btn-secondary">Manage Notes</button>
+            <button class="btn-secondary">Manage Job Contacts</button>
+            <button class="btn-secondary">View Activity Log</button>
+            <button class="btn-secondary">View Billing Details</button>
+          </div>
+          <div class="acct-team">
+            <div class="avatar-group"><div class="avatar" style="background:#d8e2fb">JP</div><div class="avatar-label type-body-sm">Sales</div></div>
+            <div class="avatar-group"><div class="avatar" style="background:#e8fbd4">SC</div><div class="avatar-label type-body-sm">Billing</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TABS ══ -->
+    <div class="tabs">
+      <button class="tab-btn active">Production</button>
+      <button class="tab-btn">Shipping</button>
+    </div>
+
+    <!-- ══ JOB-LEVEL GENERAL NOTES — apply to the whole job, so they sit
+         above the workspace rather than inside the detail card ══════ -->
+    <div class="ds-job-notes">
+      <div class="ds-job-notes-header">
+        <span class="ds-section-label">General Notes</span>
+        <button class="icon-btn" title="Manage notes"><i class="fa-regular fa-pen"></i></button>
+      </div>
+      <div class="widget-notes">
+        <div class="widget-note-item">
+          <span class="widget-note-num">(1)</span>
+          <p class="widget-note-text">Send a "Zero" proof of the Alchamey menu inserts for hotels to update their
+            content. Send PDF proof to hotel for approval, then once approved send to Megan and Josh.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ WORKSPACE — master list rail + single detail pane ══════ -->
+    <div class="ds-workspace" id="ds-workspace">
+
+      <!-- ── RAIL: job context widgets, then the detail list ── -->
+      <aside class="ds-rail">
+
+        <!-- Proofing Contacts -->
+        <div class="ds-rail-widget">
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">Proofing Contacts</span>
+              <button class="icon-btn" title="Manage job contacts"><i class="fa-regular fa-pen"></i></button>
+            </div>
+            <p class="widget-section-description">Click to copy</p>
+            <div class="copy-wrap" title="Click to copy">
+              <span class="pc-email-string-text">d.kovach@marriott.com, dainamo@gmail.com, m.trevino@marriott.com</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MenuMaker Details -->
+        <div class="ds-rail-widget">
+          <div class="widget-section">
+            <div class="widget-section-header">
+              <span class="widget-section-label">MenuMaker Details</span>
+              <button class="icon-btn" title="Open in MenuMaker"><i class="fa-regular fa-arrow-up-right-from-square"></i></button>
+            </div>
+            <div class="spec-tiles">
+              <div class="spec-tile">
+                <span class="spec-tile-label">Order Number</span>
+                <span class="spec-tile-value">49054</span>
+              </div>
+              <div class="spec-tile">
+                <span class="spec-tile-label">Menu Number</span>
+                <span class="spec-tile-value">55035</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail list — the master list -->
+        <div class="ds-list" id="ds-list">
+          <div class="ds-list-header">
+            <span class="ds-section-label">Job Details</span>
+            <span class="ds-list-count" id="ds-list-count">3</span>
+          </div>
+
+          <button class="ds-list-item active has-content" data-detail="1" onclick="dsSelectDetail(1, this)">
+            <span class="ds-list-item-num">1</span>
+            <span class="ds-list-item-name">Folder</span>
+            <span class="ds-list-item-dot"></span>
+          </button>
+
+          <button class="ds-list-item has-content" data-detail="2" onclick="dsSelectDetail(2, this)">
+            <span class="ds-list-item-num">2</span>
+            <span class="ds-list-item-name">Cover</span>
+            <span class="ds-list-item-dot"></span>
+          </button>
+
+          <button class="ds-list-item has-content" data-detail="3" onclick="dsSelectDetail(3, this)">
+            <span class="ds-list-item-num">3</span>
+            <span class="ds-list-item-name">Insert Sheet</span>
+            <span class="ds-list-item-dot"></span>
+          </button>
+
+          <button class="add-list-btn" onclick="dsAddDetail()">+ ADD JOB DETAIL</button>
+        </div>
+
+      </aside><!-- /.ds-rail -->
+
+      <!-- ── PANE: only the selected detail ── -->
+      <div class="ds-pane" id="ds-pane">
+
+        <!-- ══ Detail 1 ══════════════════════════════════════════════
+             Each panel is: head (number, name, actions, this detail's
+             notes) · sections side by side · what is not specified.
+        ═════════════════════════════════════════════════════════════ -->
+        <div class="ds-pane-panel active" data-panel="1">
+
+          <div class="ds-detail-head">
+            <div class="ds-detail-head-row">
+              <span class="ds-pane-title">
+                <span class="detail-num">1</span>
+                Folder
+              </span>
+              <div class="ds-pane-actions">
+                <button class="icon-btn" title="Edit detail"><i class="fa-regular fa-pen"></i></button>
+                <button class="icon-btn" title="Remove detail"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </div>
+            <div class="ds-detail-notes">
+              <div class="widget-note-item">
+                <span class="widget-note-num">(1)</span>
+                <p class="widget-note-text">Confirm durapoly stock availability with vendor before going to press.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sections run side by side; each column is one section -->
+          <div class="ds-sections">
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">General</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Quantity</span>
+                  <span class="spec-tile-value">300</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Number of Panels</span>
+                  <span class="spec-tile-value">1</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Number of Sides</span>
+                  <span class="spec-tile-value">2</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">Paper</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Size</span>
+                  <span class="spec-tile-value">13 x 19</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Type</span>
+                  <span class="spec-tile-value">Durapoly</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Weight</span>
+                  <span class="spec-tile-value">14pt</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Color</span>
+                  <span class="spec-tile-value">White</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">Print Finishing</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Lamination Thickness</span>
+                  <span class="spec-tile-value">1.2 MIL</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">UV Coat</span>
+                  <span class="spec-tile-value">Matte</span>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Perf</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Scored</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Folded</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Drill</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.ds-sections -->
+
+          <!-- Everything this detail has no entry for, in one line -->
+          <div class="detail-empty-prompt ds-empty-summary">
+            <i class="fa-regular fa-circle-minus"></i>
+            <span>No bindery finishing or interior boards specified.</span>
+          </div>
+        </div><!-- /panel 1 -->
+
+        <!-- ══ Detail 2 ══ -->
+        <div class="ds-pane-panel" data-panel="2">
+
+          <div class="ds-detail-head">
+            <div class="ds-detail-head-row">
+              <span class="ds-pane-title">
+                <span class="detail-num">2</span>
+                Cover
+              </span>
+              <div class="ds-pane-actions">
+                <button class="icon-btn" title="Edit detail"><i class="fa-regular fa-pen"></i></button>
+                <button class="icon-btn" title="Remove detail"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ds-sections">
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">General</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Quantity</span>
+                  <span class="spec-tile-value">300</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Number of Panels</span>
+                  <span class="spec-tile-value">2</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">Bindery Finishing</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Emboss</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Binding Type</span>
+                  <span class="spec-tile-value">Sewn</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.ds-sections -->
+
+          <div class="detail-empty-prompt ds-empty-summary">
+            <i class="fa-regular fa-circle-minus"></i>
+            <span>No paper info, print finishing or interior boards specified.</span>
+          </div>
+        </div><!-- /panel 2 -->
+
+        <!-- ══ Detail 3 — every section specified (worst case for the grid) ══ -->
+        <div class="ds-pane-panel" data-panel="3">
+
+          <div class="ds-detail-head">
+            <div class="ds-detail-head-row">
+              <span class="ds-pane-title">
+                <span class="detail-num">3</span>
+                Insert Sheet
+              </span>
+              <div class="ds-pane-actions">
+                <button class="icon-btn" title="Edit detail"><i class="fa-regular fa-pen"></i></button>
+                <button class="icon-btn" title="Remove detail"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </div>
+            <div class="ds-detail-notes">
+              <div class="widget-note-item">
+                <span class="widget-note-num">(1)</span>
+                <p class="widget-note-text">Board wrap must match the cover stock — pull the approved sample from
+                  the last run before starting.</p>
+              </div>
+              <div class="widget-note-item">
+                <span class="widget-note-num">(2)</span>
+                <p class="widget-note-text">Round corners on the inserts only; boards stay square.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="ds-sections">
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">General</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Quantity</span>
+                  <span class="spec-tile-value">1,200</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Number of Panels</span>
+                  <span class="spec-tile-value">4</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Number of Sides</span>
+                  <span class="spec-tile-value">2</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Menu Size</span>
+                  <span class="spec-tile-value">8.5 x 14</span>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Show Pre-Press Box</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">Paper</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Size</span>
+                  <span class="spec-tile-value">13 x 19</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Type</span>
+                  <span class="spec-tile-value">Cougar Opaque</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Weight</span>
+                  <span class="spec-tile-value">100# Cover</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Color</span>
+                  <span class="spec-tile-value">Natural</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Grain</span>
+                  <span class="spec-tile-value">Long</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">Print Finishing</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Lamination Thickness</span>
+                  <span class="spec-tile-value">3 MIL</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">UV Coat</span>
+                  <span class="spec-tile-value">Gloss</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Round Corner Size</span>
+                  <span class="spec-tile-value">1/4"</span>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Perf</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Drill</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Scored</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Collated</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Round Corners</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">Bindery Finishing</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Decoration Color</span>
+                  <span class="spec-tile-value">Matte Gold</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Binding Type</span>
+                  <span class="spec-tile-value">Sewn</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Thread Color</span>
+                  <span class="spec-tile-value">Black</span>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Emboss</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+                <div class="spec-tile spec-tile-check">
+                  <span class="spec-tile-label">Flat Stamp</span>
+                  <i class="fa-solid fa-check spec-tile-check-icon"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-section-header">
+                <i class="fa-regular fa-circle-check detail-section-icon"></i>
+                <span class="detail-section-title">Interior Boards</span>
+              </div>
+              <div class="spec-tiles">
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Board Size</span>
+                  <span class="spec-tile-value">9 x 15</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Board Thickness</span>
+                  <span class="spec-tile-value">120pt</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Insert Size 1</span>
+                  <span class="spec-tile-value">8.5 x 14</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Insert Size 2</span>
+                  <span class="spec-tile-value">8.5 x 11</span>
+                </div>
+                <div class="spec-tile">
+                  <span class="spec-tile-label">Special Instructions</span>
+                  <span class="spec-tile-value">Wrap boards in cover stock</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.ds-sections -->
+        </div><!-- /panel 3 -->
+
+      </div><!-- /.ds-pane -->
+    </div><!-- /.ds-workspace -->
+  </div><!-- /.ds-page -->
+
+  <!-- ══ MOBILE ACTIONS SHEET — full screen, small viewports only ══════
+       Holds every action from the header bar and the job card, so the
+       card itself carries none of them below 620px.
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="ds-menu-sheet" id="ds-menu-sheet" hidden>
+    <div class="ds-menu-sheet-header">
+      <span class="ds-menu-sheet-title">232323 &middot; Job Actions</span>
+      <button class="icon-btn" aria-label="Close menu" onclick="dsCloseMenu()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="ds-menu-sheet-body">
+      <span class="ds-section-label">Job</span>
+      <button class="ds-menu-item"><i class="fa-regular fa-copy"></i> Duplicate Job</button>
+      <button class="ds-menu-item"><i class="fa-regular fa-print"></i> Print Ticket</button>
+      <button class="ds-menu-item"><i class="fa-regular fa-arrow-up-right-from-square"></i> Send to Trello</button>
+      <button class="ds-menu-item"><i class="fa-solid fa-pen"></i> Edit Job Information</button>
+
+      <span class="ds-section-label">Manage</span>
+      <button class="ds-menu-item"><i class="fa-regular fa-note-sticky"></i> Manage Notes</button>
+      <button class="ds-menu-item"><i class="fa-regular fa-address-book"></i> Manage Job Contacts</button>
+      <button class="ds-menu-item"><i class="fa-regular fa-clock-rotate-left"></i> View Activity Log</button>
+      <button class="ds-menu-item"><i class="fa-regular fa-file-invoice-dollar"></i> View Billing Details</button>
+    </div>
+  </div>
+
+  <script src="detail-select.js"></script>
+
+  <!-- ══ IMPLEMENTATION NOTES ═══════════════════════════════════════════
+       Components
+         JobHeader          → .header-wrap markup (components/job-header, unchanged)
+         DetailRail         → .ds-rail markup · .ds-rail / .ds-rail-widget styles
+         DetailList         → .ds-list markup · .ds-list-item styles (master list;
+                              .active is the selected detail, .has-content drives the dot)
+         DetailPane         → .ds-pane markup · .ds-pane / .ds-pane-panel styles
+                              (sections reuse .detail-section / .spec-tiles from
+                              components/production-tab/production-tab.css)
+         SpecTileCheck      → .spec-tile.spec-tile-check — new variant for an
+                              operation that is simply on (label + check)
+
+       Simulated with JS (becomes Angular state / bindings)
+         · dsSelectDetail() swaps .active between list items and panes → selected-detail
+           signal + @if / @switch in the template.
+         · One .ds-pane-panel per detail is written out statically here; in Angular
+           this is a single template bound to the selected detail, not N panels.
+         · dsAddDetail() is a prototype convenience only.
+         · dsOpenMenu() / dsCloseMenu() drive the full-screen actions sheet
+           (.ds-menu-sheet), which under 620px carries every action from the
+           header bar AND the job card — the card shows none of them there.
+
+       Layout decisions
+         · General Notes is job-level, so it sits on the page above the workspace —
+           outside the detail card entirely.
+         · A detail reads top to bottom: head (number, name, actions, its own notes) →
+           sections side by side, one column each → one line for everything it has no
+           entry for (.ds-empty-summary), closing the card.
+         · The section grid balances itself: 12 tracks, and each section spans a
+           share based on how many there are (1/2/3/4 across, and 2-on-top /
+           3-on-bottom for five), so the last row never leaves an orphan column.
+           Done with :has() quantity queries in detail-select.css — no JS.
+
+       Open question
+         · Does the rail need section status per detail, or is one dot enough?
+  ═══════════════════════════════════════════════════════════════════ -->
+
+</body>
+
+</html>

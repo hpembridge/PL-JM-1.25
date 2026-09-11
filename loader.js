@@ -37,6 +37,7 @@
     'modals/ship-edit-modal/ship-edit-modal.js',
     'modals/ship-delete-confirm-modal/ship-delete-confirm-modal.js',
     'modals/ship-settings-modal/ship-settings-modal.js',
+    'modals/duplicate-job-modal/duplicate-job-modal.js',
   ];
 
   // Replace one placeholder with the <body> contents of its component file.
