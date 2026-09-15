@@ -69,6 +69,21 @@
   <script src="shared/components/sidebar-component.js"></script>
   <script src="dashboard-jobs.js"></script>
   <script src="dashboard-loader.js"></script>
+  <script>
+    // ── Deep link: ?open=createJob | createCustomer auto-opens a modal ──
+    // Used by the "Create Jobs and Customers" index page. dashboard-loader.js
+    // re-fires DOMContentLoaded once the modal includes/scripts are in, so
+    // this listener (added before that happens) checks again once they're
+    // actually available.
+    document.addEventListener('DOMContentLoaded', function () {
+      const action = new URLSearchParams(window.location.search).get('open');
+      if (action === 'createJob' && typeof openCreateJob === 'function') {
+        openCreateJob();
+      } else if (action === 'createCustomer' && typeof openCreateCustomer === 'function') {
+        openCreateCustomer();
+      }
+    });
+  </script>
   <!-- ══ IMPLEMENTATION NOTES ═══════════════════════════════════════════
        Components
          Sidebar          → shared/components/sidebar-component.js (PL-shared)

@@ -96,6 +96,19 @@
   <div class="toast" id="toast">Detail saved</div>
 
   <script src="loader.js"></script>
+  <script>
+    // ── Deep link: ?open=duplicateJob auto-opens the modal on load ──
+    // Used by the "Create Jobs and Customers" index page. loader.js
+    // re-fires DOMContentLoaded once the modal includes/scripts are in, so
+    // this listener (added before that happens) checks again once it's
+    // actually available.
+    document.addEventListener('DOMContentLoaded', function () {
+      const action = new URLSearchParams(window.location.search).get('open');
+      if (action === 'duplicateJob' && typeof openDuplicateJob === 'function') {
+        openDuplicateJob();
+      }
+    });
+  </script>
 </body>
 
 </html>
