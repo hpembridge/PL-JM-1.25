@@ -19,6 +19,7 @@ const DUPLICATE_JOB_DEFINITION = {
     // { id: 'detail-2', name: 'Cover', quantity: 500, sections: ['general', 'print'] }
   ],
   productionType: 'printing',
+  customer: { number: '13730', name: 'Pizza Hut AIGP' },
   jobContacts: {
     proofs: ['d.kovach@marriott.com', 'dainamo@gmail.com', 'm.trevino@marriott.com'],
     invoices: ['ap@marriottboston.com', 'invoices@marriott-intl.com'],
@@ -31,6 +32,15 @@ const DUPLICATE_JOB_DEFINITION = {
   }
 };
 
+// Customers the picker can find (mock directory)
+const DJ_CUSTOMERS = [
+  { number: '13730', name: 'Pizza Hut AIGP' },
+  { number: '2030', name: 'Pizza Hut Corporation' },
+  { number: '21372', name: 'D A R ( Coltons Management Group )' },
+  { number: '18440', name: 'Marriott Downtown Cleveland' },
+  { number: '9921', name: 'Omni Hotels & Resorts' },
+];
+
 // Job Type descriptions (Production step)
 const DUPLICATE_JOB_TYPE_DESC = {
   '': '',
@@ -41,7 +51,13 @@ const DUPLICATE_JOB_TYPE_DESC = {
   'replacement': 'Replace a previously produced product.'
 };
 
-const DJ_STEPS = ['content', 'production', 'contacts', 'billing'];
+const DJ_ALL_STEPS = ['content', 'production', 'contacts', 'billing'];
+const DJ_CREATE_STEPS = ['production', 'contacts', 'billing'];
+
+// Which steps this run of the modal uses — Duplicate Job has the Content
+// step, Create New Job does not (there is nothing to copy from).
+let DJ_STEPS = DJ_ALL_STEPS;
+let djMode = 'duplicate';
 const DJ_DETAIL_SECTIONS = ['general', 'paper', 'print', 'bindery', 'boards'];
 
 // ══ Steps ════════════════════════════════════════════════════════════
@@ -161,7 +177,9 @@ function djInitCopyListEvents() {
 function djOnJobTypeChange(select) {
   const desc = document.getElementById('dj-job-type-desc');
   if (desc) desc.textContent = DUPLICATE_JOB_TYPE_DESC[select.value] || '';
-  djTouched.add('dj-job-type');
+  // Only a real change from the user counts as touching the field — opening
+  // the modal resets it through here too, and that should not show an error.
+  if (select instanceof HTMLElement) djTouched.add('dj-job-type');
   djValidate();
 }
 
@@ -194,12 +212,18 @@ function djApplyPrefill() {
   // above it for reference only.
   const source = document.getElementById('dj-source-description');
   if (source) source.textContent = job.description || '—';
+  document.querySelector('.dj-source-description')?.classList.remove('hidden-section');
   set('dj-description', '');
 
   // Billing information
   set('dj-po-number', djIsCopied('billing.poNumber') ? job.billing.poNumber : '');
   set('dj-po-name', djIsCopied('billing.poName') ? job.billing.poName : '');
   set('dj-billing-note', djIsCopied('notes.billing') ? job.billing.note : '');
+
+  // The customer comes across only while job contacts are being copied;
+  // setting it clears any recipients, so the channels are seeded after.
+  const keepingContacts = ['contacts.proofing', 'contacts.billing', 'contacts.shipping'].some(djIsCopied);
+  djSetCustomer(keepingContacts ? job.customer : null);
 
   // Job contacts — one copy row per channel
   const channelRow = { proofs: 'contacts.proofing', invoices: 'contacts.billing', shipping: 'contacts.shipping' };
@@ -245,11 +269,13 @@ const djTouched = new Set();
 function djValidate() {
   const invalid = { content: [], production: [], contacts: [], billing: [] };
 
-  // Content: at least one thing has to be selected to copy
-  const copyOk = djAnyCopySelected();
-  if (!copyOk) invalid.content.push('copy-list');
-  document.getElementById('dj-copy-error')
-    ?.classList.toggle('hidden-section', copyOk || !djTouched.has('content'));
+  // Content: at least one thing has to be selected to copy (duplicate only)
+  if (DJ_STEPS.includes('content')) {
+    const copyOk = djAnyCopySelected();
+    if (!copyOk) invalid.content.push('copy-list');
+    document.getElementById('dj-copy-error')
+      ?.classList.toggle('hidden-section', copyOk || !djTouched.has('content'));
+  }
 
   Object.entries(DJ_REQUIRED).forEach(([step, ids]) => {
     ids.forEach(id => {
@@ -263,6 +289,11 @@ function djValidate() {
       if (!ok) invalid[step].push(id);
     });
   });
+
+  // A customer has to be chosen before the job can be created
+  if (!djCustomer) invalid.contacts.push('customer');
+  document.getElementById('dj-customer-error')
+    ?.classList.toggle('hidden-section', !!djCustomer || !djTouched.has('contacts'));
 
   // At least one detail with a non-zero quantity (negatives are valid)
   const quantities = [...document.querySelectorAll('.dj-detail-quantity')];
@@ -323,6 +354,99 @@ function djBack() {
   const i = DJ_STEPS.indexOf(djCurrentStep());
   if (i > 0) djRequestStep(DJ_STEPS[i - 1]);
 }
+
+// ══ Customer picker (Job Contacts step) ═════════════════════════════
+// Empty on a new job. On a duplicate it carries the original's customer
+// while Job Contacts is being copied, and clears when that is unchecked.
+let djCustomer = null;
+let djCustomerMatches = [];
+let djCustomerHighlight = -1;
+
+function djSetCustomer(customer) {
+  const previous = djCustomer;
+  djCustomer = customer;
+
+  // Recipients belong to a customer, so they only make sense once one is
+  // chosen — and anything picked for a different customer is dropped.
+  if (!customer || previous?.number !== customer.number) djcClearAll();
+  djcSetPickersEnabled(!!customer);
+
+  const chosen = !!customer;
+  document.getElementById('dj-customer-selected')?.classList.toggle('hidden-section', !chosen);
+  document.getElementById('dj-customer-search')?.classList.toggle('hidden-section', chosen);
+
+  if (chosen) {
+    document.getElementById('dj-customer-number').textContent = customer.number;
+    document.getElementById('dj-customer-name').textContent = customer.name;
+  }
+
+  const input = document.getElementById('dj-customer-input');
+  if (input) input.value = '';
+  djCloseCustomerDropdown();
+  djValidate();
+}
+
+function djClearCustomer() {
+  djSetCustomer(null);
+  document.getElementById('dj-customer-input')?.focus();
+}
+
+function djCustomerInput(val) {
+  const q = val.trim().toLowerCase();
+  djCustomerMatches = DJ_CUSTOMERS.filter(c =>
+    !q || c.number.includes(q) || c.name.toLowerCase().includes(q));
+  djCustomerHighlight = djCustomerMatches.length ? 0 : -1;
+  djRenderCustomerDropdown();
+}
+
+function djRenderCustomerDropdown() {
+  const dd = document.getElementById('dj-customer-dropdown');
+  if (!dd) return;
+
+  dd.innerHTML = djCustomerMatches.length
+    ? djCustomerMatches.map((c, i) =>
+        '<div class="jc-dd-row' + (i === djCustomerHighlight ? ' highlighted' : '') + '"' +
+        ' data-idx="' + i + '" onmousedown="djPickCustomer(' + i + ')">' +
+          '<span class="jc-dd-row-name">' + c.number + '</span>' +
+          '<span class="jc-dd-row-email">' + c.name + '</span>' +
+        '</div>').join('')
+    : '<div class="jc-dd-empty">No customers found</div>';
+
+  dd.classList.remove('hidden-section');
+}
+
+function djCloseCustomerDropdown() {
+  document.getElementById('dj-customer-dropdown')?.classList.add('hidden-section');
+  djCustomerMatches = [];
+  djCustomerHighlight = -1;
+}
+
+function djPickCustomer(idx) {
+  const hit = djCustomerMatches[idx];
+  if (hit) djSetCustomer(hit);
+}
+
+function djCustomerKeydown(e) {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (djCustomerHighlight < djCustomerMatches.length - 1) djCustomerHighlight++;
+    djRenderCustomerDropdown();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (djCustomerHighlight > 0) djCustomerHighlight--;
+    djRenderCustomerDropdown();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (djCustomerHighlight >= 0) djPickCustomer(djCustomerHighlight);
+  } else if (e.key === 'Escape') {
+    djCloseCustomerDropdown();
+  }
+}
+
+document.addEventListener('mousedown', e => {
+  const wrap = document.getElementById('dj-customer-search');
+  if (wrap && !wrap.contains(e.target)) djCloseCustomerDropdown();
+});
 
 // ══ Job Contacts step ════════════════════════════════════════════════
 // Same token-field picker as modals/proof-contacts-modal, scoped to this
@@ -432,6 +556,27 @@ function djcRemove(channel, email) {
   djcRenderList(channel);
 }
 
+// Recipient fields are only usable once a customer is chosen.
+function djcSetPickersEnabled(enabled) {
+  DJC_CHANNELS.forEach(channel => {
+    const field = djcEl(channel, '.jc-field');
+    const input = djcEl(channel, '.jc-search');
+    field?.classList.toggle('jc-field-disabled', !enabled);
+    if (input) {
+      input.disabled = !enabled;
+      input.placeholder = enabled ? 'Add a recipient…' : 'Choose a customer first';
+    }
+    if (!enabled) djcCloseDropdown(channel);
+  });
+}
+
+function djcClearAll() {
+  DJC_CHANNELS.forEach(channel => {
+    djcSelected[channel] = [];
+    djcRenderList(channel);
+  });
+}
+
 function djcRenderList(channel) {
   const chips = djcEl(channel, '.jc-chips');
   if (!chips) return;
@@ -454,16 +599,70 @@ function djcRenderList(channel) {
   if (count) count.textContent = emails.length + ' ADDRESS' + (emails.length === 1 ? '' : 'ES');
 }
 
-// ══ Open / create ════════════════════════════════════════════════════
-function openDuplicateJob() {
+// ══ Open ═════════════════════════════════════════════════════════════
+// Shared setup for both modes: reset touched state, clear the job type and
+// show only the steps this mode uses.
+function djSetMode(mode) {
+  djMode = mode;
+  DJ_STEPS = mode === 'create' ? DJ_CREATE_STEPS : DJ_ALL_STEPS;
+
+  const isCreate = mode === 'create';
+  document.getElementById('dj-modal-title').textContent = isCreate ? 'Create New Job' : 'Duplicate Job';
+  document.getElementById('dj-step-content')?.classList.toggle('hidden-section', isCreate);
+  document.getElementById('dj-panel-content')?.classList.toggle('hidden-section', isCreate);
+
   djTouched.clear();
-  djBuildCopyList();
+
+  // Creating from scratch is a New Job by definition, so that is the default;
+  // duplicating leaves it unchosen, since the whole point is picking how the
+  // new job relates to the original.
   const jobType = document.getElementById('dj-job-type');
-  if (jobType) jobType.value = '';
-  djOnJobTypeChange({ value: '' });
+  const value = isCreate ? 'new' : '';
+  if (jobType) jobType.value = value;
+  djOnJobTypeChange({ value });
+}
+
+function openDuplicateJob() {
+  djSetMode('duplicate');
+  djBuildCopyList();
   djApplyPrefill();
   djGoToStep('content');
   openModal('duplicateJob');
+}
+
+// Create New Job — same modal, no Content step and nothing prefilled.
+function openCreateJob() {
+  djSetMode('create');
+  djClearFields();
+  djGoToStep('production');
+  openModal('duplicateJob');
+}
+
+function djClearFields() {
+  ['dj-description', 'dj-po-number', 'dj-po-name', 'dj-billing-note', 'dj-production-type']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+
+  const source = document.getElementById('dj-source-description');
+  if (source) source.textContent = '';
+  document.querySelector('.dj-source-description')?.classList.add('hidden-section');
+
+  djSetCustomer(null);
+
+  DJC_CHANNELS.forEach(channel => {
+    djcSelected[channel] = [];
+    djcRenderList(channel);
+  });
+
+  const rows = document.getElementById('dj-detail-rows');
+  if (rows) {
+    const row = rows.firstElementChild.cloneNode(true);
+    row.querySelector('.dj-detail-num').textContent = 1;
+    row.querySelectorAll('input').forEach(i => (i.value = ''));
+    rows.innerHTML = '';
+    rows.appendChild(row);
+  }
+
+  djValidate();
 }
 
 function djCreate() {

@@ -250,3 +250,95 @@
   font-size: var(--fontsize-body-sm);
   color: var(--text-primary);
 }
+
+/* ── Customer picker (Job Contacts step) ──
+   A search field until a customer is chosen, then one row showing which
+   customer the job belongs to. */
+
+.dj-customer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dj-customer-label {
+  font-size: var(--fontsize-label);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+.dj-customer-search {
+  position: relative;
+}
+
+.dj-customer-search > i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
+.dj-customer-search .form-input {
+  padding-left: 34px;
+}
+
+/* The chosen customer */
+
+.dj-customer-selected {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-surface);
+}
+
+.dj-customer-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.dj-customer-number {
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.dj-customer-name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dj-customer-clear {
+  flex-shrink: 0;
+}
+
+/* Recipient fields are inert until a customer is chosen */
+
+.jc-field-disabled {
+  background: var(--bg-muted);
+  cursor: not-allowed;
+}
+
+.jc-field-disabled .jc-search {
+  cursor: not-allowed;
+}

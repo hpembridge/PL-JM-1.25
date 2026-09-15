@@ -1,0 +1,184 @@
+/* ══════════════════════════════════════════════════════════════
+   CREATE NEW CUSTOMER MODAL
+   Step chrome comes from duplicate-job-modal.css (.dj-steps /
+   .dj-panel / .dj-footer). The rules below are the form pieces the
+   reused Contact and Address bodies need — lifted from
+   PL-CM-1.5/customer-management.css so those forms look the same
+   here as they do in customer maintenance.
+   ══════════════════════════════════════════════════════════════ */
+
+.cc-body {
+  gap: 0;
+}
+
+.cc-body .dj-panel {
+  gap: 16px;
+}
+
+/* ── Sub-sections (email / phone groups) ── */
+
+.cc-body .sub-section {
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.cc-body .sub-section-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fontsize-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.cc-body .add-link {
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--interactive-default);
+  cursor: pointer;
+}
+
+.cc-body .add-link:hover {
+  text-decoration: underline;
+}
+
+.cc-body .input-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.cc-body .input-row .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* ── Toggle row ── */
+
+.cc-body .toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cc-body .toggle-row:hover {
+  background: var(--bg-muted);
+  border-color: var(--border-default);
+}
+
+.cc-body .toggle-row.on {
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.cc-body .toggle-label {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-primary);
+  transition: color 0.15s;
+}
+
+.cc-body .toggle-row.on .toggle-label {
+  color: var(--status-success-border);
+}
+
+.cc-body .toggle {
+  width: 36px;
+  height: 20px;
+  background: var(--border-default);
+  border-radius: 20px;
+  position: relative;
+  pointer-events: none;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.cc-body .toggle::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: var(--color-white);
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.cc-body .toggle-row.on .toggle {
+  background: var(--status-success-border);
+}
+
+.cc-body .toggle-row.on .toggle::after {
+  left: 19px;
+}
+
+/* ── Address role checkboxes ── */
+
+.cc-body .checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-surface);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cc-body .checkbox-row:hover {
+  background: var(--bg-muted);
+  border-color: var(--border-default);
+}
+
+.cc-body .checkbox-row:has(input:checked) {
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+}
+
+.cc-body .checkbox-row:has(input:checked) .checkbox-title {
+  color: var(--status-success-border);
+}
+
+.cc-body .checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: var(--status-success-border);
+  flex-shrink: 0;
+}
+
+.cc-body .checkbox-title {
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.cc-body .checkbox-sub {
+  font-size: var(--fontsize-label);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+.cc-body .section-label-sm {
+  font-size: var(--fontsize-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 16px 0 8px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 8px;
+}

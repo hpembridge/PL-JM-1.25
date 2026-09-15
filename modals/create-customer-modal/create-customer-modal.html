@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create New Customer Modal</title>
+  <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+  <link rel="stylesheet" href="../../job-detail.css" />
+  <link rel="stylesheet" href="../../components/modal-shell.css" />
+  <link rel="stylesheet" href="../duplicate-job-modal/duplicate-job-modal.css" />
+  <link rel="stylesheet" href="create-customer-modal.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet" />
+</head>
+
+<body data-theme="titanium">
+
+  <!-- ══ MODAL: Create New Customer ════════════════════════════════════
+       Three steps: General, Add Contact, Add Address. The Contact and
+       Address steps are the bodies of the Add New Contact / Add New Address
+       modals from customer maintenance (PL-CM-1.5), reused verbatim so the
+       forms stay in one shape across the two places they appear.
+       Step chrome (.dj-steps / .dj-panel) is shared with the Duplicate Job
+       modal.
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-createCustomer" onclick="handleOverlayClick(event, 'createCustomer')">
+    <div class="modal-panel modal-panel-fixed">
+
+      <div class="modal-header">
+        <span class="modal-title">Create New Customer</span>
+        <button class="icon-btn" onclick="closeModal('createCustomer')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Step tabs + progress rail -->
+      <div class="dj-steps">
+        <div class="dj-steps-row">
+          <button class="dj-step active" data-step="general" onclick="ccRequestStep('general')">General<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+          <button class="dj-step" data-step="contact" onclick="ccRequestStep('contact')">Add Contact<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+          <button class="dj-step" data-step="address" onclick="ccRequestStep('address')">Add Address<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+        </div>
+        <div class="dj-steps-rail">
+          <div class="dj-steps-rail-fill" id="cc-steps-rail-fill"></div>
+        </div>
+      </div>
+
+      <div class="modal-body dj-body cc-body">
+
+        <!-- ══ STEP 1: General ═══════════════════════════════════════ -->
+        <div class="dj-panel active" data-panel="general">
+          <div class="form-group">
+            <label class="form-label" for="cc-customer-name">Customer Name <span class="dj-required">*</span></label>
+            <input class="form-input" type="text" id="cc-customer-name" oninput="ccValidate()" />
+            <p class="dj-field-error hidden-section">Customer name is required.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cc-short-name">Short Name <span class="dj-required">*</span></label>
+            <input class="form-input" type="text" id="cc-short-name" oninput="ccValidate()" />
+            <p class="dj-field-error hidden-section">Short name is required.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cc-main-phone">Main Phone Number <span class="dj-required">*</span></label>
+            <input class="form-input" type="tel" id="cc-main-phone" placeholder="(000) 000-0000" oninput="ccValidate()" />
+            <p class="dj-field-error hidden-section">Main phone number is required.</p>
+          </div>
+        </div><!-- /step: general -->
+
+        <!-- ══ STEP 2: Add Contact — body reused from PL-CM-1.5 ══════ -->
+        <div class="dj-panel" data-panel="contact">
+
+            <div class="form-group">
+            <div class="form-row form-row-3">
+            <div>
+            <label class="form-label">Salutation</label>
+            <select class="form-select">
+            <option>Mr.</option>
+            <option>Ms.</option>
+            <option>Mrs.</option>
+            <option>Dr.</option>
+            </select>
+            </div>
+            <div>
+            <label class="form-label">First Name</label>
+            <input class="form-input" placeholder="First Name" />
+            </div>
+            <div>
+            <label class="form-label">Last Name</label>
+            <input class="form-input" placeholder="Last Name" />
+            </div>
+            </div>
+            </div>
+
+            <div class="toggle-row" style="margin-bottom: 16px" onclick="this.classList.toggle('on')">
+            <span class="toggle-label">Receives shipping notifications</span>
+            <div class="toggle"></div>
+            </div>
+
+            <div class="sub-section" id="contact-email-section">
+            <div class="sub-section-header">
+            <span>EMAIL(S)</span>
+            </div>
+            <div id="contact-email-rows">
+            <div class="input-row contact-method-row" style="margin-bottom: 8px">
+            <div class="form-group" style="flex: 0.6">
+            <label class="form-label">Description</label>
+            <select class="form-select" disabled>
+            <option>Email</option>
+            </select>
+            </div>
+            <div class="form-group" style="flex: 1">
+            <label class="form-label">Email</label>
+            <input class="form-input" type="email" placeholder="name@company.com" />
+            </div>
+            <div style="display: flex; align-items: flex-end; padding-bottom: 2px">
+            <button class="icon-btn" title="Remove" onclick="removeContactMethodRow(this)">
+            <i class="fa-regular fa-trash-can"></i>
+            </button>
+            </div>
+            </div>
+            </div>
+            <a class="add-link" onclick="addContactMethod('email')">+ Add Email</a>
+            </div>
+
+            <div class="sub-section" id="contact-phone-section">
+            <div class="sub-section-header">
+            <span>PHONE NUMBER(S)</span>
+            </div>
+            <div id="contact-phone-rows">
+            <div class="input-row contact-method-row" style="margin-bottom: 8px">
+            <div class="form-group" style="flex: 0.6">
+            <label class="form-label">Description</label>
+            <select class="form-select">
+            <option>Work</option>
+            <option>Home</option>
+            <option>Mobile</option>
+            <option>Fax</option>
+            </select>
+            </div>
+            <div class="form-group" style="flex: 1">
+            <label class="form-label">Number</label>
+            <input class="form-input" type="tel" placeholder="(000) 000-0000" />
+            </div>
+            <div style="display: flex; align-items: flex-end; padding-bottom: 2px">
+            <button class="icon-btn" title="Remove" onclick="removeContactMethodRow(this)">
+            <i class="fa-regular fa-trash-can"></i>
+            </button>
+            </div>
+            </div>
+            </div>
+            <a class="add-link" onclick="addContactMethod('phone')">+ Add Phone</a>
+            </div>
+
+            <div class="form-group">
+            <label class="form-label">Address</label>
+            <select class="form-select" id="contact-address-select">
+            <option value="">Select an address…</option>
+            </select>
+            </div>
+
+            <div class="sub-section" id="menumaker-section" style="display:none">
+            <div class="sub-section-header">
+            <span>MENUMAKER LOGIN</span>
+            </div>
+            <div class="input-row" style="margin-bottom: 8px; gap: 12px">
+            <div class="form-group" style="flex: 1">
+            <label class="form-label">Username</label>
+            <input class="form-input" id="mm-username" placeholder="Username" />
+            </div>
+            <div class="form-group" style="flex: 1">
+            <label class="form-label">Password</label>
+            <input class="form-input" id="mm-password" placeholder="Password" />
+            </div>
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea
+            class="form-input"
+            rows="4"
+            placeholder="Add notes about this contact…"
+            style="resize: vertical"
+            ></textarea>
+            </div>
+        </div><!-- /step: contact -->
+
+        <!-- ══ STEP 3: Add Address — body reused from PL-CM-1.5 ══════ -->
+        <div class="dj-panel" data-panel="address">
+
+            <div class="form-group">
+            <label class="form-label">Address Description</label>
+            <input class="form-input" placeholder="Main Address" />
+            </div>
+            <div class="form-group">
+            <label class="form-label">Street Address</label>
+            <input class="form-input" placeholder="123 Main St" />
+            </div>
+            <div class="form-group">
+            <label class="form-label">Apt, suite, unit (optional)</label>
+            <input class="form-input" placeholder="Apt 4B" />
+            </div>
+            <div class="form-group">
+            <div
+            class="form-row"
+            style="grid-template-columns: 1fr 88px 120px; gap: 12px"
+            >
+            <div>
+            <label class="form-label">City</label>
+            <input class="form-input" placeholder="City" />
+            </div>
+            <div>
+            <label class="form-label">State</label>
+            <select class="form-select">
+            <option>OH</option>
+            <option>NY</option>
+            <option>CA</option>
+            <option>FL</option>
+            <option>TX</option>
+            </select>
+            </div>
+            <div>
+            <label class="form-label">Zip Code</label>
+            <input class="form-input" placeholder="00000" />
+            </div>
+            </div>
+            </div>
+            <div class="form-group">
+            <label class="form-label">Country</label>
+            <select class="form-select">
+            <option>United States of America</option>
+            <option>Canada</option>
+            <option>Mexico</option>
+            </select>
+            </div>
+
+            <div class="section-label-sm">Address Roles</div>
+            <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+            <label class="checkbox-row" for="mainAddr">
+            <input type="checkbox" id="mainAddr" />
+            <div class="checkbox-desc">
+            <div class="checkbox-title">Main Address</div>
+            <div class="checkbox-sub">
+            Currently assigned to
+            <strong>1000 S Pine Island Rd, Plantation, FL 33324</strong>
+            </div>
+            </div>
+            </label>
+            <label class="checkbox-row" for="billAddr">
+            <input type="checkbox" id="billAddr" />
+            <div class="checkbox-desc">
+            <div class="checkbox-title">Billing Address</div>
+            <div class="checkbox-sub">
+            Currently assigned to
+            <strong>1000 S Pine Island Rd, Plantation, FL 33324</strong>
+            </div>
+            </div>
+            </label>
+            </div>
+
+            <div class="form-group">
+            <label class="form-label">Store Name</label>
+            <input class="form-input" placeholder="Main Address" />
+            </div>
+            <div
+            style="
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+            "
+            >
+            <label
+            style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            "
+            >
+            <input type="checkbox" style="accent-color: var(--interactive-default)" />
+            Use Description on Labels
+            </label>
+            <label
+            style="
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            "
+            >
+            <input type="checkbox" style="accent-color: var(--interactive-default)" />
+            Display Online
+            </label>
+            </div>
+        </div><!-- /step: address -->
+
+      </div><!-- /.modal-body -->
+
+      <div class="modal-footer dj-footer">
+        <button class="btn-secondary" onclick="closeModal('createCustomer')">Cancel</button>
+        <button class="btn-secondary hidden-section" id="cc-back-btn" onclick="ccBack()">Back</button>
+        <button class="btn-primary" id="cc-next-btn" onclick="ccNext()">Next</button>
+        <button class="btn-primary hidden-section" id="cc-create-btn" onclick="ccCreate()">Create</button>
+      </div>
+
+    </div><!-- /.modal-panel -->
+  </div><!-- /#modal-createCustomer -->
+
+  <!-- ══ IMPLEMENTATION NOTES ═══════════════════════════════════════════
+       Components
+         CreateCustomerModal → #modal-createCustomer · .modal-* (components/modal-shell.css)
+         CreateCustomerSteps → .dj-steps markup, shared with the Duplicate Job
+                               modal (modals/duplicate-job-modal/duplicate-job-modal.css)
+         ContactForm         → [data-panel="contact"] — the Add New Contact body
+                               from PL-CM-1.5 customer-detail-page.html, unchanged
+         AddressForm         → [data-panel="address"] — the Add New Address body
+                               from the same file, unchanged
+
+       Simulated with JS (becomes Angular state / bindings)
+         · ccRequestStep()/ccNext()/ccBack() mirror the Duplicate Job rules:
+           always free to go back, never forward past a step missing something.
+         · addContactMethod()/removeContactMethodRow() are the same helpers
+           customer maintenance uses for the email/phone rows.
+         · In Angular the Contact and Address panels are the existing contact
+           and address form components, not copies.
+  ═══════════════════════════════════════════════════════════════════ -->
+
+</body>
+
+</html>

@@ -28,14 +28,14 @@
     <div class="modal-panel modal-panel-fixed">
 
       <div class="modal-header">
-        <span class="modal-title">Duplicate Job</span>
+        <span class="modal-title" id="dj-modal-title">Duplicate Job</span>
         <button class="icon-btn" onclick="closeModal('duplicateJob')"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <!-- ── Step tabs + progress rail ── -->
       <div class="dj-steps">
         <div class="dj-steps-row">
-          <button class="dj-step active" data-step="content" onclick="djRequestStep('content')">Content<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+          <button class="dj-step active" data-step="content" id="dj-step-content" onclick="djRequestStep('content')">Content<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
           <button class="dj-step" data-step="production" onclick="djRequestStep('production')">Production<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
           <button class="dj-step" data-step="contacts" onclick="djRequestStep('contacts')">Job Contacts<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
           <button class="dj-step" data-step="billing" onclick="djRequestStep('billing')">Billing<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
@@ -53,7 +53,7 @@
              current job does not define (.dj-hidden) and collapses a
              group's children when its parent is unchecked.
         ═════════════════════════════════════════════════════════════ -->
-        <div class="dj-panel active" data-panel="content">
+        <div class="dj-panel active" data-panel="content" id="dj-panel-content">
           <p class="dj-intro type-body-sm semibold">
             Select which parts of the existing job you would like to copy over to the new job
           </p>
@@ -229,6 +229,35 @@
              the two instances don't collide. Rows prefill from the job.
         ═════════════════════════════════════════════════════════════ -->
         <div class="dj-panel" data-panel="contacts">
+
+          <!-- Customer the job belongs to. Empty on a new job; on a duplicate
+               it holds the original's customer while Job Contacts is being
+               copied, and clears when that is unchecked. -->
+          <div class="dj-customer">
+            <span class="ds-section-label dj-customer-label">Customer <span class="dj-required">*</span></span>
+
+            <!-- Nothing chosen yet: search -->
+            <div class="dj-customer-search" id="dj-customer-search">
+              <i class="fa-regular fa-magnifying-glass"></i>
+              <input class="form-input" type="text" id="dj-customer-input" placeholder="Search customers…"
+                autocomplete="off" name="dj-customer" oninput="djCustomerInput(this.value)"
+                onfocus="djCustomerInput(this.value)" onkeydown="djCustomerKeydown(event)" />
+              <div class="jc-dropdown hidden-section" id="dj-customer-dropdown"></div>
+            </div>
+
+            <!-- Chosen: the customer reads as one selected row -->
+            <div class="dj-customer-selected hidden-section" id="dj-customer-selected">
+              <span class="dj-customer-avatar"><i class="fa-solid fa-people-group"></i></span>
+              <span class="dj-customer-number" id="dj-customer-number"></span>
+              <span class="dj-customer-name" id="dj-customer-name"></span>
+              <button class="icon-btn dj-customer-clear" aria-label="Clear customer" onclick="djClearCustomer()">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <p class="dj-field-error hidden-section" id="dj-customer-error">Choose a customer.</p>
+          </div>
+
           <div class="jc-body dj-contacts">
 
             <!-- Proofs -->
@@ -317,7 +346,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="dj-billing-note">Billing Note</label>
+            <label class="form-label" for="dj-billing-note">Billing Note <span class="dj-required">*</span></label>
             <textarea class="form-input dj-textarea" id="dj-billing-note" rows="5"></textarea>
           </div>
         </div><!-- /step: billing -->
@@ -336,12 +365,20 @@
   </div><!-- /#modal-duplicateJob -->
 
   <!-- ══ IMPLEMENTATION NOTES ═══════════════════════════════════════════
+       Modes
+         The same component serves two jobs: Duplicate Job (four steps) and
+         Create New Job (the same steps without Content, since there is no
+         source job to copy from). openDuplicateJob() / openCreateJob() set
+         the mode; in Angular this is one input on the component.
+
        Components
          DuplicateJobModal      → #modal-duplicateJob · .modal-* (components/modal-shell.css)
          DuplicateJobSteps      → .dj-steps markup · .dj-step / .dj-steps-rail styles
                                   (tab + progress rail; fill width = step / 4)
          DuplicateJobCopyList   → .dj-copy-list markup · .dj-copy-* styles
          DuplicateJobProduction → [data-panel="production"] · .dj-details / .dj-detail-row
+         DuplicateJobCustomer   → .dj-customer markup · .dj-customer-* styles
+                                  (search until chosen, then one selected row)
          DuplicateJobContacts   → [data-panel="contacts"] · .jc-* classes reused from
                                   modals/proof-contacts-modal (same component, scoped
                                   here with data-dj-channel)

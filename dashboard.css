@@ -1,0 +1,127 @@
+/* ══════════════════════════════════════════════════════════════
+   DASHBOARD
+   Page shell for the dashboard: shared sidebar (injected by
+   shared/components/sidebar-component.js) + a work area holding
+   the search row and, eventually, the dashboard content.
+   ══════════════════════════════════════════════════════════════ */
+
+body.dashboard-body {
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg-page);
+}
+
+/* ── Work area (everything right of the sidebar) ── */
+
+.dashboard-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+}
+
+/* ── Search row: search field left, create actions right ── */
+
+.dashboard-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard-search {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.dashboard-search i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.dashboard-search input {
+  width: 100%;
+  /* matches the .add-row buttons beside it */
+  min-height: var(--scale-1100);
+  padding: 0 14px 0 38px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-surface);
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.dashboard-search input:focus {
+  border-color: var(--border-focus);
+}
+
+.dashboard-search input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.dashboard-create-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Create buttons use the inventory system's "add" affordance — an
+   info-tinted surface whose only content is an interactive label —
+   sized to its content rather than the full row. */
+
+.add-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--scale-200);
+  min-height: var(--scale-1100);
+  padding: 0 var(--scale-400);
+  border: 1px solid var(--status-info-border);
+  border-radius: var(--border-radius-md);
+  background: var(--status-info-bg);
+  color: var(--interactive-default);
+  font-family: inherit;
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.add-row:hover {
+  background: var(--interactive-bg-subtle);
+}
+
+/* ── Body: empty for now; dashboard content lands here ── */
+
+.dashboard-content {
+  flex: 1;
+}
+
+@media (max-width: 720px) {
+  .dashboard-actions-row {
+    flex-wrap: wrap;
+  }
+
+  .dashboard-search {
+    flex: 1 0 100%;
+  }
+
+  .dashboard-create-actions {
+    flex: 1;
+  }
+
+  .dashboard-create-actions > .add-row {
+    flex: 1;
+    justify-content: center;
+  }
+}

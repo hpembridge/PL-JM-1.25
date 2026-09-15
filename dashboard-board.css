@@ -1,0 +1,303 @@
+/* ══════════════════════════════════════════════════════════════
+   DASHBOARD BOARD
+   The kanban board from PL-JOBS-DASHBOARDS, brought over as-is:
+   lanes, job cards, production-type stripes and the legend. Lanes
+   here are job statuses (see DASHBOARD_STATUSES in dashboard-jobs.js)
+   rather than scan locations.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── PRODUCTION TYPE LEGEND ──
+   The stripe colour is the only production-type cue on a card, so the
+   board carries a legend rather than relying on colour alone. */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-tertiary);
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1.5px solid;
+  flex-shrink: 0;
+}
+
+/* ── PRODUCTION TYPE COLOURS ──
+   Three come straight from the wireframe (bindery grey, print/press
+   yellow, PDF-only blue). The other three are pulled from the token
+   palette to stay on-system: paper → mint, woodshop → copper (reads as
+   wood), menu hardware → grape. */
+.prod-bindery  { --stripe-fill: var(--color-titanium-600);     --stripe-line: var(--color-titanium-900); }
+.prod-printing { --stripe-fill: var(--color-gold-300);         --stripe-line: var(--color-gold-600); }
+.prod-pdf      { --stripe-fill: var(--datacolor-blueberry-01); --stripe-line: var(--datacolor-blueberry-04); }
+.prod-paper    { --stripe-fill: var(--datacolor-mint-01);      --stripe-line: var(--datacolor-mint-04); }
+.prod-wood     { --stripe-fill: var(--datacolor-orange-01);    --stripe-line: var(--color-copper-500); }
+.prod-hardware { --stripe-fill: var(--datacolor-grape-01);     --stripe-line: var(--datacolor-grape-04); }
+
+.legend-swatch.prod-bindery,
+.legend-swatch.prod-printing,
+.legend-swatch.prod-pdf,
+.legend-swatch.prod-paper,
+.legend-swatch.prod-wood,
+.legend-swatch.prod-hardware {
+  background: var(--stripe-fill);
+  border-color: var(--stripe-line);
+}
+
+
+/* ── KANBAN BOARD ── */
+.kanban {
+  display: flex;
+  align-items: stretch;   /* all lanes full height, like a proper board */
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 16px;
+  height: calc(100vh - 190px);
+  min-height: 360px;
+}
+
+/* ── LANE ── */
+.lane {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 288px;
+  width: 288px;
+  height: 100%;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  min-height: 0;
+}
+
+.lane-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+}
+.lane-header:hover .lane-title { color: var(--interactive-default); }
+.lane-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+.lane-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--border-radius-full);
+  padding: 1px 8px;
+  flex-shrink: 0;
+}
+.lane-collapse-icon {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.lane-cards {
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+.lane-empty {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: 20px 8px;
+  border: 1px dashed var(--border-tertiary);
+  border-radius: 8px;
+}
+
+/* ── COLLAPSED LANE ──
+   Empty stops collapse to a rail so the board stays scannable without
+   pretending the stop doesn't exist. Click to expand. */
+.lane.is-collapsed {
+  flex: 0 0 44px;
+  width: 44px;
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--border-tertiary);
+}
+.lane.is-collapsed .lane-header {
+  flex-direction: column;
+  border-bottom: none;
+  padding: 12px 4px;
+  gap: 10px;
+  height: 100%;
+  justify-content: flex-start;
+}
+.lane.is-collapsed .lane-title {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  max-height: 100%;
+  flex: 0 1 auto;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.lane.is-collapsed .lane-count {
+  padding: 1px 5px;
+  order: -1;
+}
+.lane.is-collapsed .lane-cards { display: none; }
+
+/* ── JOB CARD (per wireframe) ── */
+.job-card {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 0.15s, transform 0.15s;
+  flex-shrink: 0;   /* never compress — the lane scrolls instead */
+}
+.job-card:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.card-body {
+  flex: 1;
+  padding: 12px 14px;
+  min-width: 0;
+}
+.card-job {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.card-desc {
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-top: 1px;
+  line-height: 1.35;
+}
+.card-customer {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 18px;
+  line-height: 1.3;
+}
+.card-mgmt {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* Colored stripe down the right edge — production type */
+.card-stripe {
+  flex: 0 0 16px;
+  background: var(--stripe-fill, var(--color-titanium-600));
+}
+
+
+/* ── EMPTY BOARD STATE ── */
+.board-empty {
+  padding: 48px 32px;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* Scrollbars — slightly heavier than the app default, since the board
+   scrolls horizontally and needs the affordance. */
+.kanban::-webkit-scrollbar { height: 10px; }
+.kanban::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 5px;
+}
+
+
+/* ── PRESS PROOF STRIPE ──
+   Seventh production type, for the page layout allocation queue. */
+.prod-pressproof { --stripe-fill: var(--datacolor-cherry-01); --stripe-line: var(--datacolor-cherry-04); }
+.legend-swatch.prod-pressproof {
+  background: var(--stripe-fill);
+  border-color: var(--stripe-line);
+}
+
+
+/* ── CARD SCAN-LOCATION PILL ──
+   Shown wherever a lane holds more than one scan location: the sales board
+   (lanes are departments) and Creative's combined Working / Proof Out lanes. */
+.card-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+}
+.card-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: var(--border-radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-tertiary);
+  color: var(--text-secondary);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ── DRAG TO PAN ──
+   The board is grabbable anywhere that is not a card or a lane header. */
+
+.kanban {
+  cursor: grab;
+}
+
+.kanban.is-panning {
+  cursor: grabbing;
+  user-select: none;
+  scroll-behavior: auto;
+}
+
+.kanban .job-card,
+.kanban .lane-header {
+  cursor: pointer;
+}
