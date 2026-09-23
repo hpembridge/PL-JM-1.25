@@ -147,7 +147,7 @@
 /* ── Production step ── */
 
 .dj-required {
-  color: var(--text-danger, #b3261e);
+  color: var(--status-error-border);
 }
 
 .dj-select-desc {
@@ -207,18 +207,22 @@
 
 .dj-step-flag {
   font-size: 11px;
-  color: var(--text-danger, #b3261e);
+  color: var(--status-error-border);
 }
 
 .dj-field-error {
   font-size: var(--fontsize-body-sm);
-  color: var(--text-danger, #b3261e);
+  /* Local override: PL-SHARED has no semantic error-text token and
+     --status-error-border (#f44336) is only 3.68:1 on white — fails AA
+     for body text. --color-red-900 is 13.47:1. Reserved for rejected
+     input help text; devs should bake this into the field component. */
+  color: var(--color-red-900);
   margin: 6px 0 0;
 }
 
 .form-input.dj-invalid,
 .form-select.dj-invalid {
-  border-color: var(--text-danger, #b3261e);
+  border-color: var(--status-error-border);
 }
 
 /* ── Wizard footer: Cancel sits left, step controls right ── */
