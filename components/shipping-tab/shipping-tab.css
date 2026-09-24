@@ -8,6 +8,11 @@
 
 .ship-widget {
   flex: 1;
+  min-width: 0;
+}
+
+.ship-widget.widget--collapsed {
+  flex: none;
 }
 
 .ship-table-area {
@@ -29,33 +34,6 @@
   width: fit-content;
   margin-bottom: 16px;
   align-items: center;
-}
-
-/* ── QTY COLUMN MISMATCH ── */
-
-.ship-col-qty-over {
-  background: var(--status-warning-bg);
-      border-color: var(--status-warning-border);
-    border-width: 0px 1px 0px 1px;
-    border-style: solid;
-}
-
-.ship-qty-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  color: var(--status-warning-border);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px 0;
-  font-size: var(--fontsize-body-sm);
-}
-
-.ship-qty-icon-disabled {
-  cursor: default;
-  opacity: 0.55;
 }
 
 /* ── ADDRESS LIST container ── */
@@ -168,10 +146,13 @@
   text-align: left;
 }
 
-/* col order: cb(1) addr(2) delivery(3) notes(4) qty(5) actions(6) */
+/* col order: cb(1) addr(2) delivery(3) notes(4) qty(5)
+   shipped-on(6) shipped-by(7) tracking(8) actions(9) */
 .ship-table td:nth-child(2),
 .ship-table td:nth-child(3),
-.ship-table td:nth-child(4) {
+.ship-table td:nth-child(4),
+.ship-table th.ship-col-tracking,
+.ship-table td.ship-col-tracking {
   text-align: left;
 }
 
@@ -179,6 +160,60 @@
   padding: 12px 12px;
   color: var(--text-secondary);
   vertical-align: middle;
+}
+
+/* ── SHIPMENTS — Shipped On / Shipped By / Tracking ──
+   An address can ship more than once. Each cell holds a list with one item
+   per shipment, stacked and centred in the row like the other cells. Fixed
+   item height keeps the lines aligned across the three columns. */
+
+.ship-shipment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ship-shipment-item {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.ship-col-shipped-on .ship-shipment-item,
+.ship-col-shipped-by .ship-shipment-item {
+  justify-content: center;
+}
+
+/* Tracking status dot — sits before the tracking number */
+.ship-col-tracking .ship-shipment-item {
+  gap: 8px;
+}
+
+.ship-status-dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: var(--border-radius-full);
+  background: var(--status-neutral-border);
+}
+
+.ship-status-dot--pending   { background: var(--status-neutral-border); }
+.ship-status-dot--transit   { background: var(--status-warning-border); }
+.ship-status-dot--delivered { background: var(--status-success-border); }
+.ship-status-dot--error     { background: var(--status-error-border); }
+
+.ship-tracking-link {
+  color: var(--text-interactive);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+}
+
+.ship-tracking-link:hover {
+  text-decoration: underline;
 }
 
 .ship-address-row.row-hidden {
@@ -189,9 +224,6 @@
   background-color: var(--bg-muted);
 }
 
-.ship-address-row:hover .ship-col-qty-over{
-  background-color: color-mix(in srgb, var(--status-warning-border), var(--bg-muted) 95%);
-}
 
 
 .ship-addr-attn {

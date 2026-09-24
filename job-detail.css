@@ -377,6 +377,175 @@ textarea.form-input {
   text-decoration: underline;
 }
 
+/* ── WIDGET — COLLAPSIBLE ──
+   .widget--collapsed (default) = narrow icon rail with count badges.
+   Remove the modifier to show the full .widget-content.
+   Toggle markup: .widget-toggle / .widget-rail / .widget-content */
+
+/* Toggle — collapsed: icon-only button. Expanded: full-width widget header
+   (matches .detail-card-header so the two headers line up). */
+.widget-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin: -18px -18px 0;
+  padding: 14px 18px;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  background: var(--bg-muted);
+  color: var(--text-tertiary);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.widget-toggle:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.widget-toggle:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -2px;
+}
+
+.widget-toggle-icon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: rotate 0.15s;
+}
+
+.widget-toggle[aria-expanded="true"] .widget-toggle-icon {
+  rotate: 180deg;
+}
+
+.widget-toggle-label {
+  flex: 1;
+  font-size: var(--fontsize-body-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+/* Collapsed: plain icon button, no header bar */
+.widget--collapsed .widget-toggle {
+  align-self: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  background: transparent;
+}
+
+.widget--collapsed .widget-toggle:hover {
+  background: var(--bg-muted);
+  border-color: var(--border-subtle);
+}
+
+.widget--collapsed .widget-toggle-label {
+  display: none;
+}
+
+.widget-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.widget-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.widget:not(.widget--collapsed) .widget-rail,
+.widget--collapsed .widget-content {
+  display: none;
+}
+
+.widget--collapsed {
+  flex: none;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 12px;
+}
+
+.widget-rail-btn {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.widget-rail-btn:hover {
+  background: var(--bg-muted);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+/* Copy confirmation (proofing contacts) — icon swaps to a check, mirrors .copy-wrap-copied */
+.widget-rail-btn-check,
+.widget-rail-btn--copied .widget-rail-btn-icon {
+  display: none;
+}
+
+.widget-rail-btn--copied .widget-rail-btn-check {
+  display: inline-block;
+}
+
+.widget-rail-btn--copied,
+.widget-rail-btn--copied:hover {
+  background: var(--status-success-bg);
+  border-color: var(--status-success-border);
+  color: var(--status-success-border);
+}
+
+.widget-rail-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.widget-rail-btn--text {
+  font-size: var(--fontsize-body-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.02em;
+}
+
+/* Count badge — top-right of a rail icon */
+.widget-rail-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  border-radius: var(--border-radius-full);
+  background: var(--bg-surface);
+  font-size: var(--fontsize-label);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
 /* Contact items inside shipping widget */
 
 .widget-contact-list {

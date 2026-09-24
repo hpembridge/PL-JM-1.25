@@ -46,9 +46,7 @@
       });
       updateDetailPills(currentDetailId);
       closeModal('detailEdit');
-      const t = document.getElementById('toast');
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2500);
+      showToast('Detail saved');
     }
 
     // ── Live "does this tab have anything in it?" detection ──

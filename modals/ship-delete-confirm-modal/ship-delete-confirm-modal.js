@@ -1,6 +1,6 @@
     // ── Ship Delete Confirm Modal ──
     // Relies on table helpers defined in components/shipping-tab:
-    // clearShipSelection(), onRowCheck(), updateAddrCount(), updateQtyBadge().
+    // clearShipSelection(), onRowCheck(), updateAddrCount().
 
     function openDeleteSelectedConfirm() {
       const count = document.querySelectorAll('.ship-row-check:checked').length;
@@ -17,7 +17,6 @@
       closeModal('shipDeleteConfirm');
       onRowCheck();
       updateAddrCount();
-      updateQtyBadge();
     }
 
     function cancelShipDelete() {

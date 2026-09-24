@@ -15,9 +15,18 @@
     }
     function saveModal(section) {
       closeModal(section);
+      showToast('Detail saved');
+    }
+
+    // ── Toast ── one shared #toast element; the message is set per call
+    let _toastTimer = null;
+    function showToast(message) {
       const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = message;
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2500);
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
     }
     // ── Escape key closes any open modal ──
     document.addEventListener('keydown', e => {

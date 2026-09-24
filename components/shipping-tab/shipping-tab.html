@@ -19,8 +19,30 @@
 
       <div class="ship-layout">
 
-        <!-- Left: widget -->
-        <div class="widget ship-widget">
+        <!-- ═══ Shipping Widget (collapsible — defaults to collapsed) ═══ -->
+        <div class="widget ship-widget widget--collapsed" id="shipWidget">
+
+          <!-- Widget Toggle (icon-only when collapsed; full-width header when expanded) -->
+          <button class="widget-toggle" type="button" aria-expanded="false" aria-controls="shipWidgetContent"
+            title="Expand panel" onclick="toggleWidget(this)">
+            <i class="fa-solid fa-chevron-right widget-toggle-icon"></i>
+            <span class="widget-toggle-label">Shipping Details</span>
+          </button>
+
+          <!-- Widget Rail (collapsed state only) -->
+          <div class="widget-rail">
+            <button class="widget-rail-btn" type="button" title="Shipping notifications" onclick="expandWidget(this)">
+              <i class="fa-solid fa-address-book"></i>
+              <span class="widget-rail-badge" id="shipContactsCount">2</span>
+            </button>
+            <button class="widget-rail-btn" type="button" title="Shipping notes" onclick="expandWidget(this)">
+              <i class="fa-solid fa-note-sticky"></i>
+              <span class="widget-rail-badge" id="shipNotesCount">1</span>
+            </button>
+          </div><!-- /.widget-rail -->
+
+          <!-- Widget Content (expanded state only) -->
+          <div class="widget-content" id="shipWidgetContent">
 
           <!-- Shipping Notifications -->
           <div class="widget-section" id="pcShipWrap">
@@ -41,7 +63,7 @@
                 <i class="fa-regular fa-pen"></i>
               </button>
             </div>
-            <div class="widget-notes">
+            <div class="widget-notes" id="shipNotesList">
               <div class="widget-note-item ">
                 <span class="widget-note-num">(1)</span>
                 <p class="widget-note-text">Ship via UPS ground. Ensure all boxes are labeled with the job number before
@@ -50,7 +72,9 @@
             </div>
           </div>
 
+          </div><!-- /.widget-content -->
         </div><!-- /.ship-widget -->
+        <!-- ═══ /Shipping Widget ═══ -->
 
         <!-- Right: table area -->
         <div class="ship-table-area">
@@ -74,11 +98,16 @@
                     <th class="ship-col-addr">Address</th>
                     <th class="ship-col-delivery">Delivery</th>
                     <th class="ship-col-notes">Notes</th>
-                    <th class="ship-col-qty">Qty<div id="shipQtyFooter"></div>
-                    </th>
+                    <th class="ship-col-qty">Qty</th>
+                    <th class="ship-col-shipped-on">Shipped On</th>
+                    <th class="ship-col-shipped-by">Shipped By</th>
+                    <th class="ship-col-tracking">Tracking</th>
                     <th class="ship-col-actions"></th>
                   </tr>
                 </thead>
+                <!-- Shipped On / Shipped By / Tracking: one .ship-shipment-item per shipment,
+                     same order in all three cells so the lines align across columns.
+                     Tracking status dot: --pending (not shipped yet) / --transit / --delivered / --error -->
                 <tbody id="shipAddressList">
 
                   <tr class="ship-address-row" data-id="1" data-carrier="UPS" data-method="Ground"
@@ -92,6 +121,24 @@
                         Account</span></td>
                     <td>2233</td>
                     <td class="ship-col-qty">100</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/08/26</li>
+                        <li class="ship-shipment-item">9/15/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">HP</li>
+                        <li class="ship-shipment-item">JP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.ups.com/track?tracknum=1Z84W73903407919" target="_blank" rel="noopener">1Z84W73903407919</a></li>
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--transit" role="img" aria-label="In transit" title="In transit"></span><a class="ship-tracking-link" href="https://www.ups.com/track?tracknum=1Z84W73903415838" target="_blank" rel="noopener">1Z84W73903415838</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -107,6 +154,21 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">100</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/08/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">HP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.ups.com/track?tracknum=1Z84W73903423757" target="_blank" rel="noopener">1Z84W73903423757</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -123,6 +185,27 @@
                         FedEx Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">100</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/09/26</li>
+                        <li class="ship-shipment-item">9/12/26</li>
+                        <li class="ship-shipment-item">9/18/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">SC</li>
+                        <li class="ship-shipment-item">SC</li>
+                        <li class="ship-shipment-item">HP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774952418916" target="_blank" rel="noopener">774952418916</a></li>
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774952523645" target="_blank" rel="noopener">774952523645</a></li>
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--pending" role="img" aria-label="Not shipped yet" title="Not shipped yet"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774952628374" target="_blank" rel="noopener">774952628374</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -139,6 +222,21 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">75</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/10/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">JP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.ups.com/track?tracknum=1Z84W73903455433" target="_blank" rel="noopener">1Z84W73903455433</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -155,6 +253,21 @@
                         class="ship-delivery-account">Customer Account</span></td>
                     <td>Fragile</td>
                     <td class="ship-col-qty">50</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/11/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">HP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--error" role="img" aria-label="Delivery exception" title="Delivery exception"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774952837832" target="_blank" rel="noopener">774952837832</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -170,6 +283,9 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">125</td>
+                    <td class="ship-col-shipped-on">—</td>
+                    <td class="ship-col-shipped-by">—</td>
+                    <td class="ship-col-tracking">—</td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -186,6 +302,24 @@
                         class="ship-delivery-account">Customer Account</span></td>
                     <td>Hold at door</td>
                     <td class="ship-col-qty">60</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/10/26</li>
+                        <li class="ship-shipment-item">9/17/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">SC</li>
+                        <li class="ship-shipment-item">JP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://tools.usps.com/go/TrackConfirmAction?tLabels=940011189956000071271" target="_blank" rel="noopener">940011189956000071271</a></li>
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--transit" role="img" aria-label="In transit" title="In transit"></span><a class="ship-tracking-link" href="https://tools.usps.com/go/TrackConfirmAction?tLabels=940011189956000079190" target="_blank" rel="noopener">940011189956000079190</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -202,6 +336,21 @@
                         FedEx Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">80</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/12/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">HP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774953152019" target="_blank" rel="noopener">774953152019</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -218,6 +367,9 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">90</td>
+                    <td class="ship-col-shipped-on">—</td>
+                    <td class="ship-col-shipped-by">—</td>
+                    <td class="ship-col-tracking">—</td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -233,6 +385,21 @@
                         FedEx Account</span></td>
                     <td>Call ahead</td>
                     <td class="ship-col-qty">110</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/14/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">JP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--transit" role="img" aria-label="In transit" title="In transit"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774953256748" target="_blank" rel="noopener">774953256748</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -249,6 +416,9 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">95</td>
+                    <td class="ship-col-shipped-on">—</td>
+                    <td class="ship-col-shipped-by">—</td>
+                    <td class="ship-col-tracking">—</td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -264,6 +434,21 @@
                     <td><span class="ship-delivery-method">Will Call</span></td>
                     <td>Pickup by Friday</td>
                     <td class="ship-col-qty">40</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/19/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">SC</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">—</li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -279,6 +464,24 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">150</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/08/26</li>
+                        <li class="ship-shipment-item">9/16/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">HP</li>
+                        <li class="ship-shipment-item">HP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.ups.com/track?tracknum=1Z84W73903510866" target="_blank" rel="noopener">1Z84W73903510866</a></li>
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--transit" role="img" aria-label="In transit" title="In transit"></span><a class="ship-tracking-link" href="https://www.ups.com/track?tracknum=1Z84W73903518785" target="_blank" rel="noopener">1Z84W73903518785</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -295,6 +498,21 @@
                         class="ship-delivery-account">Customer Account</span></td>
                     <td>Rush order</td>
                     <td class="ship-col-qty">30</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/09/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">JP</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774953675664" target="_blank" rel="noopener">774953675664</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -311,6 +529,9 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">85</td>
+                    <td class="ship-col-shipped-on">—</td>
+                    <td class="ship-col-shipped-by">—</td>
+                    <td class="ship-col-tracking">—</td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -326,6 +547,9 @@
                         class="ship-delivery-account">Customer Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">55</td>
+                    <td class="ship-col-shipped-on">—</td>
+                    <td class="ship-col-shipped-by">—</td>
+                    <td class="ship-col-tracking">—</td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -342,6 +566,21 @@
                         FedEx Account</span></td>
                     <td>Back entrance</td>
                     <td class="ship-col-qty">70</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/15/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">SC</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--transit" role="img" aria-label="In transit" title="In transit"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774953780393" target="_blank" rel="noopener">774953780393</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -358,6 +597,9 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">120</td>
+                    <td class="ship-col-shipped-on">—</td>
+                    <td class="ship-col-shipped-by">—</td>
+                    <td class="ship-col-tracking">—</td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -373,6 +615,27 @@
                         FedEx Account</span></td>
                     <td>Dock B</td>
                     <td class="ship-col-qty">200</td>
+                    <td class="ship-col-shipped-on">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">9/08/26</li>
+                        <li class="ship-shipment-item">9/11/26</li>
+                        <li class="ship-shipment-item">9/16/26</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-shipped-by">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item">HP</li>
+                        <li class="ship-shipment-item">JP</li>
+                        <li class="ship-shipment-item">SC</li>
+                      </ul>
+                    </td>
+                    <td class="ship-col-tracking">
+                      <ul class="ship-shipment-list">
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--delivered" role="img" aria-label="Delivered" title="Delivered"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774953885122" target="_blank" rel="noopener">774953885122</a></li>
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--error" role="img" aria-label="Delivery exception" title="Delivery exception"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774953989851" target="_blank" rel="noopener">774953989851</a></li>
+                        <li class="ship-shipment-item"><span class="ship-status-dot ship-status-dot--transit" role="img" aria-label="In transit" title="In transit"></span><a class="ship-tracking-link" href="https://www.fedex.com/fedextrack/?trknbr=774954094580" target="_blank" rel="noopener">774954094580</a></li>
+                      </ul>
+                    </td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -389,6 +652,9 @@
                         Account</span></td>
                     <td>—</td>
                     <td class="ship-col-qty">65</td>
+                    <td class="ship-col-shipped-on">—</td>
+                    <td class="ship-col-shipped-by">—</td>
+                    <td class="ship-col-tracking">—</td>
                     <td class="ship-row-actions"><button class="icon-btn" onclick="openShipEdit(this.closest('tr'))"><i
                           class="fa-regular fa-pen"></i></button><button class="icon-btn"
                         onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>

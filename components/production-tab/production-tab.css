@@ -1,9 +1,33 @@
-/* ── DETAIL GRID ── */
+/* ── PRODUCTION LAYOUT — widget + detail grid ── */
+
+.prod-layout {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+.prod-layout > .widget {
+      flex: 1;
+      min-width: 0;
+    }
+
+.prod-layout > .widget--collapsed {
+      flex: none;
+    }
+
+/* ── DETAIL GRID ──
+   2 columns while the widget is expanded, 3 when it's collapsed */
 
 .detail-grid {
+      flex: 2;
+      min-width: 0;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
+    }
+
+.prod-layout:has(> .widget--collapsed) > .detail-grid {
+      grid-template-columns: repeat(3, 1fr);
     }
 
 /* ── DETAIL CARDS ── */

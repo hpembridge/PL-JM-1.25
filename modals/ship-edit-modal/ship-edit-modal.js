@@ -1,7 +1,7 @@
     // ── Ship Edit Modal ──
     // Add / Edit / Bulk-edit a shipping address row in the shipping table
     // (components/shipping-tab). Relies on table helpers defined there:
-    // onRowCheck(), updateAddrCount(), updateQtyBadge().
+    // onRowCheck(), updateAddrCount().
 
     let _shipEditTargetRow = null;
     let _shipEditMode = 'edit'; // 'edit' | 'add' | 'bulk'
@@ -106,6 +106,9 @@
           <td><span class="ship-delivery-method">${deliveryLine}</span>${accountLine}</td>
           <td>${notes || '—'}</td>
           <td class="ship-col-qty">${qty || '0'}</td>
+          <td class="ship-col-shipped-on">—</td>
+          <td class="ship-col-shipped-by">—</td>
+          <td class="ship-col-tracking">—</td>
           <td class="ship-row-actions">
             <button class="icon-btn" title="Edit address" onclick="openShipEdit(this.closest('tr'))"><i class="fa-regular fa-pen"></i></button>
             <button class="icon-btn" title="Delete address" onclick="deleteAddressRow(this)"><i class="fa-regular fa-trash-can"></i></button>
@@ -114,7 +117,6 @@
         onRowCheck();
         updateAddrCount();
         closeModal('shipEdit');
-        updateQtyBadge();
         return;
       }
 
@@ -154,5 +156,4 @@
 
       if (_shipEditMode === 'bulk') clearShipSelection();
       closeModal('shipEdit');
-      updateQtyBadge();
     }

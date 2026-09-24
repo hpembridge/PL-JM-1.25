@@ -201,6 +201,9 @@ function jcUpdateAllStrings() {
   const billEl   = document.getElementById('pcBillNames');
   if (billWrap) billWrap.classList.toggle('hidden-section', !billNames.length);
   if (billEl)   billEl.textContent = billNames.join(', ');
+
+  // Collapsed-widget badge counts
+  if (typeof updateWidgetCounts === 'function') updateWidgetCounts();
 }
 
 // ── Demo seed ──
@@ -226,6 +229,17 @@ function pcCopyContacts(textElId, wrapId) {
   navigator.clipboard.writeText(text).then(() => {
     wrap.classList.add('copy-wrap-copied');
     setTimeout(() => wrap.classList.remove('copy-wrap-copied'), 1800);
+  });
+}
+
+// Collapsed widget rail: same copy, confirmed on the icon button itself
+function pcCopyContactsRail(textElId, btn) {
+  const text = document.getElementById(textElId).textContent;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('widget-rail-btn--copied');
+    setTimeout(() => btn.classList.remove('widget-rail-btn--copied'), 1000);
+    showToast('Proofing contacts copied');
   });
 }
 

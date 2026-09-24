@@ -16,10 +16,39 @@
 
 <body data-theme="titanium">
     <div class="tab-panel" id="tab-panel-production">
-      <div class="detail-grid" id="detail-grid">
+      <!-- Production Layout: widget (left) + detail grid (right) -->
+      <div class="prod-layout">
 
-        <!-- Combined contacts + notes widget -->
-        <div class="widget">
+        <!-- ═══ Production Widget (collapsible — defaults to collapsed) ═══ -->
+        <div class="widget widget--collapsed" id="prodWidget">
+
+          <!-- Widget Toggle (icon-only when collapsed; full-width header when expanded) -->
+          <button class="widget-toggle" type="button" aria-expanded="false" aria-controls="prodWidgetContent"
+            title="Expand panel" onclick="toggleWidget(this)">
+            <i class="fa-solid fa-chevron-right widget-toggle-icon"></i>
+            <span class="widget-toggle-label">Production Details</span>
+          </button>
+
+          <!-- Widget Rail (collapsed state only) -->
+          <div class="widget-rail">
+            <button class="widget-rail-btn" type="button" title="Add job detail" onclick="addDetail()">
+              <i class="fa-solid fa-square-plus"></i>
+            </button>
+            <a class="widget-rail-btn widget-rail-btn--text" href="https://menumaker.clevelandmenu.com/MenuEdit/1775/55035/ORDRMNG/0/RenderingViewer/8859887" target="_blank" title="Open in MenuMaker">MM</a>
+            <button class="widget-rail-btn" type="button" title="Copy proofing contacts"
+              onclick="pcCopyContactsRail('pcProdEmailString', this)">
+              <i class="fa-solid fa-address-book widget-rail-btn-icon"></i>
+              <i class="fa-solid fa-check widget-rail-btn-check"></i>
+              <span class="widget-rail-badge" id="prodContactsCount">3</span>
+            </button>
+            <button class="widget-rail-btn" type="button" title="General notes" onclick="expandWidget(this)">
+              <i class="fa-solid fa-note-sticky"></i>
+              <span class="widget-rail-badge" id="prodNotesCount">1</span>
+            </button>
+          </div><!-- /.widget-rail -->
+
+          <!-- Widget Content (expanded state only) -->
+          <div class="widget-content" id="prodWidgetContent">
           <button class="add-list-btn" onclick="addDetail()">+ ADD JOB DETAIL</button>
           <!-- Proofing Contacts -->
           <div class="widget-section">
@@ -63,7 +92,7 @@
                 <i class="fa-regular fa-pen"></i>
               </button>
             </div>
-            <div class="widget-notes">
+            <div class="widget-notes" id="prodNotesList">
               <div class="widget-note-item ">
                 <span class="widget-note-num">(1)</span>
                 <p class="widget-note-text">Send a "Zero" proof of the Alchamey menu inserts for hotels to update their
@@ -74,7 +103,12 @@
           </div>
 
 
+          </div><!-- /.widget-content -->
         </div><!-- /.widget -->
+        <!-- ═══ /Production Widget ═══ -->
+
+        <!-- Detail Grid -->
+        <div class="detail-grid" id="detail-grid">
         <!-- Detail Card 1 -->
         <div class="detail-card" id="detail-1">
           <div class="detail-card-header">
@@ -201,7 +235,9 @@
             </div>
           </div>
         </div>
-      </div><!-- /.detail-grid -->
+        </div><!-- /.detail-grid -->
+
+      </div><!-- /.prod-layout -->
 
     </div><!-- /tab-panel-production -->
 

@@ -1,50 +1,5 @@
     // ── Shipping ──
 
-    const SHIP_JOB_QTY = 300; // total job quantity to compare against
-
-    function updateQtyBadge() {
-      const rows          = Array.from(document.querySelectorAll('#shipAddressList .ship-address-row'));
-      const total         = rows.reduce((sum, row) => sum + (parseInt(row.dataset.qty) || 0), 0);
-      const qtyCells      = document.querySelectorAll('#shipAddressList .ship-address-row td:nth-child(5)');
-      const footerQtyCell = document.getElementById('shipQtyFooter');
-
-      // Reset
-      qtyCells.forEach(td => td.classList.remove('ship-col-qty-over'));
-      if (footerQtyCell) footerQtyCell.innerHTML = '';
-
-      if (rows.length === 0 || total === SHIP_JOB_QTY) return;
-
-      const diff        = Math.abs(total - SHIP_JOB_QTY);
-      const remainder   = SHIP_JOB_QTY % rows.length;
-      const label       = total > SHIP_JOB_QTY ? 'Over' : 'Under';
-
-      if (diff > remainder) {
-        // Distributable — highlight column and show clickable icon
-        qtyCells.forEach(td => td.classList.add('ship-col-qty-over'));
-        const tipRemainder = remainder > 0 ? ` (remainder: ${remainder})` : '';
-        const tip = `Click to evenly distribute quantity${tipRemainder}`;
-        if (footerQtyCell) {
-          footerQtyCell.innerHTML = `<button class="ship-qty-icon" title="${tip}" onclick="applyEvenQty()"><i class="fa-solid fa-triangle-exclamation"></i></button>`;
-        }
-      } else {
-        // Minor mismatch — non-interactive span so title still shows on hover
-        const tip = `${label} job quantity by ${diff}`;
-        if (footerQtyCell) {
-          footerQtyCell.innerHTML = `<span class="ship-qty-icon ship-qty-icon-disabled" title="${tip}"><i class="fa-solid fa-triangle-exclamation"></i></span>`;
-        }
-      }
-    }
-
-    function applyEvenQty() {
-      const rows    = Array.from(document.querySelectorAll('#shipAddressList .ship-address-row'));
-      const perAddr = Math.floor(SHIP_JOB_QTY / rows.length);
-      rows.forEach(row => {
-        row.dataset.qty = perAddr;
-        row.querySelectorAll('td')[4].textContent = perAddr;
-      });
-      updateQtyBadge();
-    }
-
     function onRowCheck() {
       const visibleChecks = Array.from(document.querySelectorAll('.ship-address-row:not(.row-hidden) .ship-row-check'));
       const checked       = visibleChecks.filter(c => c.checked);
@@ -83,7 +38,6 @@
       btn.closest('.ship-address-row').remove();
       onRowCheck();
       updateAddrCount();
-      updateQtyBadge();
     }
 
     function clearShipSelection() {
@@ -143,5 +97,4 @@
     }
 
     // Run on load
-    updateQtyBadge();
     initDeliverySpans();
