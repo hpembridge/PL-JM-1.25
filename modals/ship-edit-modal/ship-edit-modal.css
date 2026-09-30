@@ -58,3 +58,38 @@
 .ship-stepper-val::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
+
+.improvement-note summary{
+  cursor: pointer;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.improvement-note p{
+  margin-top: 8px;
+  font-size: var(--fontsize-body-md);
+  color: var(--text-secondary);
+}
+
+.improvement-note{
+  background-color: var(--accent-bg);
+  padding: 16px;
+  border: solid 1px var(--accent-default);
+  border-radius: 12px;
+}
+
+.improvement-note summary {
+  list-style: none;
+}
+
+.improvement-note summary::before {
+  content: "★";
+  display: inline-block;
+  color: var(--accent-default);
+  margin-right: 0.5rem;
+  transition: transform .5s;
+}
+
+.improvement-note[open] summary::before {
+  transform: rotate(135deg);
+}
