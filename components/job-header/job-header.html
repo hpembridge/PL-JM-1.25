@@ -21,7 +21,12 @@
 
         <!-- ── Above-card bar: status left, primary actions right ── -->
         <div class="job-header-bar">
-            <p class="pill">Status: Bindery on Cart</p>
+            <!-- Status tabs: sit flush on top of the job card -->
+            <div class="job-status-tabs">
+                <p class="pill">Status: Bindery on Cart</p>
+                <!-- Scheduling request tab (neutral = no request made yet) -->
+                <p class="pill job-status-tab-neutral">Make Scheduling Request</p>
+            </div>
             <div class="job-actions-right">
                 <button class="btn-secondary" id="trello-btn" onclick="trelloAction()">
                     Send to Trello
