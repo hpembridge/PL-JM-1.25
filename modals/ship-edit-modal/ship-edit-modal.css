@@ -65,6 +65,19 @@
   color: var(--text-primary);
 }
 
+.improvement-note summary:hover{
+  color: var(--interactive-default);
+}
+
+.improvement-note:has(summary:hover) {
+  background-color: var(--status-info-bg);
+  border-color: var(--status-info-border);
+}
+
+.improvement-note:has(summary:hover) summary::before {
+  color: var(--interactive-default);
+}
+
 .improvement-note p{
   margin-top: 8px;
   font-size: var(--fontsize-body-md);
