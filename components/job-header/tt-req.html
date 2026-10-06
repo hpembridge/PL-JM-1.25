@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Tracker and BSR request stuff</title>
+    <link rel="stylesheet" href="../../shared/css/design-tokens.css" />
+    <link rel="stylesheet" href="../../job-detail.css" />
+    <link rel="stylesheet" href="job-header.css" />
+
+    <script src="https://kit.fontawesome.com/da08280601.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+        }
+        body div{
+            display: flex;
+            justify-content: center;
+            width: 100vw;
+            gap: 8px;
+        }
+        .action-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            align-self: stretch;
+        }
+        p:has(.fa-arrow-up-right):hover{
+            cursor: pointer;
+            opacity: .8;
+        }
+
+        .in-review{
+            background-color: var(--status-info-bg);
+            border-color: var(--status-info-border);
+        }
+        .action-needed{
+            background-color: var(--status-warning-bg);
+            border-color: var(--status-warning-border);
+        }
+        .approved{
+            background-color: var(--status-success-bg);
+            border-color: var(--status-success-border);
+        }
+    </style>
+
+</head>
+
+<body>
+    <div>
+        <p class="pill">Make Scheduling Request <i class="fa-solid fa-arrow-up-right"></i></p>
+        <p class="pill"><span class="semibold">24 hours</span> tracked <i class="fa-solid fa-arrow-up-right"></i></p>
+    </div>
+    <div>
+        <p class="pill in-review">Request in Review<i class="fa-solid fa-arrow-up-right"></i></p>
+        <p class="pill"><span class="semibold">24 hours</span> tracked <i class="fa-solid fa-arrow-up-right"></i></p>
+    </div>
+    <div>
+        <p class="pill action-needed">Requeest Action Needed<i class="fa-solid fa-arrow-up-right"></i></p>
+        <p class="pill"><span class="semibold">24 hours</span> tracked <i class="fa-solid fa-arrow-up-right"></i></p>
+    </div>
+    <div>
+        <p class="pill approved">Shipping XX/XX/XX<i class="fa-solid fa-arrow-up-right"></i></p>
+        <p class="pill"><span class="semibold">24 hours</span> tracked <i class="fa-solid fa-arrow-up-right"></i></p>
+    </div>
+</body>
+
+</html>

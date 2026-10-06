@@ -17,24 +17,31 @@
 </head>
 
 <body>
+    <!-- ══ JobHeader: start ══ -->
     <div class="header-wrap">
 
-        <!-- ── Above-card bar: status left, primary actions right ── -->
+        <!-- ── JobHeader / Bar: status (left) + job output actions (right) ── -->
         <div class="job-header-bar">
-            <!-- Status tabs: sit flush on top of the job card -->
-            <div class="job-status-tabs">
-                <p class="pill">Status: Bindery on Cart</p>
-                <!-- Scheduling request tab (neutral = no request made yet) -->
-                <p class="pill job-status-tab-neutral">Make Scheduling Request</p>
+
+            <!-- JobStatus: current production status + latest milestone -->
+            <div class="job-status">
+                <p class="job-status__badge">
+                    <span class="job-status__dot" aria-hidden="true"></span>
+                    Bindery on Cart
+                </p>
+                <p class="job-status__detail type-body-sm">Approved for Production on 9/22/26</p>
             </div>
+
+            <!-- JobOutputActions -->
             <div class="job-actions-right">
-                <button class="btn-secondary" id="trello-btn" onclick="trelloAction()">
+                <button class="btn-text" id="trello-btn" onclick="trelloAction()">
+                    <i class="fa-brands fa-trello"></i>
                     Send to Trello
                 </button>
 
-                <button class="btn-primary" id="duplicate-job-btn" onclick="openDuplicateJob()">
+                <button class="btn-text" id="duplicate-job-btn" onclick="openDuplicateJob()">
                     <i class="fa-regular fa-copy"></i>
-                    Duplicate Job
+                    Duplicate
                 </button>
 
                 <!-- Simple print button: shown when no interior boards or future print items exist -->
@@ -44,14 +51,14 @@
                 </button>
 
                 <!-- Split print button: shown when interior boards (or future items) are present -->
-                <!-- PROTOTYPE: forced visible; production should toggle via initPrintButton() -->
+                <!-- PROTOTYPE: initPrintButton() in job-detail.js toggles simple vs split -->
                 <div class="btn-split" id="print-btn-split">
                     <button class="btn-split-main" onclick="printTicket()">
                         <i class="fa-regular fa-print"></i>
                         Print Ticket
                     </button>
                     <button class="btn-split-caret" onclick="togglePrintMenu(event)" aria-label="More print options">
-                        <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                        <i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <div class="btn-split-menu" id="print-menu">
                         <button onclick="printItem('ticket')">
@@ -70,51 +77,85 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- /.job-header-bar -->
 
-        <div class="job-header-card">
-            <div class="inner-row inner-row-col">
-                <div class="job-header-top">
-                    <h6 class="job-title-row">
-                        <span>232323</span>
-                        <span id="description">2018 Standard Menu Single Fold Jan 2018 Ws</span>
-                    </h6>
-                    <button class="icon-btn" title="Edit job information" onclick="openModal('editJob')">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
-                </div>
-                <p class="job-meta type-body-md semibold"><span>New Job</span> • <span>Printing</span></p>
-                <p class="job-meta type-body-sm">Last Modified by Healey Pembridge on 3/03/25</p>
+        <!-- ── JobHeader / Card ── -->
+        <section class="job-header-card" aria-labelledby="job-title">
+
+            <!-- JobHeader / Top: job number + description + edit -->
+            <div class="job-header-top">
+                <h5 class="job-title-row" id="job-title">
+                    <span class="job-title-row__number">232323</span>
+                    <span class="job-title-row__name" id="description">2018 Standard Menu Single Fold Jan 2018 Ws</span>
+                </h5>
+                <button class="icon-btn" title="Edit job information" aria-label="Edit job information" onclick="openModal('editJob')">
+                    <i class="fa-regular fa-pen"></i>
+                </button>
             </div>
-            <div class="inner-row border-top">
+
+            <!-- JobMeta: read-only job facts as label/value pairs (repeatable → @for in Angular) -->
+            <dl class="meta-list">
+                <div class="meta-item">
+                    <dt class="meta-item__label">Job type</dt>
+                    <dd class="meta-item__value">New Job</dd>
+                </div>
+                <div class="meta-item">
+                    <dt class="meta-item__label">Production Type</dt>
+                    <dd class="meta-item__value">Printing</dd>
+                </div>
+                <div class="meta-item">
+                    <!-- Scheduling: link text changes with request state (Make request / In review / Action needed / Shipping date) -->
+                    <dt class="meta-item__label">Scheduling</dt>
+                    <dd class="meta-item__value">
+                        <a class="meta-link" href="#">Make request <i class="fa-solid fa-arrow-up-right"></i></a>
+                    </dd>
+                </div>
+                <div class="meta-item">
+                    <dt class="meta-item__label">Time tracked</dt>
+                    <dd class="meta-item__value">
+                        <a class="meta-link" href="#">24 hours <i class="fa-solid fa-arrow-up-right"></i></a>
+                    </dd>
+                </div>
+                <div class="meta-item">
+                    <dt class="meta-item__label">Sales</dt>
+                    <dd class="meta-item__value">
+                        <span class="avatar avatar--sales" title="Sales rep">JP</span>
+                    </dd>
+                </div>
+                <div class="meta-item">
+                    <dt class="meta-item__label">Billing</dt>
+                    <dd class="meta-item__value">
+                        <span class="avatar avatar--billing" title="Billing contact">SC</span>
+                    </dd>
+                </div>
+            </dl>
+
+            <!-- JobHeader / Footer: job-info panels (left) + audit line (right) -->
+            <div class="job-header-footer">
                 <div class="job-actions">
-                    <button class="btn-secondary" onclick="openModal('manageNotes')">
-                        Manage Notes
+                    <button class="btn-text" onclick="openModal('manageNotes')">
+                        <i class="fa-regular fa-note-sticky"></i>
+                        Notes
                     </button>
-                    <button class="btn-secondary" onclick="openModal('proofContacts')">
-                        Manage Job Contacts
+                    <button class="btn-text" onclick="openModal('proofContacts')">
+                        <i class="fa-regular fa-user-group"></i>
+                        Job Contacts
                     </button>
-                    <button class="btn-secondary" id="statusPill" title="Bindery On Cart"
-                        onclick="openModal('scanHistory')">
-                        View Activity Log
+                    <button class="btn-text" id="statusPill" onclick="openModal('scanHistory')">
+                        <i class="fa-regular fa-clock-rotate-left"></i>
+                        Activity Log
                     </button>
-                    <button class="btn-secondary" onclick="openModal('billingDetails')">
-                        View Billing Details
+                    <button class="btn-text" onclick="openModal('billingDetails')">
+                        <i class="fa-regular fa-receipt"></i>
+                        Billing Details
                     </button>
                 </div>
-                <div class="acct-team">
-                <div class="avatar-group">
-                  <div class="avatar" style="background: #d8e2fb">JP</div>
-                  <div class="avatar-label type-body-sm">Sales</div>
-                </div>
-                <div class="avatar-group">
-                  <div class="avatar" style="background: #e8fbd4">SC</div>
-                  <div class="avatar-label type-body-sm">Billing</div>
-                </div>
-              </div>
+                <p class="job-meta type-body-sm">Last modified by Healey Pembridge on 3/03/25</p>
             </div>
-        </div><!-- /.job-header-card -->
+
+        </section><!-- /.job-header-card -->
     </div><!-- /.header-wrap -->
+    <!-- ══ JobHeader: end ══ -->
 </body>
 
 </html>

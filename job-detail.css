@@ -99,7 +99,7 @@ body {
   width: var(--container-workspace);
 }
 #tab-panel-shipping{
-  width: var(--container-workspace);
+  width: var(--container-data);
 }
 
 /* ── PAGE CONTENT ── */

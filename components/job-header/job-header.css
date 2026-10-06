@@ -1,152 +1,211 @@
-.header-wrap{
+/* ============================================================
+   JOB HEADER — labeled meta strip
+   Component map (see job-header.html):
+     .header-wrap         JobHeader wrapper
+     .job-header-bar      status (left) + output actions (right)
+     .job-status          JobStatus badge + milestone line
+     .job-header-card     card: top / meta list / footer
+     .meta-list           JobMeta label/value pairs
+     .job-header-footer   job-info panel buttons + last modified
+   ============================================================ */
+
+.header-wrap {
   width: var(--container-workspace);
   margin: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* ── Above-card bar: status pill left, primary actions right ── */
+/* ── Bar above the card ── */
 .job-header-bar {
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   justify-content: space-between;
+  gap: var(--scale-400);
+  padding-bottom: var(--scale-300);
 }
 
-/* Status tab sits flush on top of the card — no bottom border, rounded top corners only */
-.job-header-bar .pill {
-  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
-  padding: 8px 16px;
-  display: flex;
-  align-self: stretch;
-  margin-left: 16px;
-  margin-top: auto;
-  background: var(--status-info-bg);
-  border: solid 1px var(--status-info-border);
-  border-bottom: none;
-}
-
-/* Groups the status tab and the scheduling request tab */
-.job-status-tabs {
-  display: flex;
-  align-self: stretch;
-}
-.job-status-tabs .pill + .pill {
-  margin-left: 8px;
-}
-
-/* Scheduling request tab — PL-SHARED neutral pill colours */
-.job-header-bar .pill.job-status-tab-neutral {
-  background: var(--status-neutral-bg);
-  border-color: var(--status-neutral-border);
-}
-
-.job-header-bar .job-actions-right {
-  padding-bottom: 16px;
-}
-
-/* ── JOB HEADER — styled as account card ── */
-
-.job-header-card {
+/* ── JobStatus ── */
+.job-status {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  background-color: var(--bg-surface);
-  border-radius: 8px;
-  border: solid 1px var(--border-default);
+  gap: var(--scale-100);
 }
 
-/* inner rows mirror .account .inner-row */
-
-.inner-row {
-  display: flex;
-  gap: 12px;
-  padding: 0;
-  align-items: flex-start;
-  padding: 16px;
-}
-
-.inner-row.border-top {
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 12px;
-  justify-content: space-between;
-}
-
-.inner-row-col {
-  flex-direction: column;
+.job-status__badge {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--interactive-default);
 }
 
-.acct-team {
-  display: flex;
-  gap: 12px;
+.job-status__dot {
+  width: var(--scale-200);
+  height: var(--scale-200);
+  border-radius: var(--border-radius-full);
+  background: var(--interactive-default);
 }
 
-.avatar-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  border: solid 1px var(--border-subtle);
-  color: var(--text-primary);
-}
-.avatar-label {
+.job-status__detail {
   color: var(--text-tertiary);
 }
 
-/* Job header layout helpers */
+/* ── Output actions (Trello / Duplicate / Print) ── */
+.job-actions-right {
+  display: flex;
+  gap: var(--scale-200);
+  align-items: center;
+}
 
+/* Text button — LOCAL OVERRIDE (not in PL-SHARED).
+   Borderless interactive-colored button used for Trello/Duplicate and the
+   footer panel links. Candidate for a shared button variant. */
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  background: transparent;
+  color: var(--interactive-default);
+  font-family: var(--font-family-primary);
+  font-size: var(--fontsize-body-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-text:hover {
+  background: var(--interactive-bg-subtle);
+}
+
+/* ── Card ── */
+.job-header-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-surface);
+  border-radius: var(--border-radius-md);
+  border: solid 1px var(--border-default);
+}
+
+/* Top: title + edit */
 .job-header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-}
-
-.job-header-card .pill{
-  padding: 0px 16px;
-  margin-left: 8px;
-  background-color: var(--status-warning-bg);
-  border: solid 1px var(--status-warning-border);
+  gap: var(--scale-600);
+  padding: var(--scale-500) var(--scale-600) var(--scale-400);
 }
 
 .job-title-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--scale-300);
   color: var(--text-primary);
 }
-.job-title-row #description{
+
+.job-title-row__name {
   font-weight: var(--font-weight-book);
-
 }
 
-.job-meta{
-  color: var(--text-secodary);
+/* ── JobMeta: label/value pairs ── */
+.meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0 var(--scale-600) var(--scale-500);
 }
 
-/* action buttons row */
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--scale-100);
+  padding: 0 var(--scale-600);
+  border-left: 1px solid var(--border-subtle);
+}
+
+.meta-item:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.meta-item__label {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-tertiary);
+}
+
+.meta-item__value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--scale-600);
+  margin: 0;
+  font-size: var(--fontsize-body-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.meta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--scale-100);
+  text-underline-offset: 3px;
+}
+
+.meta-link i {
+  font-size: var(--fontsize-label);
+}
+
+/* Avatar */
+.avatar {
+  width: var(--scale-600);
+  height: var(--scale-600);
+  border-radius: var(--border-radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fontsize-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+/* UNDEFINED TOKENS: role colors carried over from the previous inline
+   styles — no PL-SHARED blue / light-green tokens exist for these. */
+.avatar--sales {
+  background: #d8e2fb;
+}
+
+.avatar--billing {
+  background: #e8fbd4;
+}
+
+/* ── Footer: panel buttons + audit line ── */
+.job-header-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--scale-400);
+  padding: 6px 14px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-muted);
+  border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+}
 
 .job-actions {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: var(--scale-100);
 }
 
-/* ── Right-side action group (Trello + Print) ── */
-.job-actions-right {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+/* Last-modified line — de-emphasized */
+.job-meta {
+  color: var(--text-tertiary);
+  padding-right: 10px;
 }
 
 /* ── Print split button (primary style) ── */
@@ -180,6 +239,7 @@
 
 .btn-split-caret {
   padding: 6px 10px;
+  font-size: var(--fontsize-label);
   border-left: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0 var(--border-radius-full) var(--border-radius-full) 0;
 }
