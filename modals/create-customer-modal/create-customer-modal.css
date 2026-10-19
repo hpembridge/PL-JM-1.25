@@ -182,3 +182,61 @@
   border-top: 1px solid var(--border-subtle);
   margin-top: 8px;
 }
+
+/* ── General step: Account + Billing sections ──
+   .toggle-grid and .prefix-input lifted from PL-CM-1.5/customer-management.css. */
+
+.cc-body .dj-panel > .section-label-sm:first-child {
+  padding-top: 0;
+  margin-top: 0;
+  border-top: none;
+}
+
+.cc-body .section-label-sm {
+  margin-bottom: -8px;
+}
+
+.cc-body .toggle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.cc-body .cc-type-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cc-body .prefix-input {
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cc-body .prefix-input:focus-within {
+  border-color: var(--border-focus);
+}
+
+.cc-body .prefix-input span {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-page);
+  border-right: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+  font-size: var(--fontsize-body-sm);
+}
+
+.cc-body .prefix-input input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 8px 12px;
+  font-size: var(--fontsize-body-sm);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}

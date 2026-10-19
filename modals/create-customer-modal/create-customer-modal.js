@@ -1,10 +1,15 @@
 // ── Create New Customer modal ─────────────────────────────────────────
-// Three steps: General, Add Contact, Add Address. Navigation follows the
+// Four steps: General, Billing Details, Add Contact, Add Address. Navigation follows the
 // same rule as the Duplicate Job modal — always free to go back, never
 // forward past a step that is missing something.
 
-const CC_STEPS = ['general', 'contact', 'address'];
-const CC_REQUIRED = { general: ['cc-customer-name', 'cc-short-name', 'cc-main-phone'], contact: [], address: [] };
+const CC_STEPS = ['general', 'billing', 'contact', 'address'];
+const CC_REQUIRED = {
+  general: ['cc-customer-name', 'cc-short-name', 'cc-main-phone', 'cc-customer-type', 'cc-salesperson'],
+  billing: ['cc-sales-tax-code'],
+  contact: [],
+  address: []
+};
 const ccTouched = new Set();
 
 function ccCurrentStep() {
@@ -42,7 +47,7 @@ function ccUpdateFooter() {
 }
 
 function ccValidate() {
-  const invalid = { general: [], contact: [], address: [] };
+  const invalid = { general: [], billing: [], contact: [], address: [] };
 
   Object.entries(CC_REQUIRED).forEach(([step, ids]) => {
     ids.forEach(id => {
@@ -98,6 +103,11 @@ function ccCreate() {
   const firstBad = CC_STEPS.find(step => invalid[step].length);
   if (firstBad) { ccGoToStep(firstBad); return; }
   saveModal('createCustomer');
+}
+
+// ── Customer Type → Hotel Settings visibility (mirrors updateTypeSettings in PL-CM-1.5) ──
+function ccUpdateTypeSettings(type) {
+  document.getElementById('cc-hotel-settings')?.classList.toggle('hidden-section', type !== 'Hotel');
 }
 
 // ── Contact email / phone rows — same helpers customer maintenance uses ──

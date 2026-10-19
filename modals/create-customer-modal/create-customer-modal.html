@@ -19,7 +19,9 @@
 <body data-theme="titanium">
 
   <!-- ══ MODAL: Create New Customer ════════════════════════════════════
-       Three steps: General, Add Contact, Add Address. The Contact and
+       Four steps: General, Billing Details, Add Contact, Add Address.
+       General is the Edit Account Information body and Billing Details is
+       the Edit Billing Information body. The Contact and
        Address steps are the bodies of the Add New Contact / Add New Address
        modals from customer maintenance (PL-CM-1.5), reused verbatim so the
        forms stay in one shape across the two places they appear.
@@ -38,6 +40,7 @@
       <div class="dj-steps">
         <div class="dj-steps-row">
           <button class="dj-step active" data-step="general" onclick="ccRequestStep('general')">General<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
+          <button class="dj-step" data-step="billing" onclick="ccRequestStep('billing')">Billing Details<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
           <button class="dj-step" data-step="contact" onclick="ccRequestStep('contact')">Add Contact<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
           <button class="dj-step" data-step="address" onclick="ccRequestStep('address')">Add Address<i class="fa-solid fa-circle-exclamation dj-step-flag hidden-section" title="Required information missing"></i></button>
         </div>
@@ -48,18 +51,31 @@
 
       <div class="modal-body dj-body cc-body">
 
-        <!-- ══ STEP 1: General ═══════════════════════════════════════ -->
+        <!-- ══ STEP 1: General ═══════════════════════════════════════
+             Edit Account Information body from PL-CM-1.5
+             customer-detail-page.html. Values are blank (create mode);
+             required markers + validation added. -->
         <div class="dj-panel active" data-panel="general">
+
+          <!-- ── AccountInfoForm (from Edit Account Information) ── -->
+          <div class="section-label-sm">Account Information</div>
+
           <div class="form-group">
             <label class="form-label" for="cc-customer-name">Customer Name <span class="dj-required">*</span></label>
-            <input class="form-input" type="text" id="cc-customer-name" oninput="ccValidate()" />
+            <input class="form-input" type="text" id="cc-customer-name" placeholder="ex. Sunrise Grill" oninput="ccValidate()" />
             <p class="dj-field-error hidden-section">Customer name is required.</p>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="cc-short-name">Short Name <span class="dj-required">*</span></label>
-            <input class="form-input" type="text" id="cc-short-name" oninput="ccValidate()" />
-            <p class="dj-field-error hidden-section">Short name is required.</p>
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="cc-short-name">Customer Short Name <span class="dj-required">*</span></label>
+              <input class="form-input" type="text" id="cc-short-name" placeholder="ex. Sunrise Grill" oninput="ccValidate()" />
+              <p class="dj-field-error hidden-section">Short name is required.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cc-alternate-id">Alternate ID</label>
+              <input class="form-input" type="text" id="cc-alternate-id" />
+            </div>
           </div>
 
           <div class="form-group">
@@ -67,9 +83,158 @@
             <input class="form-input" type="tel" id="cc-main-phone" placeholder="(000) 000-0000" oninput="ccValidate()" />
             <p class="dj-field-error hidden-section">Main phone number is required.</p>
           </div>
+
+          <div class="toggle-grid">
+            <div class="toggle-row" onclick="this.classList.toggle('on')">
+              <span class="toggle-label">Management Group</span>
+              <div class="toggle"></div>
+            </div>
+            <div class="toggle-row" onclick="this.classList.toggle('on')">
+              <span class="toggle-label">Franchise Group</span>
+              <div class="toggle"></div>
+            </div>
+          </div>
+
+          <div class="toggle-row on" onclick="this.classList.toggle('on')">
+            <span class="toggle-label">Active Customer</span>
+            <div class="toggle"></div>
+          </div>
+
+          <div class="section-label-sm">Customer Organization</div>
+          <div class="form-group">
+            <label class="form-label" for="cc-management-group">Management Group</label>
+            <select class="form-select" id="cc-management-group">
+              <option>Start typing to search groups…</option>
+              <option>Marriott International</option>
+              <option>Hilton Hotels</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cc-franchise-group">Franchise Group</label>
+            <select class="form-select" id="cc-franchise-group">
+              <option>Start typing to search groups…</option>
+              <option>Marriott International</option>
+              <option>Hilton Hotels</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cc-customer-type">Customer Type <span class="dj-required">*</span></label>
+            <select class="form-select" id="cc-customer-type" onchange="ccUpdateTypeSettings(this.value); ccValidate()">
+              <option value="">Select a customer type…</option>
+              <option value="Hotel">Hotel</option>
+              <option value="Agency">Agency</option>
+              <option value="Beverage Company">Beverage Company</option>
+              <option value="Club">Club</option>
+              <option value="Cruise Line">Cruise Line</option>
+              <option value="Independent Restaurant">Independent Restaurant</option>
+              <option value="National Restaurant">National Restaurant</option>
+            </select>
+            <p class="dj-field-error hidden-section">Customer type is required.</p>
+          </div>
+
+          <!-- Hotel Settings — shown only when Customer Type = Hotel -->
+          <div class="cc-type-settings hidden-section" id="cc-hotel-settings">
+            <div class="section-label-sm">Hotel Settings</div>
+            <div class="form-group">
+              <label class="form-label" for="cc-room-count">Room Count</label>
+              <input class="form-input" type="number" id="cc-room-count" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="section-label-sm">Team</div>
+          <div class="form-group">
+            <label class="form-label" for="cc-salesperson">Salesperson <span class="dj-required">*</span></label>
+            <select class="form-select" id="cc-salesperson" onchange="ccValidate()">
+              <option value="">Select a salesperson…</option>
+              <option>JP — John Patterson</option>
+            </select>
+            <p class="dj-field-error hidden-section">Salesperson is required.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cc-billing-associate">Billing Associate</label>
+            <select class="form-select" id="cc-billing-associate">
+              <option>Unassigned</option>
+              <option>SC — Sara Chen</option>
+            </select>
+          </div>
+          <!-- ── /AccountInfoForm ── -->
+
         </div><!-- /step: general -->
 
-        <!-- ══ STEP 2: Add Contact — body reused from PL-CM-1.5 ══════ -->
+        <!-- ══ STEP 2: Billing Details ════════════════════════════════
+             Edit Billing Information body from PL-CM-1.5
+             customer-detail-page.html, blank for create mode. -->
+        <div class="dj-panel" data-panel="billing">
+
+          <!-- ── BillingInfoForm (from Edit Billing Information) ── -->
+
+          <div class="toggle-grid">
+            <div class="toggle-row" onclick="this.classList.toggle('on')">
+              <span class="toggle-label">PO Required</span>
+              <div class="toggle"></div>
+            </div>
+            <div class="toggle-row" onclick="this.classList.toggle('on')">
+              <span class="toggle-label">Tax Exempt</span>
+              <div class="toggle"></div>
+            </div>
+          </div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="cc-sales-tax-code">Sales Tax Code <span class="dj-required">*</span></label>
+              <input class="form-input" type="text" id="cc-sales-tax-code" oninput="ccValidate()" />
+              <p class="dj-field-error hidden-section">Sales tax code is required.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cc-sales-tax-rate">Sales Tax Rate</label>
+              <div class="prefix-input">
+                <span>%</span>
+                <input type="number" id="cc-sales-tax-rate" step="0.001" placeholder="0.00" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cc-payment-terms">Payment Terms</label>
+            <select class="form-select" id="cc-payment-terms">
+              <option>Net 15</option>
+              <option>Net 30</option>
+              <option>Net 60</option>
+              <option>Due on Receipt</option>
+              <option>2/10 Net 30</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cc-credit-status">Credit Status</label>
+            <select class="form-select" id="cc-credit-status">
+              <option>Good</option>
+              <option>Watch</option>
+              <option>Hold</option>
+              <option>Closed</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cc-credit-limit">Credit Limit</label>
+            <div class="prefix-input">
+              <span>$</span>
+              <input type="number" id="cc-credit-limit" placeholder="00.00" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cc-commission-rate">Commission Rate</label>
+            <div class="prefix-input">
+              <span>%</span>
+              <input type="number" id="cc-commission-rate" placeholder="00" />
+            </div>
+          </div>
+          <!-- ── /BillingInfoForm ── -->
+
+        </div><!-- /step: billing -->
+
+        <!-- ══ STEP 3: Add Contact — body reused from PL-CM-1.5 ══════ -->
         <div class="dj-panel" data-panel="contact">
 
             <div class="form-group">
@@ -188,7 +353,7 @@
             </div>
         </div><!-- /step: contact -->
 
-        <!-- ══ STEP 3: Add Address — body reused from PL-CM-1.5 ══════ -->
+        <!-- ══ STEP 4: Add Address — body reused from PL-CM-1.5 ══════ -->
         <div class="dj-panel" data-panel="address">
 
             <div class="form-group">
@@ -315,6 +480,12 @@
   <!-- ══ IMPLEMENTATION NOTES ═══════════════════════════════════════════
        Components
          CreateCustomerModal → #modal-createCustomer · .modal-* (components/modal-shell.css)
+         AccountInfoForm     → [data-panel="general"] — the Edit Account
+                               Information body from PL-CM-1.5, blank for create
+                               mode, plus Main Phone Number (create-only)
+         BillingInfoForm     → [data-panel="billing"] — the Edit
+                               Billing Information body from PL-CM-1.5, including
+                               the new Sales Tax Code / Sales Tax Rate fields
          CreateCustomerSteps → .dj-steps markup, shared with the Duplicate Job
                                modal (modals/duplicate-job-modal/duplicate-job-modal.css)
          ContactForm         → [data-panel="contact"] — the Add New Contact body
@@ -327,6 +498,10 @@
            always free to go back, never forward past a step missing something.
          · addContactMethod()/removeContactMethodRow() are the same helpers
            customer maintenance uses for the email/phone rows.
+         · ccUpdateTypeSettings() shows Hotel Settings only for Customer Type =
+           Hotel (same rule as updateTypeSettings() in customer maintenance).
+         · In Angular the Account Info and Billing Info sections should be the
+           same form components the Edit Account / Edit Billing modals use.
          · In Angular the Contact and Address panels are the existing contact
            and address form components, not copies.
   ═══════════════════════════════════════════════════════════════════ -->
