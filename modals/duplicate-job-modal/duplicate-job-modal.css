@@ -243,6 +243,37 @@
   border-radius: var(--border-radius-md);
 }
 
+.dj-source-description-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dj-source-description-keep {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.dj-source-description-keep input[type="checkbox"] {
+  accent-color: var(--interactive-default);
+  cursor: pointer;
+}
+
+/* Pull-plate: Keep is forced on and can't be changed */
+.dj-source-description-keep.is-locked {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.dj-source-description-keep.is-locked input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
 .dj-source-description-label {
   font-size: var(--fontsize-label);
   font-weight: var(--font-weight-bold);
@@ -255,7 +286,7 @@
   color: var(--text-primary);
 }
 
-/* ── Customer picker (Job Contacts step) ──
+/* ── Customer picker (top of Production step) ──
    A search field until a customer is chosen, then one row showing which
    customer the job belongs to. */
 
@@ -345,4 +376,80 @@
 
 .jc-field-disabled .jc-search {
   cursor: not-allowed;
+}
+
+/* New Job Description while "Keep" is checked */
+#dj-description[readonly] {
+  background: var(--bg-muted);
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+/* ── Shipping change notice (under the customer picker) ──
+   Info styling when every address carried over; warning styling
+   (--warning) when some were removed for the new customer. */
+
+.dj-shipping-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 6px;
+  padding: 12px 8px 12px 14px;
+  background: var(--status-info-bg);
+  border: 1px solid var(--status-info-border);
+  border-radius: var(--border-radius-md);
+}
+
+.dj-shipping-notice--warning {
+  background: var(--status-warning-bg);
+  border-color: var(--status-warning-border);
+}
+
+.dj-shipping-notice-icon {
+  margin-top: 2px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.dj-shipping-notice-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dj-shipping-notice-title {
+  margin: 0;
+  font-size: var(--fontsize-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.dj-shipping-notice-text {
+  margin: 0;
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-secondary);
+}
+
+.dj-shipping-notice-list {
+  margin: 2px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dj-shipping-notice-item {
+  font-size: var(--fontsize-body-sm);
+  color: var(--text-secondary);
+}
+
+.dj-shipping-notice-item-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.dj-shipping-notice-dismiss {
+  flex-shrink: 0;
 }

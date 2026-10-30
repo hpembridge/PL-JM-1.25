@@ -61,29 +61,6 @@
   align-items: center;
 }
 
-/* Text button — LOCAL OVERRIDE (not in PL-SHARED).
-   Borderless interactive-colored button used for Trello/Duplicate and the
-   footer panel links. Candidate for a shared button variant. */
-.btn-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border: none;
-  border-radius: var(--border-radius-sm);
-  background: transparent;
-  color: var(--interactive-default);
-  font-family: var(--font-family-primary);
-  font-size: var(--fontsize-body-md);
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.btn-text:hover {
-  background: var(--interactive-bg-subtle);
-}
-
 /* ── Card ── */
 .job-header-card {
   display: flex;
@@ -190,7 +167,7 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--scale-400);
-  padding: 6px 14px;
+  padding: var(--scale-300);
   border-top: 1px solid var(--border-subtle);
   background: var(--bg-muted);
   border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
@@ -199,7 +176,7 @@
 .job-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--scale-100);
+  gap: var(--scale-200);
 }
 
 /* Last-modified line — de-emphasized */

@@ -14,6 +14,14 @@ const DUPLICATE_JOB_DEFINITION = {
   notes: ['billing', 'detail'],        // billing | shipping | paper | detail
   contacts: ['billing', 'shipping', 'proofing'],
   shipping: true,                      // shipping distribution rows exist
+  // Shipping distribution addresses. `customers` = customer numbers whose
+  // account holds that address (mock for the customer address-book lookup).
+  shippingAddresses: [
+    { name: 'Main Address',   street: '710 S Wayside Drive, Houston, TX 77023',     customers: ['13730', '2030'] },
+    { name: 'Clearwood',      street: '8925 Clearwood St, Houston, TX 77075',       customers: ['13730'] },
+    { name: 'Office Address', street: '1441 East 17th Street, Cleveland, OH 44114', customers: ['13730', '2030', '18440'] },
+    { name: 'Westpark',       street: '3131 Westpark, Houston, TX 77005',           customers: ['13730'] }
+  ],
   details: [
     { id: 'detail-1', name: 'Folder', quantity: 200, sections: ['general', 'paper'] }
     // { id: 'detail-2', name: 'Cover', quantity: 500, sections: ['general', 'print'] }
@@ -117,9 +125,10 @@ function djBuildCopyList() {
     });
   });
 
-  // Nothing is selected by default — the user opts in to what gets copied
+  // Everything the job defines is selected by default — the user opts out
+  // of what they don't want copied. Rows hidden for this job stay unchecked.
   list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-    cb.checked = false;
+    cb.checked = !cb.closest('.dj-hidden');
     cb.indeterminate = false;
   });
   list.querySelectorAll('[data-copy-parent]').forEach(p => djToggleChildren(p));
@@ -177,10 +186,41 @@ function djInitCopyListEvents() {
 function djOnJobTypeChange(select) {
   const desc = document.getElementById('dj-job-type-desc');
   if (desc) desc.textContent = DUPLICATE_JOB_TYPE_DESC[select.value] || '';
+  djApplyJobTypeLock(select.value);
   // Only a real change from the user counts as touching the field — opening
   // the modal resets it through here too, and that should not show an error.
   if (select instanceof HTMLElement) djTouched.add('dj-job-type');
   djValidate();
+}
+
+// Pull-plate reproduces the original exactly, so the description is locked
+// to the original: Keep is forced on and can't be unchecked. Switching to
+// another type re-enables Keep (left checked; the user can uncheck it).
+// Duplicate mode only — Create New Job has no original description.
+function djApplyJobTypeLock(jobType) {
+  const keep = document.getElementById('dj-keep-description');
+  if (!keep) return;
+  const locked = djMode === 'duplicate' && jobType === 'pull-plate';
+  if (locked) djSetKeepDescription(true);
+  keep.disabled = locked;
+  keep.closest('.dj-source-description-keep')?.classList.toggle('is-locked', locked);
+}
+
+// "Keep" on Current Job Description: the new description mirrors the
+// original and is read-only while checked; unchecking clears it for entry.
+function djOnKeepDescription(cb) {
+  djSetKeepDescription(cb.checked);
+  djTouched.add('dj-description');
+  djValidate();
+}
+
+function djSetKeepDescription(keep) {
+  const cb = document.getElementById('dj-keep-description');
+  const input = document.getElementById('dj-description');
+  if (cb) cb.checked = keep;
+  if (!input) return;
+  input.value = keep ? (DUPLICATE_JOB_DEFINITION.description || '') : '';
+  input.readOnly = keep;
 }
 
 function djAddDetailRow() {
@@ -214,6 +254,8 @@ function djApplyPrefill() {
   if (source) source.textContent = job.description || '—';
   document.querySelector('.dj-source-description')?.classList.remove('hidden-section');
   set('dj-description', '');
+  djSetKeepDescription(false);
+  djApplyJobTypeLock(document.getElementById('dj-job-type')?.value || '');
 
   // Billing information
   set('dj-po-number', djIsCopied('billing.poNumber') ? job.billing.poNumber : '');
@@ -224,6 +266,7 @@ function djApplyPrefill() {
   // setting it clears any recipients, so the channels are seeded after.
   const keepingContacts = ['contacts.proofing', 'contacts.billing', 'contacts.shipping'].some(djIsCopied);
   djSetCustomer(keepingContacts ? job.customer : null);
+  djHideShippingNotice();
 
   // Job contacts — one copy row per channel
   const channelRow = { proofs: 'contacts.proofing', invoices: 'contacts.billing', shipping: 'contacts.shipping' };
@@ -290,10 +333,10 @@ function djValidate() {
     });
   });
 
-  // A customer has to be chosen before the job can be created
-  if (!djCustomer) invalid.contacts.push('customer');
+  // A customer has to be chosen before the job can be created (Production step)
+  if (!djCustomer) invalid.production.push('customer');
   document.getElementById('dj-customer-error')
-    ?.classList.toggle('hidden-section', !!djCustomer || !djTouched.has('contacts'));
+    ?.classList.toggle('hidden-section', !!djCustomer || !djTouched.has('production'));
 
   // At least one detail with a non-zero quantity (negatives are valid)
   const quantities = [...document.querySelectorAll('.dj-detail-quantity')];
@@ -355,10 +398,12 @@ function djBack() {
   if (i > 0) djRequestStep(DJ_STEPS[i - 1]);
 }
 
-// ══ Customer picker (Job Contacts step) ═════════════════════════════
+// ══ Customer picker (Production step) ════════════════════════════════
 // Empty on a new job. On a duplicate it carries the original's customer
 // while Job Contacts is being copied, and clears when that is unchecked.
 let djCustomer = null;
+// Shipping addresses the new job will carry (filtered on customer change)
+let djShippingAddresses = [];
 let djCustomerMatches = [];
 let djCustomerHighlight = -1;
 
@@ -388,6 +433,7 @@ function djSetCustomer(customer) {
 
 function djClearCustomer() {
   djSetCustomer(null);
+  djHideShippingNotice();
   document.getElementById('dj-customer-input')?.focus();
 }
 
@@ -423,7 +469,61 @@ function djCloseCustomerDropdown() {
 
 function djPickCustomer(idx) {
   const hit = djCustomerMatches[idx];
-  if (hit) djSetCustomer(hit);
+  if (!hit) return;
+  djSetCustomer(hit);
+  djShowShippingNotice(hit);
+}
+
+let djShippingItemTemplate = null;
+
+// ══ Shipping change notice ═══════════════════════════════════════════
+// Only when Shipping Distribution is being copied and the user picks a
+// customer other than the original job's. Addresses not on the new
+// customer's account are dropped and listed.
+function djShowShippingNotice(customer) {
+  const job = DUPLICATE_JOB_DEFINITION;
+  const notice = document.getElementById('dj-shipping-notice');
+  if (!notice) return;
+
+  if (djMode !== 'duplicate' || !djIsCopied('shipping') ||
+      customer.number === job.customer.number) {
+    djHideShippingNotice();
+    return;
+  }
+
+  const addresses = job.shippingAddresses || [];
+  const removed = addresses.filter(a => !a.customers.includes(customer.number));
+  djShippingAddresses = addresses.filter(a => a.customers.includes(customer.number));
+
+  document.getElementById('dj-shipping-notice-customer').textContent =
+    customer.number + ' ' + customer.name;
+
+  const n = removed.length;
+  document.getElementById('dj-shipping-notice-summary').textContent = n
+    ? n + ' address' + (n === 1 ? ' was' : 'es were') + ' removed because ' +
+      (n === 1 ? "it isn't" : "they aren't") + " on this customer's account:"
+    : 'All ' + addresses.length + ' shipping addresses carried over.';
+
+  // Repeat the markup's <li> once per removed address (@for in Angular).
+  // The first <li> in the HTML is captured once as the row template.
+  const list = document.getElementById('dj-shipping-notice-list');
+  djShippingItemTemplate ??= list.firstElementChild.cloneNode(true);
+  list.innerHTML = '';
+  removed.forEach(a => {
+    const li = djShippingItemTemplate.cloneNode(true);
+    li.querySelector('.dj-shipping-notice-item-name').textContent = a.name;
+    li.querySelector('.dj-shipping-notice-item-street').textContent = a.street;
+    list.appendChild(li);
+  });
+  list.classList.toggle('hidden-section', n === 0);
+
+  notice.classList.toggle('dj-shipping-notice--warning', n > 0);
+  notice.classList.remove('hidden-section');
+}
+
+function djHideShippingNotice() {
+  document.getElementById('dj-shipping-notice')?.classList.add('hidden-section');
+  djShippingAddresses = [...(DUPLICATE_JOB_DEFINITION.shippingAddresses || [])];
 }
 
 function djCustomerKeydown(e) {
@@ -642,6 +742,7 @@ function djClearFields() {
   ['dj-description', 'dj-po-number', 'dj-po-name', 'dj-billing-note', 'dj-production-type']
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 
+  djSetKeepDescription(false);
   const source = document.getElementById('dj-source-description');
   if (source) source.textContent = '';
   document.querySelector('.dj-source-description')?.classList.add('hidden-section');

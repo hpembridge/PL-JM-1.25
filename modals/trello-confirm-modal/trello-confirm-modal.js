@@ -16,7 +16,7 @@
         btn.innerHTML = 'Sent! <i class="fa-solid fa-circle-check" ></i> ';
         setTimeout(() => {
           // Final state
-          btn.innerHTML = ' View on Trello';
+          btn.innerHTML = 'View on Trello <i class="fa-solid fa-arrow-up-right"></i>';
           btn.disabled = false;
           btn.dataset.state = 'done';
         }, 1200);

@@ -34,12 +34,12 @@
 
             <!-- JobOutputActions -->
             <div class="job-actions-right">
-                <button class="btn-text" id="trello-btn" onclick="trelloAction()">
-                    <i class="fa-brands fa-trello"></i>
+                <button class="btn-secondary" id="trello-btn" onclick="trelloAction()">
                     Send to Trello
+                    <i class="fa-solid fa-arrow-up-right"></i>
                 </button>
 
-                <button class="btn-text" id="duplicate-job-btn" onclick="openDuplicateJob()">
+                <button class="btn-secondary" id="duplicate-job-btn" onclick="openDuplicateJob()">
                     <i class="fa-regular fa-copy"></i>
                     Duplicate
                 </button>
@@ -133,20 +133,16 @@
             <!-- JobHeader / Footer: job-info panels (left) + audit line (right) -->
             <div class="job-header-footer">
                 <div class="job-actions">
-                    <button class="btn-text" onclick="openModal('manageNotes')">
-                        <i class="fa-regular fa-note-sticky"></i>
+                    <button class="btn-secondary" onclick="openModal('manageNotes')">
                         Notes
                     </button>
-                    <button class="btn-text" onclick="openModal('proofContacts')">
-                        <i class="fa-regular fa-user-group"></i>
+                    <button class="btn-secondary" onclick="openModal('proofContacts')">
                         Job Contacts
                     </button>
-                    <button class="btn-text" id="statusPill" onclick="openModal('scanHistory')">
-                        <i class="fa-regular fa-clock-rotate-left"></i>
+                    <button class="btn-secondary" id="statusPill" onclick="openModal('scanHistory')">
                         Activity Log
                     </button>
-                    <button class="btn-text" onclick="openModal('billingDetails')">
-                        <i class="fa-regular fa-receipt"></i>
+                    <button class="btn-secondary" onclick="openModal('billingDetails')">
                         Billing Details
                     </button>
                 </div>

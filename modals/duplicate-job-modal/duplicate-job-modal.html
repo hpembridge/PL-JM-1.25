@@ -140,18 +140,64 @@
           </div>
         </div><!-- /step: content -->
 
-        <!-- ══ STEP 2: Production ════════════════════════════════════ -->
+        <!-- ══ STEP 2: Production ════════════════════════════════════
+             Customer · Job Type · Current/New Job Description ·
+             Production Type · Details
+        ═════════════════════════════════════════════════════════════ -->
         <div class="dj-panel" data-panel="production">
-          <!-- Original description, for reference — read-only -->
-          <div class="dj-source-description">
-            <span class="dj-source-description-label">Current Job Description</span>
-            <span class="dj-source-description-value" id="dj-source-description"></span>
-          </div>
+          <!-- Customer the job belongs to — first field on Production. Empty on
+               a new job; on a duplicate it holds the original's customer while
+               Job Contacts is being copied, and clears when that is unchecked.
+               Recipient pickers on the Job Contacts step stay disabled until
+               a customer is chosen here. -->
+          <div class="dj-customer">
+            <span class="ds-section-label dj-customer-label">Customer <span class="dj-required">*</span></span>
 
-          <div class="form-group">
-            <label class="form-label" for="dj-description">New Job Description <span class="dj-required">*</span></label>
-            <input class="form-input" type="text" id="dj-description" data-required oninput="djValidate()" />
-            <p class="dj-field-error hidden-section">Job description is required.</p>
+            <!-- Nothing chosen yet: search -->
+            <div class="dj-customer-search" id="dj-customer-search">
+              <i class="fa-regular fa-magnifying-glass"></i>
+              <input class="form-input" type="text" id="dj-customer-input" placeholder="Search customers…"
+                autocomplete="off" name="dj-customer" oninput="djCustomerInput(this.value)"
+                onfocus="djCustomerInput(this.value)" onkeydown="djCustomerKeydown(event)" />
+              <div class="jc-dropdown hidden-section" id="dj-customer-dropdown"></div>
+            </div>
+
+            <!-- Chosen: the customer reads as one selected row -->
+            <div class="dj-customer-selected hidden-section" id="dj-customer-selected">
+              <span class="dj-customer-avatar"><i class="fa-solid fa-people-group"></i></span>
+              <span class="dj-customer-number" id="dj-customer-number"></span>
+              <span class="dj-customer-name" id="dj-customer-name"></span>
+              <button class="icon-btn dj-customer-clear" aria-label="Clear customer" onclick="djClearCustomer()">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <p class="dj-field-error hidden-section" id="dj-customer-error">Choose a customer.</p>
+
+            <!-- Shipping change notice — shown when Shipping Distribution is
+                 being copied and the user picks a different customer. Lists
+                 the addresses dropped because they aren't on the new
+                 customer's account. The <li> is the repeated item (@for). -->
+            <div class="dj-shipping-notice hidden-section" id="dj-shipping-notice" role="status">
+              <i class="fa-solid fa-truck dj-shipping-notice-icon"></i>
+              <div class="dj-shipping-notice-body">
+                <p class="dj-shipping-notice-title">
+                  Shipping updated to <span id="dj-shipping-notice-customer">Customer Name</span>
+                </p>
+                <p class="dj-shipping-notice-text" id="dj-shipping-notice-summary">
+                  2 addresses were removed because they aren't on this customer's account:
+                </p>
+                <ul class="dj-shipping-notice-list" id="dj-shipping-notice-list">
+                  <li class="dj-shipping-notice-item">
+                    <span class="dj-shipping-notice-item-name">Address Name</span>
+                    <span class="dj-shipping-notice-item-street">Street, City, ST 00000</span>
+                  </li>
+                </ul>
+              </div>
+              <button class="icon-btn dj-shipping-notice-dismiss" aria-label="Dismiss" onclick="djHideShippingNotice()">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
           </div>
 
           <div class="form-group">
@@ -166,6 +212,25 @@
             </select>
             <p class="dj-select-desc type-body-sm" id="dj-job-type-desc"></p>
             <p class="dj-field-error hidden-section">Job type is required.</p>
+          </div>
+
+          <!-- Original description, for reference. "Keep" copies it into
+               New Job Description and locks that field while checked.
+               Pull-plate forces Keep on and disables it (exact reproduction). -->
+          <div class="dj-source-description">
+            <div class="dj-source-description-header">
+              <span class="dj-source-description-label">Current Job Description</span>
+              <label class="dj-source-description-keep">
+                <input type="checkbox" id="dj-keep-description" onchange="djOnKeepDescription(this)" /> Keep
+              </label>
+            </div>
+            <span class="dj-source-description-value" id="dj-source-description"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dj-description">New Job Description <span class="dj-required">*</span></label>
+            <input class="form-input" type="text" id="dj-description" data-required oninput="djValidate()" />
+            <p class="dj-field-error hidden-section">Job description is required.</p>
           </div>
 
           <div class="form-group">
@@ -211,34 +276,6 @@
              the two instances don't collide. Rows prefill from the job.
         ═════════════════════════════════════════════════════════════ -->
         <div class="dj-panel" data-panel="contacts">
-
-          <!-- Customer the job belongs to. Empty on a new job; on a duplicate
-               it holds the original's customer while Job Contacts is being
-               copied, and clears when that is unchecked. -->
-          <div class="dj-customer">
-            <span class="ds-section-label dj-customer-label">Customer <span class="dj-required">*</span></span>
-
-            <!-- Nothing chosen yet: search -->
-            <div class="dj-customer-search" id="dj-customer-search">
-              <i class="fa-regular fa-magnifying-glass"></i>
-              <input class="form-input" type="text" id="dj-customer-input" placeholder="Search customers…"
-                autocomplete="off" name="dj-customer" oninput="djCustomerInput(this.value)"
-                onfocus="djCustomerInput(this.value)" onkeydown="djCustomerKeydown(event)" />
-              <div class="jc-dropdown hidden-section" id="dj-customer-dropdown"></div>
-            </div>
-
-            <!-- Chosen: the customer reads as one selected row -->
-            <div class="dj-customer-selected hidden-section" id="dj-customer-selected">
-              <span class="dj-customer-avatar"><i class="fa-solid fa-people-group"></i></span>
-              <span class="dj-customer-number" id="dj-customer-number"></span>
-              <span class="dj-customer-name" id="dj-customer-name"></span>
-              <button class="icon-btn dj-customer-clear" aria-label="Clear customer" onclick="djClearCustomer()">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
-            </div>
-
-            <p class="dj-field-error hidden-section" id="dj-customer-error">Choose a customer.</p>
-          </div>
 
           <div class="jc-body dj-contacts">
 
@@ -359,8 +396,16 @@
                                   (tab + progress rail; fill width = step / 4)
          DuplicateJobCopyList   → .dj-copy-list markup · .dj-copy-* styles
          DuplicateJobProduction → [data-panel="production"] · .dj-details / .dj-detail-row
-         DuplicateJobCustomer   → .dj-customer markup · .dj-customer-* styles
-                                  (search until chosen, then one selected row)
+         DuplicateJobCustomer   → .dj-customer markup (top of Production step) ·
+                                  .dj-customer-* styles (search until chosen,
+                                  then one selected row)
+         ShippingChangeNotice   → #dj-shipping-notice (under the customer picker) ·
+                                  .dj-shipping-notice-* styles; --warning modifier
+                                  when addresses were removed
+         Keep description       → #dj-keep-description · .dj-source-description-keep
+                                  (checked = new description mirrors the current
+                                  one and the field is read-only; Job Type =
+                                  Pull-plate forces it on and disables it)
          DuplicateJobContacts   → [data-panel="contacts"] · .jc-* classes reused from
                                   modals/proof-contacts-modal (same component, scoped
                                   here with data-dj-channel)
@@ -376,6 +421,11 @@
          · djGoToStep() sets the active panel and the rail fill → router/step state.
          · djAddDetailRow() clones the first row → FormArray push + @for.
          · Create stays disabled until Job Type is chosen → form validity.
+         · djShowShippingNotice() runs when the user picks a different customer
+           while Shipping Distribution is copied: it filters
+           DUPLICATE_JOB_DEFINITION.shippingAddresses by the new customer
+           (mock `customers` list per address) and lists the removed ones →
+           real version is a lookup against the customer's address book.
          · Detail 1/2/3 copy blocks are the same repeated structure; one @for is enough.
   ═══════════════════════════════════════════════════════════════════ -->
 
